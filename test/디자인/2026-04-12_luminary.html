@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminary — 당신만의 명상 처방전</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; cursor:none; }
+
+:root {
+  --bg: #030712;
+  --bg2: #0a0f1e;
+  --indigo: #6366f1;
+  --violet: #a78bfa;
+  --cyan: #22d3ee;
+  --white: #f8fafc;
+  --muted: rgba(248,250,252,0.45);
+  --card-bg: rgba(99,102,241,0.06);
+  --border: rgba(99,102,241,0.15);
+}
+
+html { scroll-behavior: auto; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- CUSTOM CURSOR ---- */
+#cursor {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--cyan); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s, background .2s;
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1px solid rgba(34,211,238,0.4); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+}
+.cursor-hover #cursor { width:18px; height:18px; background: var(--violet); }
+.cursor-hover #cursor-ring { border-color: rgba(167,139,250,0.6); transform: translate(-50%,-50%) scale(1.5); }
+
+/* ---- GRAIN OVERLAY ---- */
+#grain {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 100;
+  opacity: 0.04;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 1.5rem 4rem;
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(99,102,241,0);
+  transition: border-color .4s;
+}
+nav.scrolled { border-color: var(--border); background: rgba(3,7,18,0.7); }
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 1.25rem;
+  letter-spacing: .12em;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+  font-size: .85rem; font-weight: 500; letter-spacing: .05em;
+  color: var(--muted); text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  padding: .6rem 1.4rem;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  border-radius: 100px;
+  font-size: .85rem; font-weight: 600;
+  color: white; text-decoration: none;
+  transition: opacity .2s, transform .2s;
+}
+.nav-cta:hover { opacity:.85; transform: translateY(-1px); }
+
+/* ---- HERO ---- */
+#hero {
+  position: relative; width: 100vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+#hero-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative; z-index: 10;
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 2rem;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .4rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: .78rem; letter-spacing: .08em;
+  color: var(--violet);
+  background: rgba(99,102,241,0.08);
+  opacity: 0;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:.4; transform:scale(.7); }
+}
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(4.5rem, 12vw, 9rem);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: .95;
+  overflow: hidden;
+}
+.hero-title .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(120%) rotateX(-90deg);
+}
+
+.hero-ko {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: .03em;
+  line-height: 1.7;
+  max-width: 480px;
+  opacity: 0;
+}
+
+.hero-actions {
+  display: flex; gap: 1rem; align-items: center;
+  opacity: 0;
+}
+.btn-primary {
+  padding: .9rem 2.2rem;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  border-radius: 100px;
+  font-size: 1rem; font-weight: 600;
+  color: white; text-decoration: none;
+  border: none;
+  box-shadow: 0 0 40px rgba(99,102,241,0.35);
+  transition: transform .2s, box-shadow .2s;
+  position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+  border-radius: inherit;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(99,102,241,0.5); }
+.btn-secondary {
+  padding: .9rem 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 1rem; font-weight: 500;
+  color: var(--muted); text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.btn-secondary:hover { border-color: var(--indigo); color: var(--white); }
+
+.hero-scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  z-index: 10; opacity: 0;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, rgba(99,102,241,0.8), transparent);
+  animation: scroll-drop 2s ease-in-out infinite;
+}
+@keyframes scroll-drop {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.scroll-txt { font-size: .65rem; letter-spacing: .25em; color: var(--muted); }
+
+/* ---- MARQUEE ---- */
+.marquee-section {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.2rem 0;
+  background: rgba(99,102,241,0.03);
+}
+.marquee-track {
+  display: flex; gap: 4rem;
+  animation: marquee-scroll 24s linear infinite;
+  white-space: nowrap;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-item {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .78rem; font-weight: 500;
+  letter-spacing: .18em;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.marquee-dot { color: var(--indigo); }
+
+/* ---- STATS ---- */
+#stats {
+  padding: 5rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell {
+  padding: 3rem 2rem;
+  background: var(--bg);
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.stat-unit { font-size: .6em; vertical-align: super; }
+.stat-label {
+  font-size: .9rem; color: var(--muted);
+  margin-top: .8rem; letter-spacing: .05em;
+}
+
+/* ---- FEATURES ---- */
+#features { padding: 8rem 4rem; max-width: 1200px; margin: 0 auto; }
+.section-tag {
+  display: inline-block;
+  font-size: .72rem; letter-spacing: .22em;
+  color: var(--violet);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900; line-height: 1.05;
+  margin-bottom: 4rem;
+}
+.section-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.feature-card {
+  background: var(--bg);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--indigo), transparent);
+  opacity: 0;
+  transition: opacity .4s;
+}
+.feature-card:hover { background: rgba(99,102,241,0.05); }
+.feature-card:hover::before { opacity: 1; }
+
+.feature-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .72rem; letter-spacing: .2em;
+  color: var(--indigo); margin-bottom: 2rem;
+}
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem;
+  background: var(--card-bg);
+  font-size: 1.4rem;
+}
+.feature-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem; font-weight: 700;
+  margin-bottom: .8rem; line-height: 1.3;
+}
+.feature-desc { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+
+.feature-glow {
+  position: absolute; bottom: -60px; right: -60px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.15), transparent);
+  pointer-events: none;
+}
+
+/* ---- HOW IT WORKS ---- */
+#how { padding: 8rem 4rem; background: var(--bg2); }
+.how-inner { max-width: 1200px; margin: 0 auto; }
+.how-steps {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 3rem; margin-top: 4rem;
+  position: relative;
+}
+.how-steps::before {
+  content: '';
+  position: absolute; top: 40px; left: 16.67%; right: 16.67%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--indigo), var(--violet), var(--cyan));
+  opacity: .3;
+}
+.step-card { text-align: center; position: relative; }
+.step-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 2rem;
+  background: var(--card-bg);
+  position: relative; z-index: 1;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem; font-weight: 900; color: var(--violet);
+  transition: border-color .3s, box-shadow .3s;
+}
+.step-circle:hover {
+  border-color: var(--violet);
+  box-shadow: 0 0 30px rgba(167,139,250,0.3);
+}
+.step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: .8rem;
+}
+.step-desc { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+
+/* ---- BREATHING DEMO ---- */
+#demo {
+  padding: 8rem 4rem;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.demo-inner { max-width: 800px; position: relative; z-index: 1; }
+.demo-orb-wrap {
+  width: 300px; height: 300px;
+  margin: 4rem auto;
+  position: relative;
+}
+.demo-orb {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%,
+    rgba(167,139,250,0.5),
+    rgba(99,102,241,0.3) 40%,
+    rgba(34,211,238,0.1) 70%,
+    transparent
+  );
+  box-shadow:
+    0 0 80px rgba(99,102,241,0.4),
+    0 0 160px rgba(99,102,241,0.15);
+  animation: breathe 5s cubic-bezier(.4,0,.2,1) infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 80px rgba(99,102,241,0.4), 0 0 160px rgba(99,102,241,0.15); }
+  50% { transform: scale(1.18); box-shadow: 0 0 120px rgba(167,139,250,0.5), 0 0 240px rgba(99,102,241,0.25); }
+}
+.demo-ring {
+  position: absolute; inset: -20px; border-radius: 50%;
+  border: 1px solid rgba(99,102,241,0.2);
+  animation: ring-pulse 5s cubic-bezier(.4,0,.2,1) infinite;
+}
+.demo-ring:nth-child(2) {
+  inset: -45px;
+  border-color: rgba(99,102,241,0.12);
+  animation-delay: .3s;
+}
+.demo-ring:nth-child(3) {
+  inset: -75px;
+  border-color: rgba(99,102,241,0.07);
+  animation-delay: .6s;
+}
+@keyframes ring-pulse {
+  0%, 100% { opacity:.8; transform:scale(1); }
+  50% { opacity:1; transform:scale(1.06); }
+}
+.breathe-label {
+  font-size: .78rem; letter-spacing: .3em; color: var(--muted);
+  animation: breathe-text 5s ease-in-out infinite;
+  margin-top: -1.5rem;
+}
+@keyframes breathe-text {
+  0%,50% { content: '들숨'; }
+  0%,100% { opacity: .5; }
+  50% { opacity: 1; }
+}
+.demo-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-style: italic;
+  color: rgba(248,250,252,0.7);
+  line-height: 1.5;
+  margin-top: 2rem;
+}
+
+/* ---- TESTIMONIALS ---- */
+#testimonials { padding: 8rem 4rem; background: var(--bg2); }
+.test-inner { max-width: 1200px; margin: 0 auto; }
+.test-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; margin-top: 4rem;
+}
+.test-card {
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  position: relative;
+  transition: border-color .3s, transform .3s;
+}
+.test-card:hover { border-color: var(--indigo); transform: translateY(-4px); }
+.test-stars { color: #fbbf24; font-size: .9rem; margin-bottom: 1.2rem; }
+.test-text { font-size: .9rem; color: rgba(248,250,252,0.8); line-height: 1.75; margin-bottom: 1.5rem; }
+.test-author { display: flex; align-items: center; gap: 1rem; }
+.test-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: .9rem;
+}
+.test-name { font-weight: 600; font-size: .88rem; }
+.test-role { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+
+/* ---- PRICING ---- */
+#pricing { padding: 8rem 4rem; }
+.pricing-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.pricing-cards {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; margin-top: 4rem; text-align: left;
+}
+.price-card {
+  padding: 3rem 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  position: relative; overflow: hidden;
+  transition: border-color .3s;
+}
+.price-card.featured {
+  border-color: var(--indigo);
+  background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(167,139,250,0.06));
+}
+.price-card.featured::before {
+  content: 'POPULAR';
+  position: absolute; top: 1.2rem; right: 1.2rem;
+  font-size: .65rem; font-weight: 700; letter-spacing: .15em;
+  color: var(--cyan);
+  background: rgba(34,211,238,0.12);
+  padding: .2rem .6rem; border-radius: 100px;
+  border: 1px solid rgba(34,211,238,0.25);
+}
+.price-label { font-size: .78rem; letter-spacing: .15em; color: var(--muted); margin-bottom: 1rem; }
+.price-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem; font-weight: 900;
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+.price-period { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: .8rem; margin-bottom: 2.5rem; }
+.price-features li {
+  font-size: .9rem; color: rgba(248,250,252,0.8);
+  display: flex; align-items: center; gap: .75rem;
+}
+.check-icon { color: var(--cyan); font-size: 1.1rem; flex-shrink: 0; }
+.price-btn {
+  width: 100%; padding: 1rem;
+  border-radius: 100px;
+  text-align: center;
+  font-weight: 600; font-size: 1rem;
+  text-decoration: none;
+  display: block;
+  transition: all .2s;
+}
+.price-btn-outline {
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.price-btn-outline:hover { border-color: var(--indigo); color: var(--white); }
+.price-btn-solid {
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: white;
+  box-shadow: 0 0 30px rgba(99,102,241,0.3);
+}
+.price-btn-solid:hover { box-shadow: 0 0 50px rgba(99,102,241,0.5); transform: translateY(-2px); }
+
+/* ---- CTA ---- */
+#cta {
+  padding: 10rem 4rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+#cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(99,102,241,0.15), transparent);
+}
+.cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.cta-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900; line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.cta-sub { font-size: 1.1rem; color: var(--muted); margin-bottom: 3rem; line-height: 1.7; }
+.cta-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.store-btn {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .9rem 1.8rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  text-decoration: none; color: var(--white);
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.store-btn:hover { border-color: var(--indigo); background: rgba(99,102,241,0.08); transform: translateY(-2px); }
+.store-icon { font-size: 1.6rem; }
+.store-info { text-align: left; }
+.store-sub { font-size: .65rem; color: var(--muted); letter-spacing: .05em; }
+.store-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+
+/* ---- FOOTER ---- */
+footer {
+  padding: 3rem 4rem;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 1.1rem;
+  letter-spacing: .1em;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.footer-copy { font-size: .8rem; color: var(--muted); }
+
+/* ---- SCROLL REVEAL ---- */
+.reveal { opacity: 0; transform: translateY(40px); }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  nav { padding: 1.2rem 1.5rem; }
+  .nav-links { display: none; }
+  #stats { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+  #features, #how, #demo, #testimonials, #pricing, #cta { padding: 5rem 1.5rem; }
+  .features-grid, .how-steps, .test-grid, .pricing-cards { grid-template-columns: 1fr; }
+  .how-steps::before { display: none; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- GRAIN -->
+<svg id="grain" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid slice">
+  <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#n)" opacity=".5"/>
+</svg>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">LUMINARY</div>
+  <div class="nav-links">
+    <a href="#features">기능</a>
+    <a href="#how">사용법</a>
+    <a href="#testimonials">후기</a>
+    <a href="#pricing">가격</a>
+    <a class="nav-cta" href="#cta">무료로 시작</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      AI 맞춤 명상 — 지금 바로 시작
+    </div>
+    <h1 class="hero-title" id="hero-title">Luminary</h1>
+    <p class="hero-ko">
+      하루 5분.<br>
+      AI가 당신의 감정 상태를 분석하고,<br>
+      오늘 밤을 위한 명상을 처방합니다.
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">무료로 시작하기</a>
+      <a href="#demo" class="btn-secondary">어떻게 작동하나요?</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-txt">SCROLL</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">AI 감정 분석 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">맞춤 명상 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">수면 최적화 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">번아웃 회복 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">하루 5분 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">개인화 처방 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">AI 감정 분석 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">맞춤 명상 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">수면 최적화 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">번아웃 회복 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">하루 5분 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">개인화 처방 <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stat-cell">
+    <div class="stat-num reveal" data-target="48000">0</div>
+    <div class="stat-label reveal">활성 사용자</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num reveal" data-target="92">0<span class="stat-unit">%</span></div>
+    <div class="stat-label reveal">수면 품질 개선</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num reveal" data-target="5">0<span class="stat-unit">분</span></div>
+    <div class="stat-label reveal">일일 권장 명상 시간</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-tag reveal">FEATURES</div>
+    <h2 class="section-title reveal">
+      AI가 읽는<br><em>당신의 오늘</em>
+    </h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">AI 감정 스캔</div>
+        <div class="feature-desc">매일 3가지 질문으로 현재 감정 상태를 분석합니다. 피로도, 스트레스 패턴, 수면 질을 종합해 오늘의 상태를 정확히 진단.</div>
+        <div class="feature-glow"></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">맞춤 명상 처방</div>
+        <div class="feature-desc">450개+ 명상 세션 중 오늘의 당신에게 꼭 맞는 것을 선택합니다. 호흡, NSDR, 바디스캔, 마음챙김 — 모두 AI가 골라줍니다.</div>
+        <div class="feature-glow"></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <div class="feature-icon">🌙</div>
+        <div class="feature-title">수면 최적화</div>
+        <div class="feature-desc">잠자리에 들기 30분 전, 당신의 뇌를 수면 모드로 전환하는 시퀀스를 자동으로 설계합니다. 평균 수면 진입 시간 23분 단축.</div>
+        <div class="feature-glow"></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">감정 트렌드 분석</div>
+        <div class="feature-desc">주간/월간 감정 패턴을 시각화합니다. 언제, 어떤 상황에서 스트레스가 오는지 파악하고 선제적으로 대응하세요.</div>
+        <div class="feature-glow"></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05</div>
+        <div class="feature-icon">🔔</div>
+        <div class="feature-title">스마트 알림</div>
+        <div class="feature-desc">당신의 생체 리듬에 맞춰 명상 알림을 보냅니다. 바쁜 회의 중엔 미루고, 에너지가 낮을 때 부드럽게 알려줍니다.</div>
+        <div class="feature-glow"></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06</div>
+        <div class="feature-icon">🎵</div>
+        <div class="feature-title">바이노럴 사운드</div>
+        <div class="feature-desc">뇌파를 직접 조율하는 바이노럴 비트와 432Hz 음악을 명상에 맞게 자동 믹싱합니다. 헤드폰 착용 시 효과 3배.</div>
+        <div class="feature-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-inner">
+    <div class="section-tag reveal">HOW IT WORKS</div>
+    <h2 class="section-title reveal">3단계로<br><em>시작합니다</em></h2>
+    <div class="how-steps">
+      <div class="step-card">
+        <div class="step-circle reveal">01</div>
+        <div class="step-title reveal">감정 체크인</div>
+        <div class="step-desc reveal">오늘의 기분을 3가지 질문으로 스캔합니다. 30초면 충분합니다. AI가 패턴을 분석하기 시작합니다.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-circle reveal">02</div>
+        <div class="step-title reveal">처방 수령</div>
+        <div class="step-desc reveal">AI가 오늘 당신에게 맞는 명상 프로그램을 선택합니다. 길이, 유형, 사운드까지 모두 맞춤화됩니다.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-circle reveal">03</div>
+        <div class="step-title reveal">5분 명상</div>
+        <div class="step-desc reveal">지금 바로 시작하세요. 가이드를 따라가면 됩니다. 매일 쌓이는 데이터가 처방을 더 정확하게 만듭니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BREATHING DEMO -->
+<section id="demo">
+  <div class="demo-inner">
+    <div class="section-tag reveal">EXPERIENCE</div>
+    <h2 class="section-title reveal">지금 이 순간,<br><em>한 번만 숨 쉬어보세요</em></h2>
+    <div class="demo-orb-wrap">
+      <div class="demo-orb"></div>
+      <div class="demo-ring"></div>
+      <div class="demo-ring"></div>
+      <div class="demo-ring"></div>
+    </div>
+    <div class="breathe-label">들숨 — 날숨 — 머무름</div>
+    <div class="demo-quote reveal">
+      "당신이 멈추면, 세상이 비로소 선명해진다"
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="test-inner">
+    <div class="section-tag reveal">TESTIMONIALS</div>
+    <h2 class="section-title reveal">이미 <em>4만 8천 명</em>이<br>달라졌습니다</h2>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"3개월 동안 수면제 없이 잠을 못 잤는데, 2주 만에 달라졌어요. AI가 제 패턴을 정확히 읽더라고요."</div>
+        <div class="test-author">
+          <div class="test-avatar">김</div>
+          <div>
+            <div class="test-name">김지수</div>
+            <div class="test-role">IT 스타트업 PM · 32세</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"번아웃으로 퇴사를 고민했어요. 지금은 같은 회사에서 더 여유 있게 일합니다. 5분이 이렇게 큰 차이를 만들 줄은 몰랐어요."</div>
+        <div class="test-author">
+          <div class="test-avatar">이</div>
+          <div>
+            <div class="test-name">이민호</div>
+            <div class="test-role">대기업 마케팅 팀장 · 38세</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"다른 명상 앱은 매번 같아서 질렸는데, Luminary는 매일 다르게 와요. AI가 어제와 오늘을 다르게 읽는 게 신기합니다."</div>
+        <div class="test-author">
+          <div class="test-avatar">박</div>
+          <div>
+            <div class="test-name">박서연</div>
+            <div class="test-role">프리랜서 디자이너 · 27세</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-inner">
+    <div class="section-tag reveal">PRICING</div>
+    <h2 class="section-title reveal">당신의 수면값은<br><em>얼마인가요?</em></h2>
+    <div class="pricing-cards">
+      <div class="price-card reveal">
+        <div class="price-label">FREE</div>
+        <div class="price-amount">₩0</div>
+        <div class="price-period">영원히 무료</div>
+        <ul class="price-features">
+          <li><span class="check-icon">◆</span> 매일 명상 1회</li>
+          <li><span class="check-icon">◆</span> 기본 감정 스캔</li>
+          <li><span class="check-icon">◆</span> 50개 명상 세션</li>
+          <li><span class="check-icon">◆</span> 주간 요약 리포트</li>
+        </ul>
+        <a href="#cta" class="price-btn price-btn-outline">무료로 시작</a>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-label">PRO</div>
+        <div class="price-amount">₩9,900</div>
+        <div class="price-period">/ 월 · 언제든 취소 가능</div>
+        <ul class="price-features">
+          <li><span class="check-icon">◆</span> 무제한 명상</li>
+          <li><span class="check-icon">◆</span> 고급 AI 감정 분석</li>
+          <li><span class="check-icon">◆</span> 450개+ 명상 세션</li>
+          <li><span class="check-icon">◆</span> 수면 최적화 프로그램</li>
+          <li><span class="check-icon">◆</span> 바이노럴 사운드 풀팩</li>
+          <li><span class="check-icon">◆</span> 월간 AI 인사이트 리포트</li>
+        </ul>
+        <a href="#cta" class="price-btn price-btn-solid">7일 무료 체험</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <h2 class="cta-title reveal">오늘 밤부터<br>달라집니다</h2>
+    <p class="cta-sub reveal">
+      지금 다운로드하고 7일 무료 체험을 시작하세요.<br>
+      카드 정보 없이도 됩니다.
+    </p>
+    <div class="cta-actions reveal">
+      <a href="#" class="store-btn">
+        <span class="store-icon"></span>
+        <div class="store-info">
+          <div class="store-sub">Download on the</div>
+          <div class="store-name">App Store</div>
+        </div>
+      </a>
+      <a href="#" class="store-btn">
+        <span class="store-icon">▶</span>
+        <div class="store-info">
+          <div class="store-sub">Get it on</div>
+          <div class="store-name">Google Play</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">LUMINARY</div>
+  <div class="footer-copy">© 2026 Luminary Inc. · 개인정보처리방침 · 이용약관</div>
+</footer>
+
+<script>
+// ===== LENIS SMOOTH SCROLL =====
+const lenis = new Lenis({
+  duration: 1.4,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+});
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+// ===== CUSTOM CURSOR =====
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+gsap.ticker.add(() => {
+  rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+  cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+});
+document.querySelectorAll('a, button, .feature-card, .test-card, .price-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ===== NAV SCROLL =====
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ===== HERO CANVAS — BREATHING SHADER =====
+const canvas = document.getElementById('hero-canvas');
+const gl = canvas.getContext('webgl');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const vs = `
+attribute vec2 p;
+varying vec2 vUv;
+void main() {
+  vUv = p * 0.5 + 0.5;
+  gl_Position = vec4(p, 0.0, 1.0);
+}`;
+
+// Breathing ripple shader — Luminary concept
+const fs = `
+precision highp float;
+uniform float u_time;
+uniform float u_breath; // 0-1 breathing cycle
+uniform vec2 u_mouse;
+varying vec2 vUv;
+
+#define PI 3.14159265
+
+// smooth noise
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+float noise(vec2 p) {
+  vec2 i = floor(p); vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(
+    mix(hash(i), hash(i + vec2(1,0)), f.x),
+    mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), f.x),
+    f.y
+  );
+}
+
+void main() {
+  vec2 uv = vUv;
+  vec2 center = vec2(0.5, 0.5);
+  vec2 toCenter = uv - center;
+  float dist = length(toCenter);
+  float angle = atan(toCenter.y, toCenter.x);
+
+  // Breathing pulse — expand/contract with sin wave
+  float breath = sin(u_time * 0.6) * 0.5 + 0.5;
+  float breathRadius = 0.05 + breath * 0.25;
+
+  // Ripple waves from center
+  float ripple1 = sin(dist * 18.0 - u_time * 1.8) * 0.5 + 0.5;
+  float ripple2 = sin(dist * 10.0 - u_time * 1.2 + PI * 0.3) * 0.5 + 0.5;
+  float rippleMix = ripple1 * 0.6 + ripple2 * 0.4;
+
+  // Radial falloff — stronger near center
+  float radialFalloff = exp(-dist * 3.5 + breath * 0.8);
+
+  // Subtle noise perturbation
+  float n = noise(uv * 4.0 + u_time * 0.15) * 0.5 + 0.5;
+  float n2 = noise(uv * 8.0 - u_time * 0.1) * 0.5 + 0.5;
+
+  // Core glow — the "breath point"
+  float coreGlow = exp(-dist * 12.0 / (breathRadius + 0.01));
+  coreGlow = pow(coreGlow, 1.5);
+
+  // Color gradients
+  vec3 colDeep = vec3(0.012, 0.016, 0.055);     // deep navy
+  vec3 colIndigo = vec3(0.388, 0.400, 0.945);   // #6366f1
+  vec3 colViolet = vec3(0.655, 0.545, 0.980);   // #a78bfa
+  vec3 colCyan = vec3(0.133, 0.827, 0.933);     // #22d3ee
+
+  // Base color from radial distance
+  float t1 = smoothstep(0.5, 0.0, dist);
+  vec3 col = mix(colDeep, colIndigo, t1 * radialFalloff);
+
+  // Layer violet on ripples
+  col = mix(col, colViolet, rippleMix * radialFalloff * 0.35);
+
+  // Cyan accent near peak breath
+  col = mix(col, colCyan, coreGlow * breath * 0.8);
+
+  // Add noise texture
+  col += colIndigo * n * 0.04 * radialFalloff;
+
+  // Vignette
+  float vig = 1.0 - dist * 1.4;
+  vig = clamp(vig, 0.0, 1.0);
+  vig = pow(vig, 1.5);
+
+  col *= vig;
+
+  // Core flash at peak breath
+  col += colCyan * coreGlow * 0.6;
+  col += colViolet * coreGlow * 0.3;
+
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+function compileShader(src, type) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    console.error('Shader error:', gl.getShaderInfoLog(s));
+  }
+  return s;
+}
+
+const prog = gl.createProgram();
+gl.attachShader(prog, compileShader(vs, gl.VERTEX_SHADER));
+gl.attachShader(prog, compileShader(fs, gl.FRAGMENT_SHADER));
+gl.linkProgram(prog);
+gl.useProgram(prog);
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+const pLoc = gl.getAttribLocation(prog, 'p');
+gl.enableVertexAttribArray(pLoc);
+gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+
+const uTime = gl.getUniformLocation(prog, 'u_time');
+const uBreath = gl.getUniformLocation(prog, 'u_breath');
+const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+let mouseNorm = { x: 0.5, y: 0.5 };
+document.addEventListener('mousemove', e => {
+  mouseNorm.x = e.clientX / window.innerWidth;
+  mouseNorm.y = 1.0 - e.clientY / window.innerHeight;
+});
+
+const startTime = Date.now();
+function render() {
+  const t = (Date.now() - startTime) / 1000;
+  const breath = Math.sin(t * 0.6) * 0.5 + 0.5;
+  gl.uniform1f(uTime, t);
+  gl.uniform1f(uBreath, breath);
+  gl.uniform2f(uMouse, mouseNorm.x, mouseNorm.y);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  requestAnimationFrame(render);
+}
+render();
+
+// ===== HERO ANIMATIONS =====
+const tl = gsap.timeline({ delay: .3 });
+
+// Badge
+tl.to('.hero-badge', { opacity: 1, y: 0, duration: .6, ease: 'power2.out' }, 0);
+
+// Title chars
+const title = document.getElementById('hero-title');
+const text = title.textContent;
+title.innerHTML = '';
+[...text].forEach(ch => {
+  const span = document.createElement('span');
+  span.className = 'char';
+  span.textContent = ch === ' ' ? '\u00a0' : ch;
+  title.appendChild(span);
+});
+tl.to('.hero-title .char', {
+  opacity: 1, y: 0, rotateX: 0, duration: .7,
+  stagger: .045, ease: 'back.out(1.5)'
+}, .25);
+
+// Subtitle + actions
+tl.to('.hero-ko', { opacity: 1, duration: .8, ease: 'power2.out' }, .8);
+tl.to('.hero-actions', { opacity: 1, duration: .6, ease: 'power2.out' }, 1.1);
+tl.to('.hero-scroll-hint', { opacity: 1, duration: .6, ease: 'power2.out' }, 1.5);
+
+// ===== SCROLL REVEAL =====
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray('.reveal').forEach(el => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1, y: 0,
+      duration: .85, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+});
+
+// ===== COUNT UP =====
+document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+  const target = parseInt(el.dataset.target);
+  const unit = el.querySelector('.stat-unit');
+  const unitText = unit ? unit.outerHTML : '';
+  const suffix = el.textContent.includes('%') ? '%' : el.textContent.includes('분') ? '분' : '';
+
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 85%',
+    once: true,
+    onEnter: () => {
+      gsap.to({ val: 0 }, {
+        val: target,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate: function() {
+          const v = Math.round(this.targets()[0].val);
+          const display = target > 1000 ? v.toLocaleString() : v;
+          el.innerHTML = display + unitText;
+        }
+      });
+    }
+  });
+});
+
+// ===== FEATURE CARDS STAGGER =====
+gsap.utils.toArray('.feature-card').forEach((card, i) => {
+  gsap.fromTo(card,
+    { opacity: 0, y: 50 },
+    {
+      opacity: 1, y: 0,
+      duration: .7, ease: 'power3.out',
+      delay: (i % 3) * 0.12,
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 90%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+});
+
+// ===== PARALLAX ON SECTIONS =====
+gsap.utils.toArray('section').forEach(section => {
+  gsap.to(section.querySelectorAll('.section-tag'), {
+    y: -30,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: section,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true
+    }
+  });
+});
+
+console.log('%cLuminary - AI 명상 처방전', 'color:#a78bfa; font-family: Space Grotesk; font-size:16px; font-weight:700;');
+</script>
+</body>
+</html>

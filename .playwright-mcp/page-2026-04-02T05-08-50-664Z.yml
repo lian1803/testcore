@@ -1,0 +1,742 @@
+- generic [ref=e2]:
+  - region
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e9]:
+        - button "Toggle navigation" [ref=e11] [cursor=pointer]
+        - link "Homepage" [ref=e17] [cursor=pointer]:
+          - /url: /
+          - img [ref=e18]
+        - generic [ref=e20]:
+          - link "Sign in" [ref=e21] [cursor=pointer]:
+            - /url: /login?return_to=https%3A%2F%2Fgithub.com%2FRaviKunapareddy%2FSales-Multi-Agent-AI
+          - button "Appearance settings" [ref=e24] [cursor=pointer]:
+            - img
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img [ref=e33]
+          - link "RaviKunapareddy" [ref=e36] [cursor=pointer]:
+            - /url: /RaviKunapareddy
+          - generic [ref=e37]: /
+          - strong [ref=e38]:
+            - link "Sales-Multi-Agent-AI" [ref=e39] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI
+          - generic [ref=e40]: Public
+        - generic [ref=e41]:
+          - list:
+            - listitem [ref=e42]:
+              - link "You must be signed in to change notification settings" [ref=e43] [cursor=pointer]:
+                - /url: /login?return_to=%2FRaviKunapareddy%2FSales-Multi-Agent-AI
+                - img [ref=e44]
+                - text: Notifications
+            - listitem [ref=e46]:
+              - link "Fork 1" [ref=e47] [cursor=pointer]:
+                - /url: /login?return_to=%2FRaviKunapareddy%2FSales-Multi-Agent-AI
+                - img [ref=e48]
+                - text: Fork
+                - generic "1" [ref=e50]
+            - listitem [ref=e51]:
+              - link "You must be signed in to star a repository" [ref=e53] [cursor=pointer]:
+                - /url: /login?return_to=%2FRaviKunapareddy%2FSales-Multi-Agent-AI
+                - img [ref=e54]
+                - text: Star
+                - generic "3 users starred this repository" [ref=e56]: "3"
+      - navigation "Repository" [ref=e57]:
+        - list [ref=e58]:
+          - listitem [ref=e59]:
+            - link "Code" [ref=e60] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI
+              - img [ref=e61]
+              - generic [ref=e63]: Code
+          - listitem [ref=e64]:
+            - link "Issues" [ref=e65] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/issues
+              - img [ref=e66]
+              - generic [ref=e69]: Issues
+          - listitem [ref=e70]:
+            - link "Pull requests 1" [ref=e71] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/pulls
+              - img [ref=e72]
+              - generic [ref=e74]: Pull requests
+              - generic "1" [ref=e75]
+          - listitem [ref=e76]:
+            - link "Actions" [ref=e77] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/actions
+              - img [ref=e78]
+              - generic [ref=e80]: Actions
+          - listitem [ref=e81]:
+            - link "Projects" [ref=e82] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/projects
+              - img [ref=e83]
+              - generic [ref=e85]: Projects
+          - listitem [ref=e86]:
+            - link "Security and quality" [ref=e87] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/security
+              - img [ref=e88]
+              - generic [ref=e90]: Security and quality
+          - listitem [ref=e91]:
+            - link "Insights" [ref=e92] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/pulse
+              - img [ref=e93]
+              - generic [ref=e95]: Insights
+    - generic [ref=e108]:
+      - heading "RaviKunapareddy/Sales-Multi-Agent-AI" [level=1] [ref=e110]
+      - generic [ref=e111]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - button "main branch" [ref=e118] [cursor=pointer]:
+                - generic [ref=e119]:
+                  - generic [ref=e121]:
+                    - img [ref=e123]
+                    - generic [ref=e126]: main
+                  - generic:
+                    - img
+              - generic [ref=e127]:
+                - link "Go to Branches page" [ref=e128] [cursor=pointer]:
+                  - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/branches
+                  - img [ref=e129]
+                - link "Go to Tags page" [ref=e131] [cursor=pointer]:
+                  - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tags
+                  - img [ref=e132]
+            - generic [ref=e134]:
+              - button "Go to file" [ref=e137] [cursor=pointer]:
+                - generic [ref=e139]: Go to file
+              - button "Code" [ref=e140] [cursor=pointer]:
+                - generic [ref=e141]:
+                  - generic:
+                    - img
+                  - generic [ref=e142]: Code
+                  - generic:
+                    - img
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - heading "Folders and files" [level=2] [ref=e145]
+              - table "Folders and files" [ref=e146]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e147]:
+                  - 'row "Latest commit RaviKunapareddy commits by RaviKunapareddy Initial commit: Multi-Agent Sales AI System Commit 0e3014e · Apr 16, 2025last year History View commit history for this file." [ref=e148]':
+                    - 'cell "Latest commit RaviKunapareddy commits by RaviKunapareddy Initial commit: Multi-Agent Sales AI System Commit 0e3014e · Apr 16, 2025last year History View commit history for this file." [ref=e149]':
+                      - generic [ref=e150]:
+                        - heading "Latest commit" [level=2] [ref=e151]
+                        - generic [ref=e152]:
+                          - generic [ref=e154]:
+                            - link "RaviKunapareddy" [ref=e155] [cursor=pointer]:
+                              - /url: /RaviKunapareddy
+                              - img "RaviKunapareddy" [ref=e156]
+                            - link "commits by RaviKunapareddy" [ref=e157] [cursor=pointer]:
+                              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commits?author=RaviKunapareddy
+                              - text: RaviKunapareddy
+                          - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e161] [cursor=pointer]':
+                            - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                        - generic [ref=e162]:
+                          - generic [ref=e164]:
+                            - link "Commit 0e3014e" [ref=e165] [cursor=pointer]:
+                              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                              - text: 0e3014e
+                            - text: ·
+                            - generic "Apr 16, 2025, 6:34 AM GMT+9" [ref=e166]: Apr 16, 2025last year
+                          - generic [ref=e167]:
+                            - heading "History" [level=2] [ref=e168]
+                            - link "View commit history for this file." [ref=e170] [cursor=pointer]:
+                              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commits/main/
+                              - generic [ref=e171]:
+                                - generic:
+                                  - img
+                  - 'row "agents, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e172]':
+                    - cell "agents, (Directory)" [ref=e173]:
+                      - generic [ref=e174]:
+                        - img [ref=e175]
+                        - link "agents, (Directory)" [ref=e180] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/agents
+                          - text: agents
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e181]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e184] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e185]:
+                      - generic [ref=e186]: Apr 16, 2025last year
+                  - 'row "assets, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e187]':
+                    - cell "assets, (Directory)" [ref=e188]:
+                      - generic [ref=e189]:
+                        - img [ref=e190]
+                        - link "assets, (Directory)" [ref=e195] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/assets
+                          - text: assets
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e196]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e199] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e200]:
+                      - generic [ref=e201]: Apr 16, 2025last year
+                  - 'row "data, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e202]':
+                    - cell "data, (Directory)" [ref=e203]:
+                      - generic [ref=e204]:
+                        - img [ref=e205]
+                        - link "data, (Directory)" [ref=e210] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/data
+                          - text: data
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e211]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e214] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e215]:
+                      - generic [ref=e216]: Apr 16, 2025last year
+                  - 'row "langgraph_nodes, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e217]':
+                    - cell "langgraph_nodes, (Directory)" [ref=e218]:
+                      - generic [ref=e219]:
+                        - img [ref=e220]
+                        - link "langgraph_nodes, (Directory)" [ref=e225] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/langgraph_nodes
+                          - text: langgraph_nodes
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e226]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e229] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e230]:
+                      - generic [ref=e231]: Apr 16, 2025last year
+                  - 'row "prompts, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e232]':
+                    - cell "prompts, (Directory)" [ref=e233]:
+                      - generic [ref=e234]:
+                        - img [ref=e235]
+                        - link "prompts, (Directory)" [ref=e240] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/prompts
+                          - text: prompts
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e241]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e244] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e245]:
+                      - generic [ref=e246]: Apr 16, 2025last year
+                  - 'row "tests, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e247]':
+                    - cell "tests, (Directory)" [ref=e248]:
+                      - generic [ref=e249]:
+                        - img [ref=e250]
+                        - link "tests, (Directory)" [ref=e255] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/tests
+                          - text: tests
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e256]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e259] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e260]:
+                      - generic [ref=e261]: Apr 16, 2025last year
+                  - 'row "utils, (Directory) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e262]':
+                    - cell "utils, (Directory)" [ref=e263]:
+                      - generic [ref=e264]:
+                        - img [ref=e265]
+                        - link "utils, (Directory)" [ref=e270] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/tree/main/utils
+                          - text: utils
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e271]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e274] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e275]:
+                      - generic [ref=e276]: Apr 16, 2025last year
+                  - 'row ".gitignore, (File) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e277]':
+                    - cell ".gitignore, (File)" [ref=e278]:
+                      - generic [ref=e279]:
+                        - img [ref=e280]
+                        - link ".gitignore, (File)" [ref=e285] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/.gitignore
+                          - text: .gitignore
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e286]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e289] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e290]:
+                      - generic [ref=e291]: Apr 16, 2025last year
+                  - 'row "README.md, (File) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e292]':
+                    - cell "README.md, (File)" [ref=e293]:
+                      - generic [ref=e294]:
+                        - img [ref=e295]
+                        - link "README.md, (File)" [ref=e300] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/README.md
+                          - text: README.md
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e301]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e304] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e305]:
+                      - generic [ref=e306]: Apr 16, 2025last year
+                  - 'row "graph_design, (File) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e307]':
+                    - cell "graph_design, (File)" [ref=e308]:
+                      - generic [ref=e309]:
+                        - img [ref=e310]
+                        - link "graph_design, (File)" [ref=e315] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/graph_design
+                          - text: graph_design
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e316]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e319] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e320]:
+                      - generic [ref=e321]: Apr 16, 2025last year
+                  - 'row "requirements.txt, (File) Initial commit: Multi-Agent Sales AI System Apr 16, 2025last year" [ref=e322]':
+                    - cell "requirements.txt, (File)" [ref=e323]:
+                      - generic [ref=e324]:
+                        - img [ref=e325]
+                        - link "requirements.txt, (File)" [ref=e330] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/requirements.txt
+                          - text: requirements.txt
+                    - 'cell "Initial commit: Multi-Agent Sales AI System" [ref=e331]':
+                      - 'link "Initial commit: Multi-Agent Sales AI System" [ref=e334] [cursor=pointer]':
+                        - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/commit/0e3014e6fa188e4b6581173a367de6e5712b9ea2
+                    - cell "Apr 16, 2025last year" [ref=e335]:
+                      - generic [ref=e336]: Apr 16, 2025last year
+            - generic [ref=e338]:
+              - generic [ref=e339]:
+                - heading "Repository files navigation" [level=2] [ref=e340]
+                - navigation "Repository files" [ref=e341]:
+                  - list [ref=e342]:
+                    - listitem [ref=e343]:
+                      - link "README" [ref=e344] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e346]
+                        - generic [ref=e348]: README
+                - button "Outline" [ref=e349] [cursor=pointer]:
+                  - img [ref=e350]
+              - article [ref=e353]:
+                - generic [ref=e354]:
+                  - heading "🧠 Multi-Agent AI for Sales Engagement (LangGraph + Gemini)" [level=1] [ref=e355]
+                  - 'link "Permalink: 🧠 Multi-Agent AI for Sales Engagement (LangGraph + Gemini)" [ref=e356] [cursor=pointer]':
+                    - /url: "#-multi-agent-ai-for-sales-engagement-langgraph--gemini"
+                    - img [ref=e357]
+                - paragraph [ref=e359]: A modular, reasoning-first AI pipeline where five specialized agents collaborate to simulate an outbound sales team — from researching lead behavior to scoring intent, generating personalized emails, optimizing follow-up timing, and logging performance insights.
+                - paragraph [ref=e360]:
+                  - text: Powered by
+                  - strong [ref=e361]: LangGraph
+                  - text: for structured coordination and
+                  - strong [ref=e362]: Gemini LLM
+                  - text: for strategic reasoning, this system showcases how agent-based automation can scale intelligent sales outreach using real engagement data.
+                - separator [ref=e363]
+                - generic [ref=e364]:
+                  - heading "📌 Project Goal" [level=2] [ref=e365]
+                  - 'link "Permalink: 📌 Project Goal" [ref=e366] [cursor=pointer]':
+                    - /url: "#-project-goal"
+                    - img [ref=e367]
+                - blockquote [ref=e369]:
+                  - paragraph [ref=e370]: Demonstrate how a multi-agent architecture can drive contextual decision-making across the full sales funnel — not just generate responses, but analyze, personalize, and adapt based on lead behavior.
+                - separator [ref=e371]
+                - generic [ref=e372]:
+                  - heading "🧩 Agent Overview" [level=2] [ref=e373]
+                  - 'link "Permalink: 🧩 Agent Overview" [ref=e374] [cursor=pointer]':
+                    - /url: "#-agent-overview"
+                    - img [ref=e375]
+                - table [ref=e378]:
+                  - rowgroup [ref=e379]:
+                    - row "Agent Purpose" [ref=e380]:
+                      - columnheader "Agent" [ref=e381]
+                      - columnheader "Purpose" [ref=e382]
+                  - rowgroup [ref=e383]:
+                    - row "🕵️ Lead Research Agent Analyzes behavioral patterns and segments leads" [ref=e384]:
+                      - cell "🕵️ Lead Research Agent" [ref=e385]
+                      - cell "Analyzes behavioral patterns and segments leads" [ref=e386]
+                    - row "🎯 Intent Qualifier Agent Scores engagement and purchase readiness" [ref=e387]:
+                      - cell "🎯 Intent Qualifier Agent" [ref=e388]
+                      - cell "Scores engagement and purchase readiness" [ref=e389]
+                    - row "💌 Email Strategy Agent Crafts tailored email content based on context" [ref=e390]:
+                      - cell "💌 Email Strategy Agent" [ref=e391]
+                      - cell "Crafts tailored email content based on context" [ref=e392]
+                    - row "⏰ Follow-Up Timing Agent Suggests when and how to follow up" [ref=e393]:
+                      - cell "⏰ Follow-Up Timing Agent" [ref=e394]
+                      - cell "Suggests when and how to follow up" [ref=e395]
+                    - row "📊 CRM Logger Agent Logs lifecycle events and system insights" [ref=e396]:
+                      - cell "📊 CRM Logger Agent" [ref=e397]
+                      - cell "Logs lifecycle events and system insights" [ref=e398]
+                - separator [ref=e399]
+                - generic [ref=e400]:
+                  - heading "🧠 System Architecture" [level=2] [ref=e401]
+                  - 'link "Permalink: 🧠 System Architecture" [ref=e402] [cursor=pointer]':
+                    - /url: "#-system-architecture"
+                    - img [ref=e403]
+                - paragraph [ref=e405]:
+                  - link "Multi-Agent Sales AI Architecture" [ref=e406] [cursor=pointer]:
+                    - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/architecture.png
+                    - img "Multi-Agent Sales AI Architecture" [ref=e407]
+                - blockquote [ref=e408]:
+                  - paragraph [ref=e409]: Each agent plays a unique role in the pipeline and contributes feedback into a centralized CRM Logger, ensuring accountability and system-wide learning.
+                - separator [ref=e410]
+                - generic [ref=e411]:
+                  - heading "1️⃣ 🕵️ Lead Research Agent" [level=2] [ref=e412]
+                  - 'link "Permalink: 1️⃣ 🕵️ Lead Research Agent" [ref=e413] [cursor=pointer]':
+                    - /url: "#1️⃣-️-lead-research-agent"
+                    - img [ref=e414]
+                - generic [ref=e416]:
+                  - heading "🎯 Purpose" [level=3] [ref=e417]
+                  - 'link "Permalink: 🎯 Purpose" [ref=e418] [cursor=pointer]':
+                    - /url: "#-purpose"
+                    - img [ref=e419]
+                - paragraph [ref=e421]: Identify behavior patterns and segment leads based on site activity and past conversion trends.
+                - generic [ref=e422]:
+                  - heading "⚙️ Flow" [level=3] [ref=e423]
+                  - 'link "Permalink: ⚙️ Flow" [ref=e424] [cursor=pointer]':
+                    - /url: "#️-flow"
+                    - img [ref=e425]
+                - generic [ref=e427]:
+                  - generic [ref=e428]: "📦 Inputs: Leads CSV + Sales CSV 🔄 Flow: 1. `prepare_data()` → Clean & normalize 2. `analyze_patterns()` → Segment + score 3. `generate_insights()` → Recommend follow-up strategy"
+                  - button "Copy" [ref=e430] [cursor=pointer]:
+                    - img [ref=e431]
+                - table [ref=e435]:
+                  - rowgroup [ref=e436]:
+                    - row [ref=e437]:
+                      - cell [ref=e438]:
+                        - link [ref=e439] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/lead_input.png
+                          - img [ref=e440]
+                      - cell [ref=e441]:
+                        - link [ref=e442] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/lead_output.png
+                          - img [ref=e443]
+                    - 'row "🔹 Input: Olark Chat visitor (0 activity) ✅ Output: Recommend chat follow-up (impact: 0.6)" [ref=e444]':
+                      - 'cell "🔹 Input: Olark Chat visitor (0 activity)" [ref=e445]'
+                      - 'cell "✅ Output: Recommend chat follow-up (impact: 0.6)" [ref=e446]'
+                - separator [ref=e447]
+                - generic [ref=e448]:
+                  - heading "2️⃣ 🎯 Intent Qualifier Agent" [level=2] [ref=e449]
+                  - 'link "Permalink: 2️⃣ 🎯 Intent Qualifier Agent" [ref=e450] [cursor=pointer]':
+                    - /url: "#2️⃣--intent-qualifier-agent"
+                    - img [ref=e451]
+                - generic [ref=e453]:
+                  - heading "🎯 Purpose" [level=3] [ref=e454]
+                  - 'link "Permalink: 🎯 Purpose" [ref=e455] [cursor=pointer]':
+                    - /url: "#-purpose-1"
+                    - img [ref=e456]
+                - paragraph [ref=e458]: Analyze engagement signals (email behavior, site visits) to score lead readiness.
+                - generic [ref=e459]:
+                  - heading "⚙️ Flow" [level=3] [ref=e460]
+                  - 'link "Permalink: ⚙️ Flow" [ref=e461] [cursor=pointer]':
+                    - /url: "#️-flow-1"
+                    - img [ref=e462]
+                - generic [ref=e464]:
+                  - generic [ref=e465]: "📦 Inputs: Leads CSV + Email Interactions 🔄 Flow: 1. `prepare_data()` → Extract email & behavioral data 2. `analyze_patterns()` → Detect intent indicators 3. `generate_insights()` → Actionable next steps"
+                  - button "Copy" [ref=e467] [cursor=pointer]:
+                    - img [ref=e468]
+                - table [ref=e472]:
+                  - rowgroup [ref=e473]:
+                    - row [ref=e474]:
+                      - cell [ref=e475]:
+                        - link [ref=e476] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/intent_input.png
+                          - img [ref=e477]
+                      - cell [ref=e478]:
+                        - link [ref=e479] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/intent_output.png
+                          - img [ref=e480]
+                    - 'row "🔹 Input: CloudTech (VP Engg, 900 sec visit) ✅ Output: Intent Score 60 + Tracking Suggestion" [ref=e481]':
+                      - 'cell "🔹 Input: CloudTech (VP Engg, 900 sec visit)" [ref=e482]'
+                      - 'cell "✅ Output: Intent Score 60 + Tracking Suggestion" [ref=e483]'
+                - separator [ref=e484]
+                - generic [ref=e485]:
+                  - heading "3️⃣ 💌 Email Strategy Agent" [level=2] [ref=e486]
+                  - 'link "Permalink: 3️⃣ 💌 Email Strategy Agent" [ref=e487] [cursor=pointer]':
+                    - /url: "#3️⃣--email-strategy-agent"
+                    - img [ref=e488]
+                - generic [ref=e490]:
+                  - heading "🎯 Purpose" [level=3] [ref=e491]
+                  - 'link "Permalink: 🎯 Purpose" [ref=e492] [cursor=pointer]':
+                    - /url: "#-purpose-2"
+                    - img [ref=e493]
+                - paragraph [ref=e495]: Craft context-aware cold emails based on lead industry, behavior, and past engagement.
+                - generic [ref=e496]:
+                  - heading "⚙️ Flow" [level=3] [ref=e497]
+                  - 'link "Permalink: ⚙️ Flow" [ref=e498] [cursor=pointer]':
+                    - /url: "#️-flow-2"
+                    - img [ref=e499]
+                - generic [ref=e501]:
+                  - generic [ref=e502]: "📦 Inputs: Company Info + Intent Signals 🔄 Flow: 1. `prepare_data()` → Load successful email examples 2. `analyze_patterns()` → Personalize by industry/tone 3. `generate_email()` → Compose custom outreach"
+                  - button "Copy" [ref=e504] [cursor=pointer]:
+                    - img [ref=e505]
+                - table [ref=e509]:
+                  - rowgroup [ref=e510]:
+                    - row [ref=e511]:
+                      - cell [ref=e512]:
+                        - link [ref=e513] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/email_input.png
+                          - img [ref=e514]
+                      - cell [ref=e515]:
+                        - link [ref=e516] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/email_output.png
+                          - img [ref=e517]
+                    - 'row "🔹 Input: DataFlow Inc (Data Analytics) ✅ Output: Custom email w/ ROI pitch" [ref=e518]':
+                      - 'cell "🔹 Input: DataFlow Inc (Data Analytics)" [ref=e519]'
+                      - 'cell "✅ Output: Custom email w/ ROI pitch" [ref=e520]'
+                - separator [ref=e521]
+                - generic [ref=e522]:
+                  - heading "4️⃣ ⏰ Follow-Up Timing Agent" [level=2] [ref=e523]
+                  - 'link "Permalink: 4️⃣ ⏰ Follow-Up Timing Agent" [ref=e524] [cursor=pointer]':
+                    - /url: "#4️⃣--follow-up-timing-agent"
+                    - img [ref=e525]
+                - generic [ref=e527]:
+                  - heading "🎯 Purpose" [level=3] [ref=e528]
+                  - 'link "Permalink: 🎯 Purpose" [ref=e529] [cursor=pointer]':
+                    - /url: "#-purpose-3"
+                    - img [ref=e530]
+                - paragraph [ref=e532]: Determine when and how to re-engage based on historical reply timing and urgency.
+                - generic [ref=e533]:
+                  - heading "⚙️ Flow" [level=3] [ref=e534]
+                  - 'link "Permalink: ⚙️ Flow" [ref=e535] [cursor=pointer]':
+                    - /url: "#️-flow-3"
+                    - img [ref=e536]
+                - generic [ref=e538]:
+                  - generic [ref=e539]: "📦 Inputs: Email Logs (sent & replied timestamps) 🔄 Flow: 1. `prepare_data()` → Clean logs for lead history 2. `analyze_patterns()` → Detect optimal windows 3. `generate_strategy()` → Recommend time + tone"
+                  - button "Copy" [ref=e541] [cursor=pointer]:
+                    - img [ref=e542]
+                - table [ref=e546]:
+                  - rowgroup [ref=e547]:
+                    - row [ref=e548]:
+                      - cell [ref=e549]:
+                        - link [ref=e550] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/followup_input.png
+                          - img [ref=e551]
+                      - cell [ref=e552]:
+                        - link [ref=e553] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/followup_output.png
+                          - img [ref=e554]
+                    - 'row "🔹 Input: 2 interactions (1 ignored) ✅ Output: Friday 9–10AM, Soft Nudge" [ref=e555]':
+                      - 'cell "🔹 Input: 2 interactions (1 ignored)" [ref=e556]'
+                      - 'cell "✅ Output: Friday 9–10AM, Soft Nudge" [ref=e557]'
+                - separator [ref=e558]
+                - generic [ref=e559]:
+                  - heading "5️⃣ 📊 CRM Logger Agent" [level=2] [ref=e560]
+                  - 'link "Permalink: 5️⃣ 📊 CRM Logger Agent" [ref=e561] [cursor=pointer]':
+                    - /url: "#5️⃣--crm-logger-agent"
+                    - img [ref=e562]
+                - generic [ref=e564]:
+                  - heading "🎯 Purpose" [level=3] [ref=e565]
+                  - 'link "Permalink: 🎯 Purpose" [ref=e566] [cursor=pointer]':
+                    - /url: "#-purpose-4"
+                    - img [ref=e567]
+                - paragraph [ref=e569]: Track all agent actions, compile lead-level metrics, and support system-wide learning.
+                - generic [ref=e570]:
+                  - heading "⚙️ Flow" [level=3] [ref=e571]
+                  - 'link "Permalink: ⚙️ Flow" [ref=e572] [cursor=pointer]':
+                    - /url: "#️-flow-4"
+                    - img [ref=e573]
+                - generic [ref=e575]:
+                  - generic [ref=e576]: "📦 Inputs: All agent events (dict format) 🔄 Flow: 1. `validate_event()` → Ensure data integrity 2. `update_metrics()` → Count and categorize activity 3. `generate_summary()` → Response rate + timeline"
+                  - button "Copy" [ref=e578] [cursor=pointer]:
+                    - img [ref=e579]
+                - table [ref=e583]:
+                  - rowgroup [ref=e584]:
+                    - row [ref=e585]:
+                      - cell [ref=e586]:
+                        - link [ref=e587] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/crm_input.png
+                          - img [ref=e588]
+                      - cell [ref=e589]:
+                        - link [ref=e590] [cursor=pointer]:
+                          - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/blob/main/assets/crm_output.png
+                          - img [ref=e591]
+                    - 'row "🔹 Input: Email sent (0.85 score) ✅ Output: Summary (3 events, 0% response)" [ref=e592]':
+                      - 'cell "🔹 Input: Email sent (0.85 score)" [ref=e593]'
+                      - 'cell "✅ Output: Summary (3 events, 0% response)" [ref=e594]'
+                - separator [ref=e595]
+                - generic [ref=e596]:
+                  - heading "🧠 Core Architecture" [level=2] [ref=e597]
+                  - 'link "Permalink: 🧠 Core Architecture" [ref=e598] [cursor=pointer]':
+                    - /url: "#-core-architecture"
+                    - img [ref=e599]
+                - paragraph [ref=e601]: "Each agent follows a consistent modular LangGraph pattern:"
+                - generic [ref=e602]:
+                  - generic [ref=e603]: workflow = StateGraph(Dict) workflow.add_node("prepare_data", prepare_data) workflow.add_node("analyze_patterns", analyze_patterns) workflow.add_node("generate_insights", generate_insights) workflow.set_entry_point("prepare_data")
+                  - button "Copy" [ref=e605] [cursor=pointer]:
+                    - img [ref=e606]
+                - list [ref=e609]:
+                  - listitem [ref=e610]:
+                    - text: Only
+                    - code [ref=e611]: generate_insights()
+                    - text: or
+                    - code [ref=e612]: generate_email()
+                    - text: uses LLM (Gemini)
+                  - listitem [ref=e613]: The rest is traditional Python/Pandas/statistical analysis
+                - separator [ref=e614]
+                - generic [ref=e615]:
+                  - heading "🔍 Highlights" [level=2] [ref=e616]
+                  - 'link "Permalink: 🔍 Highlights" [ref=e617] [cursor=pointer]':
+                    - /url: "#-highlights"
+                    - img [ref=e618]
+                - list [ref=e620]:
+                  - listitem [ref=e621]:
+                    - text: 🧠
+                    - strong [ref=e622]: Hybrid Reasoning
+                    - text: ": LLM + heuristics + data patterns"
+                  - listitem [ref=e623]:
+                    - text: 📈
+                    - strong [ref=e624]: Real Data
+                    - text: ": Used 40K+ leads and 1400+ emails"
+                  - listitem [ref=e625]:
+                    - text: ♻️
+                    - strong [ref=e626]: Feedback Loops
+                    - text: ": CRM logger feeds back what works"
+                  - listitem [ref=e627]:
+                    - text: 🔗
+                    - strong [ref=e628]: Composable Agents
+                    - text: ": Test or replace independently"
+                - separator [ref=e629]
+                - generic [ref=e630]:
+                  - heading "🛠️ Installation & Setup" [level=2] [ref=e631]
+                  - 'link "Permalink: 🛠️ Installation & Setup" [ref=e632] [cursor=pointer]':
+                    - /url: "#️-installation--setup"
+                    - img [ref=e633]
+                - generic [ref=e635]:
+                  - generic [ref=e636]:
+                    - generic [ref=e637]: "# 1. Clone the repo"
+                    - text: git clone https://github.com/RaviKunapareddy/Sales-Multi-Agent-AI.git
+                    - generic [ref=e638]: "# 2. Navigate to the project directory"
+                    - text: cd Sales-Multi-Agent-AI
+                    - generic [ref=e639]: "# 3. Create and activate a virtual environment"
+                    - text: python -m venv venv source venv/bin/activate
+                    - generic [ref=e640]: "# or `venv\\Scripts\\activate` on Windows"
+                    - generic [ref=e641]: "# 4. Install dependencies"
+                    - text: pip install -r requirements.txt
+                  - button "Copy" [ref=e643] [cursor=pointer]:
+                    - img [ref=e644]
+                - generic [ref=e647]:
+                  - heading "Environment Setup" [level=3] [ref=e648]
+                  - 'link "Permalink: Environment Setup" [ref=e649] [cursor=pointer]':
+                    - /url: "#environment-setup"
+                    - img [ref=e650]
+                - list [ref=e652]:
+                  - listitem [ref=e653]:
+                    - text: Create a
+                    - code [ref=e654]: .env
+                    - text: file in the root directory
+                  - listitem [ref=e655]: "Add your Gemini API key:"
+                - generic [ref=e656]:
+                  - code [ref=e658]: GOOGLE_API_KEY=your_api_key_here
+                  - button "Copy" [ref=e660] [cursor=pointer]:
+                    - img [ref=e661]
+                - generic [ref=e664]:
+                  - heading "Running Tests" [level=3] [ref=e665]
+                  - 'link "Permalink: Running Tests" [ref=e666] [cursor=pointer]':
+                    - /url: "#running-tests"
+                    - img [ref=e667]
+                - generic [ref=e669]:
+                  - generic [ref=e670]:
+                    - generic [ref=e671]: "# Run all tests"
+                    - text: pytest tests/
+                    - generic [ref=e672]: "# Run specific test"
+                    - text: pytest tests/test_lead_research.py
+                  - button "Copy" [ref=e674] [cursor=pointer]:
+                    - img [ref=e675]
+                - separator [ref=e678]
+                - generic [ref=e679]:
+                  - heading "🚀 Built By" [level=2] [ref=e680]
+                  - 'link "Permalink: 🚀 Built By" [ref=e681] [cursor=pointer]':
+                    - /url: "#-built-by"
+                    - img [ref=e682]
+                - paragraph [ref=e684]:
+                  - strong [ref=e685]: Raviteja Kunapareddy
+                  - text: Purpose-driven AI systems engineer who builds explainable, reasoning-first GenAI workflows.
+                - paragraph [ref=e686]:
+                  - text: 📌
+                  - link "LinkedIn" [ref=e687] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/in/ravi-kunapareddy/
+                  - text: •
+                  - link "GitHub" [ref=e688] [cursor=pointer]:
+                    - /url: https://github.com/RaviKunapareddy
+        - generic [ref=e692]:
+          - generic [ref=e695]:
+            - heading "About" [level=2] [ref=e696]
+            - paragraph [ref=e697]: Multi-Agent AI for Sales Engagement using LangGraph and Gemini LLM
+            - heading "Resources" [level=3] [ref=e698]
+            - link "Readme" [ref=e700] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e701]
+              - text: Readme
+            - link "Activity" [ref=e704] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/activity
+              - img [ref=e705]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e707]
+            - link "3 stars" [ref=e709] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/stargazers
+              - img [ref=e710]
+              - strong [ref=e712]: "3"
+              - text: stars
+            - heading "Watchers" [level=3] [ref=e713]
+            - link "1 watching" [ref=e715] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/watchers
+              - img [ref=e716]
+              - strong [ref=e718]: "1"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e719]
+            - link "1 fork" [ref=e721] [cursor=pointer]:
+              - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/forks
+              - img [ref=e722]
+              - strong [ref=e724]: "1"
+              - text: fork
+            - link "Report repository" [ref=e726] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2FRaviKunapareddy%2FSales-Multi-Agent-AI&report=RaviKunapareddy+%28user%29
+          - generic [ref=e728]:
+            - heading "Releases" [level=2] [ref=e729]:
+              - link "Releases" [ref=e730] [cursor=pointer]:
+                - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/releases
+            - generic [ref=e731]: No releases published
+          - generic [ref=e733]:
+            - heading "Packages" [level=2] [ref=e734]:
+              - link "Packages" [ref=e735] [cursor=pointer]:
+                - /url: /users/RaviKunapareddy/packages?repo_name=Sales-Multi-Agent-AI
+            - generic [ref=e736]: No packages published
+          - generic [ref=e738]:
+            - heading "Contributors 1" [level=2] [ref=e739]:
+              - link "Contributors 1" [ref=e740] [cursor=pointer]:
+                - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/graphs/contributors
+                - text: Contributors
+                - generic "1" [ref=e741]
+            - list [ref=e742]:
+              - listitem [ref=e743]:
+                - link "@RaviKunapareddy" [ref=e744] [cursor=pointer]:
+                  - /url: https://github.com/RaviKunapareddy
+                  - img "@RaviKunapareddy" [ref=e745]
+                - link "RaviKunapareddy" [ref=e747] [cursor=pointer]:
+                  - /url: https://github.com/RaviKunapareddy
+                  - strong [ref=e748]: RaviKunapareddy
+          - generic [ref=e750]:
+            - heading "Languages" [level=2] [ref=e751]
+            - list [ref=e755]:
+              - listitem [ref=e756]:
+                - link "Python 100.0%" [ref=e757] [cursor=pointer]:
+                  - /url: /RaviKunapareddy/Sales-Multi-Agent-AI/search?l=python
+                  - img [ref=e758]
+                  - generic [ref=e760]: Python
+                  - generic [ref=e761]: 100.0%
+  - contentinfo [ref=e763]:
+    - heading "Footer" [level=2] [ref=e764]
+    - generic [ref=e765]:
+      - generic [ref=e766]:
+        - link "GitHub Homepage" [ref=e767] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e768]
+        - generic [ref=e770]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e771]:
+        - heading "Footer navigation" [level=3] [ref=e772]
+        - list "Footer navigation" [ref=e773]:
+          - listitem [ref=e774]:
+            - link "Terms" [ref=e775] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e776]:
+            - link "Privacy" [ref=e777] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e778]:
+            - link "Security" [ref=e779] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e780]:
+            - link "Status" [ref=e781] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e782]:
+            - link "Community" [ref=e783] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e784]:
+            - link "Docs" [ref=e785] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e786]:
+            - link "Contact" [ref=e787] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e788]:
+            - button "Manage cookies" [ref=e790] [cursor=pointer]
+          - listitem [ref=e791]:
+            - button "Do not share my personal information" [ref=e793] [cursor=pointer]

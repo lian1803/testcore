@@ -1,0 +1,25 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "📊 영업 대시보드" [level=1] [ref=e4]
+    - paragraph [ref=e5]: 진행 중인 영업 업체 현황
+    - button "🔄 새로고침" [ref=e7] [cursor=pointer]
+  - table [ref=e9]:
+    - rowgroup [ref=e10]:
+      - row "연락처 업체명 상태 추가됨" [ref=e11]:
+        - columnheader "연락처" [ref=e12]
+        - columnheader "업체명" [ref=e13]
+        - columnheader "상태" [ref=e14]
+        - columnheader "추가됨" [ref=e15]
+    - rowgroup [ref=e16]:
+      - row "010-1234-5678 양주 헤어림 1차 발송 대기 2026. 4. 4." [ref=e17] [cursor=pointer]:
+        - cell "010-1234-5678" [ref=e18]
+        - cell "양주 헤어림" [ref=e19]
+        - cell "1차 발송 대기" [ref=e20]:
+          - generic [ref=e21]: 1차 발송 대기
+        - cell "2026. 4. 4." [ref=e22]
+      - row "010-9876-5432 의정부 피부관리샵 답변 대기 2026. 4. 4." [ref=e23] [cursor=pointer]:
+        - cell "010-9876-5432" [ref=e24]
+        - cell "의정부 피부관리샵" [ref=e25]
+        - cell "답변 대기" [ref=e26]:
+          - generic [ref=e27]: 답변 대기
+        - cell "2026. 4. 4." [ref=e28]

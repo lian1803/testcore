@@ -1,0 +1,398 @@
+- generic [ref=e2]:
+  - region
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e9]:
+        - button "Toggle navigation" [ref=e11] [cursor=pointer]
+        - link "Homepage" [ref=e17] [cursor=pointer]:
+          - /url: /
+          - img [ref=e18]
+        - generic [ref=e20]:
+          - link "Sign in" [ref=e21] [cursor=pointer]:
+            - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fomnyx2%2Fnaver_place_crawling
+          - button "Appearance settings" [ref=e24] [cursor=pointer]:
+            - img
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img [ref=e33]
+          - link "omnyx2" [ref=e36] [cursor=pointer]:
+            - /url: /omnyx2
+          - generic [ref=e37]: /
+          - strong [ref=e38]:
+            - link "naver_place_crawling" [ref=e39] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling
+          - generic [ref=e40]: Public
+        - generic [ref=e41]:
+          - list:
+            - listitem [ref=e42]:
+              - link "You must be signed in to change notification settings" [ref=e43] [cursor=pointer]:
+                - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                - img [ref=e44]
+                - text: Notifications
+            - listitem [ref=e46]:
+              - link "Fork 1" [ref=e47] [cursor=pointer]:
+                - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                - img [ref=e48]
+                - text: Fork
+                - generic "1" [ref=e50]
+            - listitem [ref=e51]:
+              - link "You must be signed in to star a repository" [ref=e53] [cursor=pointer]:
+                - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                - img [ref=e54]
+                - text: Star
+                - generic "0 users starred this repository" [ref=e56]: "0"
+      - navigation "Repository" [ref=e57]:
+        - list [ref=e58]:
+          - listitem [ref=e59]:
+            - link "Code" [ref=e60] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling
+              - img [ref=e61]
+              - generic [ref=e63]: Code
+          - listitem [ref=e64]:
+            - link "Issues" [ref=e65] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/issues
+              - img [ref=e66]
+              - generic [ref=e69]: Issues
+          - listitem [ref=e70]:
+            - link "Pull requests" [ref=e71] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/pulls
+              - img [ref=e72]
+              - generic [ref=e74]: Pull requests
+          - listitem [ref=e75]:
+            - link "Actions" [ref=e76] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/actions
+              - img [ref=e77]
+              - generic [ref=e79]: Actions
+          - listitem [ref=e80]:
+            - link "Projects" [ref=e81] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/projects
+              - img [ref=e82]
+              - generic [ref=e84]: Projects
+          - listitem [ref=e85]:
+            - link "Security and quality" [ref=e86] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/security
+              - img [ref=e87]
+              - generic [ref=e89]: Security and quality
+          - listitem [ref=e90]:
+            - link "Insights" [ref=e91] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/pulse
+              - img [ref=e92]
+              - generic [ref=e94]: Insights
+    - generic [ref=e107]:
+      - heading "omnyx2/naver_place_crawling" [level=1] [ref=e109]
+      - generic [ref=e110]:
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - button "master branch" [ref=e117] [cursor=pointer]:
+                - generic [ref=e118]:
+                  - generic [ref=e120]:
+                    - img [ref=e122]
+                    - generic [ref=e125]: master
+                  - generic:
+                    - img
+              - generic [ref=e126]:
+                - link "Go to Branches page" [ref=e127] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/branches
+                  - img [ref=e128]
+                - link "Go to Tags page" [ref=e130] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/tags
+                  - img [ref=e131]
+            - generic [ref=e133]:
+              - button "Go to file" [ref=e136] [cursor=pointer]:
+                - generic [ref=e138]: Go to file
+              - button "Code" [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]:
+                  - generic:
+                    - img
+                  - generic [ref=e141]: Code
+                  - generic:
+                    - img
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - heading "Folders and files" [level=2] [ref=e144]
+              - table "Folders and files" [ref=e145]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e146]:
+                  - row "Latest commit omnyx2 commits by omnyx2 bug.. Commit bf93f70 · Dec 9, 20206 years ago History View commit history for this file." [ref=e147]:
+                    - cell "Latest commit omnyx2 commits by omnyx2 bug.. Commit bf93f70 · Dec 9, 20206 years ago History View commit history for this file." [ref=e148]:
+                      - generic [ref=e149]:
+                        - heading "Latest commit" [level=2] [ref=e150]
+                        - generic [ref=e151]:
+                          - generic [ref=e153]:
+                            - link "omnyx2" [ref=e154] [cursor=pointer]:
+                              - /url: /omnyx2
+                              - img "omnyx2" [ref=e155]
+                            - link "commits by omnyx2" [ref=e156] [cursor=pointer]:
+                              - /url: /omnyx2/naver_place_crawling/commits?author=omnyx2
+                              - text: omnyx2
+                          - link "bug.." [ref=e160] [cursor=pointer]:
+                            - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                        - generic [ref=e161]:
+                          - generic [ref=e163]:
+                            - link "Commit bf93f70" [ref=e164] [cursor=pointer]:
+                              - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                              - text: bf93f70
+                            - text: ·
+                            - generic "Dec 9, 2020, 5:41 AM GMT+9" [ref=e165]: Dec 9, 20206 years ago
+                          - generic [ref=e166]:
+                            - heading "History" [level=2] [ref=e167]
+                            - link "View commit history for this file." [ref=e169] [cursor=pointer]:
+                              - /url: /omnyx2/naver_place_crawling/commits/master/
+                              - generic [ref=e170]:
+                                - generic:
+                                  - img
+                  - row "data_csv, (Directory) bug.. Dec 9, 20206 years ago" [ref=e171]:
+                    - cell "data_csv, (Directory)" [ref=e172]:
+                      - generic [ref=e173]:
+                        - img [ref=e174]
+                        - link "data_csv, (Directory)" [ref=e179] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/tree/master/data_csv
+                          - text: data_csv
+                    - cell "bug.." [ref=e180]:
+                      - link "bug.." [ref=e183] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e184]:
+                      - generic [ref=e185]: Dec 9, 20206 years ago
+                  - row "음식_광주_도로명_행정동명_광주, (Directory) bug.. Dec 9, 20206 years ago" [ref=e186]:
+                    - cell "음식_광주_도로명_행정동명_광주, (Directory)" [ref=e187]:
+                      - generic [ref=e188]:
+                        - img [ref=e189]
+                        - link "음식_광주_도로명_행정동명_광주, (Directory)" [ref=e194] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/tree/master/%EC%9D%8C%EC%8B%9D_%EA%B4%91%EC%A3%BC_%EB%8F%84%EB%A1%9C%EB%AA%85_%ED%96%89%EC%A0%95%EB%8F%99%EB%AA%85_%EA%B4%91%EC%A3%BC
+                          - text: 음식_광주_도로명_행정동명_광주
+                    - cell "bug.." [ref=e195]:
+                      - link "bug.." [ref=e198] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e199]:
+                      - generic [ref=e200]: Dec 9, 20206 years ago
+                  - row "README.txt, (File) bug.. Dec 9, 20206 years ago" [ref=e201]:
+                    - cell "README.txt, (File)" [ref=e202]:
+                      - generic [ref=e203]:
+                        - img [ref=e204]
+                        - link "README.txt, (File)" [ref=e209] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/README.txt
+                          - text: README.txt
+                    - cell "bug.." [ref=e210]:
+                      - link "bug.." [ref=e213] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e214]:
+                      - generic [ref=e215]: Dec 9, 20206 years ago
+                  - row "SearchList.csv, (File) bug.. Dec 9, 20206 years ago" [ref=e216]:
+                    - cell "SearchList.csv, (File)" [ref=e217]:
+                      - generic [ref=e218]:
+                        - img [ref=e219]
+                        - link "SearchList.csv, (File)" [ref=e224] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/SearchList.csv
+                          - text: SearchList.csv
+                    - cell "bug.." [ref=e225]:
+                      - link "bug.." [ref=e228] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e229]:
+                      - generic [ref=e230]: Dec 9, 20206 years ago
+                  - row "clear_cachef.py, (File) bug.. Dec 9, 20206 years ago" [ref=e231]:
+                    - cell "clear_cachef.py, (File)" [ref=e232]:
+                      - generic [ref=e233]:
+                        - img [ref=e234]
+                        - link "clear_cachef.py, (File)" [ref=e239] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/clear_cachef.py
+                          - text: clear_cachef.py
+                    - cell "bug.." [ref=e240]:
+                      - link "bug.." [ref=e243] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e244]:
+                      - generic [ref=e245]: Dec 9, 20206 years ago
+                  - row "excute.py, (File) bug.. Dec 9, 20206 years ago" [ref=e246]:
+                    - cell "excute.py, (File)" [ref=e247]:
+                      - generic [ref=e248]:
+                        - img [ref=e249]
+                        - link "excute.py, (File)" [ref=e254] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/excute.py
+                          - text: excute.py
+                    - cell "bug.." [ref=e255]:
+                      - link "bug.." [ref=e258] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e259]:
+                      - generic [ref=e260]: Dec 9, 20206 years ago
+                  - row "map_crawler.py, (File) bug.. Dec 9, 20206 years ago" [ref=e261]:
+                    - cell "map_crawler.py, (File)" [ref=e262]:
+                      - generic [ref=e263]:
+                        - img [ref=e264]
+                        - link "map_crawler.py, (File)" [ref=e269] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/map_crawler.py
+                          - text: map_crawler.py
+                    - cell "bug.." [ref=e270]:
+                      - link "bug.." [ref=e273] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e274]:
+                      - generic [ref=e275]: Dec 9, 20206 years ago
+                  - row "store_crawler.py, (File) bug.. Dec 9, 20206 years ago" [ref=e276]:
+                    - cell "store_crawler.py, (File)" [ref=e277]:
+                      - generic [ref=e278]:
+                        - img [ref=e279]
+                        - link "store_crawler.py, (File)" [ref=e284] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/store_crawler.py
+                          - text: store_crawler.py
+                    - cell "bug.." [ref=e285]:
+                      - link "bug.." [ref=e288] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e289]:
+                      - generic [ref=e290]: Dec 9, 20206 years ago
+                  - row "test_csv.csv, (File) bug.. Dec 9, 20206 years ago" [ref=e291]:
+                    - cell "test_csv.csv, (File)" [ref=e292]:
+                      - generic [ref=e293]:
+                        - img [ref=e294]
+                        - link "test_csv.csv, (File)" [ref=e299] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/test_csv.csv
+                          - text: test_csv.csv
+                    - cell "bug.." [ref=e300]:
+                      - link "bug.." [ref=e303] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e304]:
+                      - generic [ref=e305]: Dec 9, 20206 years ago
+                  - row "새로운 네이버 URI 크롤링을 위한 데이터.html, (File) bug.. Dec 9, 20206 years ago" [ref=e306]:
+                    - cell "새로운 네이버 URI 크롤링을 위한 데이터.html, (File)" [ref=e307]:
+                      - generic [ref=e308]:
+                        - img [ref=e309]
+                        - link "새로운 네이버 URI 크롤링을 위한 데이터.html, (File)" [ref=e314] [cursor=pointer]:
+                          - /url: /omnyx2/naver_place_crawling/blob/master/%EC%83%88%EB%A1%9C%EC%9A%B4%20%EB%84%A4%EC%9D%B4%EB%B2%84%20URI%20%ED%81%AC%EB%A1%A4%EB%A7%81%EC%9D%84%20%EC%9C%84%ED%95%9C%20%EB%8D%B0%EC%9D%B4%ED%84%B0.html
+                          - text: 새로운 네이버 URI 크롤링을 위한 데이터.html
+                    - cell "bug.." [ref=e315]:
+                      - link "bug.." [ref=e318] [cursor=pointer]:
+                        - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                    - cell "Dec 9, 20206 years ago" [ref=e319]:
+                      - generic [ref=e320]: Dec 9, 20206 years ago
+            - generic [ref=e322]:
+              - generic [ref=e323]:
+                - heading "Repository files navigation" [level=2] [ref=e324]
+                - navigation "Repository files" [ref=e325]:
+                  - list [ref=e326]:
+                    - listitem [ref=e327]:
+                      - link "README" [ref=e328] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e330]
+                        - generic [ref=e332]: README
+              - generic [ref=e335]:
+                - text: "# ** 중요: 현재 네이버 맵 음식점 검색 요청 URI의 변경으로 툴이 정상으로 작동하지 않습니다. # 검색 방식을 변경해야하며 검색 방식은 map_crawlew.py의 get_data_via_chorme를에서 받아오는 기본 주소를 변경하여 사용하시면 됩니다. # 1. 본 프로그램의 사용에 의한 불이익은 책임지지 않습니다. # 2. Dependencies 설치 목록들 # + python3 -m pip install --user --upgrade beautifulsoup4 # + python3 -m pip install --user --upgrade urllib # + python3 -m pip install --user --upgrade selenium # + chromedriver에 자신의 크롬과 같은 버전의 chromedvier를 다운 받아서 넣어준다. # +"
+                - link "https://chromedriver.chromium.org/downloads이" [ref=e336] [cursor=pointer]:
+                  - /url: https://chromedriver.chromium.org/downloads이
+                - text: "사이트에서 다운 받으면 된다 # 3. 본 프로그램의 실행은 excute.py를 실행시키면 된다. # 4. 이때 실행시키고 싶은 지역의 이름의 목록들을 SearchList에 넣으면 된다. # 5. 다만 검색함에 있어, 네이버 서버자체가 한 검색어에 대해 약 5000개의 리턴값을 가지므로 이를 충분히 고려하여 검색 지역 단위를 잡아야한다. 이에 따라 데이터의 특성이 충분히 달라질 수 있다. # 6. 예를 들어 모든 음식점을 알고 싶으면 SearchList는 시 -> 구 -> 동까지 세분화하여 값을 넣어야된다. # 7. 특징적인 것을 뽑고 싶을때는 시를 검색하여 상위 몇개의 데이터만 뽑으면 될 것이다. # 8. 그리고 그렇게 뽑힌 데이터는 test_csv에 저장된다. # 9. 해당 프로그램을 동작함에 있어 필요한 라이브러리는 다음과 같다."
+        - generic [ref=e340]:
+          - generic [ref=e343]:
+            - heading "About" [level=2] [ref=e344]
+            - paragraph [ref=e345]: 네이버 플레이스 크롤링, 네이버 음식점 크롤링
+            - heading "Resources" [level=3] [ref=e346]
+            - link "Readme" [ref=e348] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e349]
+              - text: Readme
+            - link "Activity" [ref=e352] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/activity
+              - img [ref=e353]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e355]
+            - link "0 stars" [ref=e357] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/stargazers
+              - img [ref=e358]
+              - strong [ref=e360]: "0"
+              - text: stars
+            - heading "Watchers" [level=3] [ref=e361]
+            - link "0 watching" [ref=e363] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/watchers
+              - img [ref=e364]
+              - strong [ref=e366]: "0"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e367]
+            - link "1 fork" [ref=e369] [cursor=pointer]:
+              - /url: /omnyx2/naver_place_crawling/forks
+              - img [ref=e370]
+              - strong [ref=e372]: "1"
+              - text: fork
+            - link "Report repository" [ref=e374] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fomnyx2%2Fnaver_place_crawling&report=omnyx2+%28user%29
+          - generic [ref=e376]:
+            - heading "Releases" [level=2] [ref=e377]:
+              - link "Releases" [ref=e378] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/releases
+            - generic [ref=e379]: No releases published
+          - generic [ref=e381]:
+            - heading "Packages" [level=2] [ref=e382]:
+              - link "Packages" [ref=e383] [cursor=pointer]:
+                - /url: /users/omnyx2/packages?repo_name=naver_place_crawling
+            - generic [ref=e384]: No packages published
+          - generic [ref=e386]:
+            - heading "Contributors 1" [level=2] [ref=e387]:
+              - link "Contributors 1" [ref=e388] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/graphs/contributors
+                - text: Contributors
+                - generic "1" [ref=e389]
+            - list [ref=e390]:
+              - listitem [ref=e391]:
+                - link "@omnyx2" [ref=e392] [cursor=pointer]:
+                  - /url: https://github.com/omnyx2
+                  - img "@omnyx2" [ref=e393]
+                - link "omnyx2" [ref=e395] [cursor=pointer]:
+                  - /url: https://github.com/omnyx2
+                  - strong [ref=e396]: omnyx2
+          - generic [ref=e398]:
+            - heading "Languages" [level=2] [ref=e399]
+            - list [ref=e404]:
+              - listitem [ref=e405]:
+                - link "HTML 94.1%" [ref=e406] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/search?l=html
+                  - img [ref=e407]
+                  - generic [ref=e409]: HTML
+                  - generic [ref=e410]: 94.1%
+              - listitem [ref=e411]:
+                - link "Python 5.9%" [ref=e412] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/search?l=python
+                  - img [ref=e413]
+                  - generic [ref=e415]: Python
+                  - generic [ref=e416]: 5.9%
+  - contentinfo [ref=e418]:
+    - heading "Footer" [level=2] [ref=e419]
+    - generic [ref=e420]:
+      - generic [ref=e421]:
+        - link "GitHub Homepage" [ref=e422] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e423]
+        - generic [ref=e425]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e426]:
+        - heading "Footer navigation" [level=3] [ref=e427]
+        - list "Footer navigation" [ref=e428]:
+          - listitem [ref=e429]:
+            - link "Terms" [ref=e430] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e431]:
+            - link "Privacy" [ref=e432] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e433]:
+            - link "Security" [ref=e434] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e435]:
+            - link "Status" [ref=e436] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e437]:
+            - link "Community" [ref=e438] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e439]:
+            - link "Docs" [ref=e440] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e441]:
+            - link "Contact" [ref=e442] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e443]:
+            - button "Manage cookies" [ref=e445] [cursor=pointer]
+          - listitem [ref=e446]:
+            - button "Do not share my personal information" [ref=e448] [cursor=pointer]

@@ -1,0 +1,122 @@
+{
+  "overview": "Immersive, scroll-driven 3D web experiences with dynamic interactions and rich visual depth, often featuring contemporary UI trends like glassmorphism and animated backgrounds.",
+  "colors": {
+    "background": [
+      "#0A0A0A",
+      "#1F1F2F",
+      "#E8E8F5",
+      "#FFFFFF"
+    ],
+    "primary": [
+      "#FFFFFF"
+    ],
+    "text": [
+      "#F0F0F0",
+      "#333333"
+    ],
+    "accent": [
+      "#E63946",
+      "#42A5F5",
+      "#A0D8B3",
+      "#FFC107"
+    ]
+  },
+  "typography": {
+    "heading": {
+      "family": "Inter",
+      "weight": "700",
+      "size_range": "clamp(2.5rem, 6vw, 4.5rem)"
+    },
+    "body": {
+      "family": "DM Sans",
+      "weight": "400",
+      "size_range": "clamp(1rem, 2vw, 1.2rem)"
+    },
+    "accent_text": {
+      "style": "uppercase",
+      "family": "Inter",
+      "weight": "600",
+      "size_range": "0.9rem"
+    }
+  },
+  "layout": {
+    "structure": "Typically starts with a full-screen hero section featuring a prominent 3D element and concise call-to-action. Subsequent sections unfold vertically, often presenting content alongside or interacting with additional 3D models or animated backgrounds. Follows a pattern of visual storytelling through scrolling.",
+    "max_width": "1440px",
+    "grid": "grid-template-columns: 1fr; (for full-width sections) or grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); (for content blocks)",
+    "spacing": "Generous vertical padding between sections (e.g., 8rem to 12rem); consistent horizontal padding for content containers (e.g., clamp(2rem, 5vw, 6rem))."
+  },
+  "animations": [
+    {
+      "element": "3D models",
+      "type": "scroll-based rotation, translation, scaling",
+      "timing": "linear",
+      "trigger": "scroll"
+    },
+    {
+      "element": "Background elements",
+      "type": "parallax scroll",
+      "timing": "linear",
+      "trigger": "scroll"
+    },
+    {
+      "element": "Text/UI elements",
+      "type": "fade-in, slide-up/down",
+      "timing": "0.6s ease-out",
+      "trigger": "scroll into view"
+    },
+    {
+      "element": "Scene transitions",
+      "type": "smooth camera movements, lighting changes",
+      "timing": "1s ease-in-out",
+      "trigger": "scroll"
+    }
+  ],
+  "interactions": [
+    {
+      "element": "CTA buttons",
+      "event": "hover",
+      "effect": "subtle scale (1.05), background color change, text color inverse",
+      "timing": "0.3s ease"
+    },
+    {
+      "element": "Navigation links",
+      "event": "hover",
+      "effect": "underline or color highlight",
+      "timing": "0.2s ease"
+    },
+    {
+      "element": "3D product models",
+      "event": "scroll",
+      "effect": "manipulate model (rotate, explode, zoom)",
+      "timing": "continuous, linked to scroll position"
+    },
+    {
+      "element": "Background elements",
+      "event": "scroll",
+      "effect": "change depth/perspective via parallax",
+      "timing": "continuous, linked to scroll position"
+    }
+  ],
+  "background_effects": "Dynamic 3D scenes (e.g., space, landscapes, abstract forms) with subtle motion and lighting, often utilizing gradients or ambient occlusion. Some examples feature frosted glass overlays (glassmorphism) for content containers. Textures and subtle patterns are also used for specific sections.",
+  "special_elements": [
+    "Fully integrated, interactive 3D models (e.g., keyboards, motorcycles, watches, space scenes)",
+    "Glassmorphism UI containers with blur and transparency",
+    "Scroll-driven narrative progression with scene changes",
+    "Particle effects and glowing elements on 3D objects",
+    "Custom cursor interactions (implied by dynamic feel, though not explicitly shown)"
+  ],
+  "css_variables": {
+    "--bg-dark": "#0A0A0A",
+    "--bg-light": "#FFFFFF",
+    "--text-primary-light": "#FFFFFF",
+    "--text-primary-dark": "#333333",
+    "--accent-red": "#E63946",
+    "--accent-blue": "#42A5F5",
+    "--font-heading": "'Inter', sans-serif",
+    "--font-body": "'DM Sans', sans-serif",
+    "--content-max-width": "1440px",
+    "--section-padding-y": "8rem",
+    "--container-padding-x": "clamp(2rem, 5vw, 6rem)"
+  },
+  "recreation_notes": "Recreating this design requires strong expertise in 3D web technologies (e.g., Three.js, R3F, Spline), meticulous optimization for performance across devices, and careful synchronization of scroll events with complex 3D animations. Attention to lighting, shadows, and material properties is crucial for realism. Responsive design must adapt 3D layouts and interactions for smaller screens. Compatibility with various browsers and hardware should be a primary concern."
+}

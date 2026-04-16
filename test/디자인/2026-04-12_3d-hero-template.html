@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Hero Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: radial-gradient(ellipse at 50% 40%, #0d0b1e 0%, #06050f 55%, #000 100%);
+    }
+
+    #canvas-container { position: fixed; inset: 0; z-index: 1; }
+    canvas { display: block; }
+
+    /* Grain overlay */
+    #grain { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0.035; }
+
+    /* Hero text */
+    #hero-ui {
+      position: fixed; inset: 0; z-index: 5;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-bottom: 5rem; pointer-events: none;
+      text-align: center;
+    }
+    #hero-label {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.5rem, 0.9vw, 0.65rem);
+      letter-spacing: 0.55em; color: rgba(120,130,255,0.65);
+      text-transform: uppercase; opacity: 0; margin-bottom: 1rem;
+    }
+    #hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 9vw, 7rem);
+      font-weight: 200; color: #fff;
+      letter-spacing: 0.15em; line-height: 1;
+      opacity: 0; transform: translateY(30px);
+      text-shadow: 0 0 60px rgba(100,100,255,0.3), 0 0 120px rgba(255,60,120,0.15);
+    }
+    #hero-sub {
+      margin-top: 1.4rem;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+      font-weight: 300; color: rgba(255,255,255,0.38);
+      letter-spacing: 0.08em; opacity: 0; transform: translateY(12px);
+    }
+    #hero-cta {
+      margin-top: 2.5rem;
+      padding: 0.8rem 2.4rem;
+      background: transparent;
+      border: 1px solid rgba(120,130,255,0.4);
+      color: rgba(140,150,255,0.9);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+      pointer-events: all; opacity: 0; transform: translateY(12px);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    #hero-cta:hover { background: rgba(100,110,255,0.1); border-color: rgba(120,130,255,0.75); }
+
+    /* Loading */
+    #loading {
+      position: fixed; inset: 0; z-index: 30;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.2rem; background: #06050f;
+    }
+    #loading-text {
+      font-family: 'Inter', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.4em; color: rgba(255,255,255,0.3); text-transform: uppercase;
+    }
+    #loading-track { width: 180px; height: 1px; background: rgba(255,255,255,0.08); }
+    #loading-fill { height: 100%; background: rgba(120,130,255,0.7); width: 0%; transition: width 0.15s; }
+
+    /* Cursor */
+    #cursor {
+      position: fixed; width: 5px; height: 5px;
+      background: rgba(160,170,255,0.9); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%); transition: transform 0.1s;
+    }
+    #cursor-ring {
+      position: fixed; width: 28px; height: 28px;
+      border: 1px solid rgba(120,130,255,0.3); border-radius: 50%;
+      pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<svg id="grain" width="100%" height="100%">
+  <filter id="fnoise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" seed="9"/>
+    <feDisplacementMap in="SourceGraphic" scale="1"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#fnoise)" opacity="0.04"/>
+</svg>
+
+<div id="hero-ui">
+  <div id="hero-label">3D Interactive Hero</div>
+  <div id="hero-title">ABSTRACT</div>
+  <div id="hero-sub">Replace MODEL_URL with any glTF / GLB file.</div>
+  <button id="hero-cta">Explore</button>
+</div>
+
+<div id="loading">
+  <div id="loading-text">Loading 0%</div>
+  <div id="loading-track"><div id="loading-fill"></div></div>
+</div>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIG — 에이전트가 여기만 바꿔서 다른 히어로 즉시 생성
+// ════════════════════════════════════════════════════════════
+const CONFIG = {
+
+  // ── 모델 ──────────────────────────────────────────────────
+  // 로컬 예시: '/models/abstract_core.glb'
+  // 외부 예시: 'https://cdn.example.com/hero_model.glb'
+  // ⚠️  파일:// 프로토콜에서는 CORS 문제 발생 시 로컬 서버 사용
+  MODEL_URL: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+  MODEL_SCALE: 2.2,          // world units 기준 최대 치수
+
+  // ── 카메라 ────────────────────────────────────────────────
+  CAMERA: {
+    fov: 45,
+    pos: [0, 0, 5.2],
+    near: 0.1,
+    far: 100,
+  },
+
+  // ── 오토 로테이션 ─────────────────────────────────────────
+  ROTATE: {
+    enabled: true,
+    speed: 0.22,             // rad/sec  (2π/speed = 1회전 시간 ~28s)
+  },
+
+  // ── 부유 (Floating) ──────────────────────────────────────
+  FLOAT: {
+    height: 0.13,            // 위아래 진폭 (world units)
+    speed: 0.85,             // rad/sec  (주기 ~7.4s)
+  },
+
+  // ── 마우스 패럴랙스 ───────────────────────────────────────
+  PARALLAX: {
+    camX: 0.65,              // 카메라 좌우 이동 강도
+    camY: 0.30,              // 카메라 상하 이동 강도
+    lightX: 2.2,             // 키라이트 X 이동 강도
+    lightY: 1.8,             // 키라이트 Y 이동 강도
+    smooth: 0.05,            // 보간 속도 (0.01 느림 ~ 0.15 빠름)
+  },
+
+  // ── 조명 ─────────────────────────────────────────────────
+  LIGHT: {
+    ambient: { color: 0x112244, intensity: 0.7 },
+    hemi:    { sky: 0x1a1a3a, ground: 0x000000, intensity: 0.5 },
+    key:     { color: 0x99aaff, intensity: 4.5, pos: [ 3.0,  4.0,  3.0] },
+    fill:    { color: 0xff3366, intensity: 1.3, pos: [-4.0,  1.0, -2.0] },
+    rim:     { color: 0x33ffaa, intensity: 1.0, pos: [ 0.0, -3.0, -5.0] },
+  },
+
+  // ── 배경 파티클 ───────────────────────────────────────────
+  PARTICLES: {
+    count: 280,              // 모바일 고려 — 500 이하 권장
+    spread: 28,
+    size: 0.05,
+    color: 0x9999cc,
+    opacity: 0.45,
+  },
+};
+// ════════════════════════════════════════════════════════════
+
+// ── 초기화 ──
+const container = document.getElementById('canvas-container');
+const W = () => window.innerWidth;
+const H = () => window.innerHeight;
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(W(), H());
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+renderer.outputEncoding = THREE.sRGBEncoding;
+container.appendChild(renderer.domElement);
+
+// Scene
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x06050f, 0.026);
+
+// Camera
+const camera = new THREE.PerspectiveCamera(
+  CONFIG.CAMERA.fov, W() / H(), CONFIG.CAMERA.near, CONFIG.CAMERA.far
+);
+const CAM_BASE = { x: CONFIG.CAMERA.pos[0], y: CONFIG.CAMERA.pos[1], z: CONFIG.CAMERA.pos[2] };
+camera.position.set(CAM_BASE.x, CAM_BASE.y, CAM_BASE.z);
+
+// ── 조명 ──
+scene.add(new THREE.AmbientLight(CONFIG.LIGHT.ambient.color, CONFIG.LIGHT.ambient.intensity));
+scene.add(new THREE.HemisphereLight(CONFIG.LIGHT.hemi.sky, CONFIG.LIGHT.hemi.ground, CONFIG.LIGHT.hemi.intensity));
+
+const keyLight = new THREE.DirectionalLight(CONFIG.LIGHT.key.color, CONFIG.LIGHT.key.intensity);
+keyLight.position.set(...CONFIG.LIGHT.key.pos);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(1024, 1024);
+scene.add(keyLight);
+
+const fillLight = new THREE.PointLight(CONFIG.LIGHT.fill.color, CONFIG.LIGHT.fill.intensity, 18);
+fillLight.position.set(...CONFIG.LIGHT.fill.pos);
+scene.add(fillLight);
+
+const rimLight = new THREE.PointLight(CONFIG.LIGHT.rim.color, CONFIG.LIGHT.rim.intensity, 14);
+rimLight.position.set(...CONFIG.LIGHT.rim.pos);
+scene.add(rimLight);
+
+// ── 배경 파티클 ──
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(CONFIG.PARTICLES.count * 3);
+for (let i = 0; i < CONFIG.PARTICLES.count * 3; i++) {
+  pPos[i] = (Math.random() - 0.5) * CONFIG.PARTICLES.spread;
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+  color: CONFIG.PARTICLES.color, size: CONFIG.PARTICLES.size,
+  transparent: true, opacity: CONFIG.PARTICLES.opacity,
+  sizeAttenuation: true, depthWrite: false,
+})));
+
+// ── 모델 로드 ──
+let modelGroup = null;
+
+const loadingEl   = document.getElementById('loading');
+const loadingTxt  = document.getElementById('loading-text');
+const loadingFill = document.getElementById('loading-fill');
+
+function spawnModel(object) {
+  modelGroup = new THREE.Group();
+
+  // 자동 센터링 + 스케일
+  const box    = new THREE.Box3().setFromObject(object);
+  const center = box.getCenter(new THREE.Vector3());
+  const size   = box.getSize(new THREE.Vector3());
+  const s      = CONFIG.MODEL_SCALE / Math.max(size.x, size.y, size.z);
+  object.scale.setScalar(s);
+  object.position.sub(center.multiplyScalar(s));
+
+  modelGroup.add(object);
+  scene.add(modelGroup);
+
+  // 입장 애니메이션
+  modelGroup.scale.setScalar(0);
+  gsap.to(modelGroup.scale, { x:1, y:1, z:1, duration:1.8, ease:'elastic.out(1,0.55)', delay:0.2 });
+
+  // 로딩 화면 제거
+  gsap.to(loadingEl, { opacity:0, duration:0.7, delay:0.1, onComplete: () => loadingEl.style.display='none' });
+
+  // UI 등장
+  const tl = gsap.timeline({ delay: 0.4 });
+  tl.to('#hero-label', { opacity:1, duration:0.9, ease:'power2.out' });
+  tl.to('#hero-title', { opacity:1, y:0, duration:1.2, ease:'power3.out' }, '-=0.4');
+  tl.to('#hero-sub',   { opacity:1, y:0, duration:0.9, ease:'power2.out' }, '-=0.6');
+  tl.to('#hero-cta',   { opacity:1, y:0, duration:0.8, ease:'power2.out' }, '-=0.5');
+}
+
+// 폴백 — CORS 실패 시 절차적 지오메트리 사용
+function spawnFallback() {
+  const geo = new THREE.IcosahedronGeometry(1.0, 5);
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0x3344dd, roughness: 0.15, metalness: 0.95,
+    emissive: 0x112255, emissiveIntensity: 0.4,
+  });
+  spawnModel(new THREE.Mesh(geo, mat));
+  loadingTxt.textContent = 'MODEL_URL 불러오기 실패 — 폴백 사용 중';
+  loadingTxt.style.color = 'rgba(255,180,80,0.6)';
+  setTimeout(() => spawnModel && gsap.to(loadingEl, { opacity:0, duration:0.5, onComplete:()=>loadingEl.style.display='none' }), 1500);
+}
+
+const loader = new THREE.GLTFLoader();
+loader.load(
+  CONFIG.MODEL_URL,
+  (gltf) => spawnModel(gltf.scene),
+  (xhr) => {
+    if (xhr.total > 0) {
+      const pct = Math.round(xhr.loaded / xhr.total * 100);
+      loadingTxt.textContent = `Loading ${pct}%`;
+      loadingFill.style.width = pct + '%';
+    }
+  },
+  (err) => { console.warn('GLTF failed, using fallback:', err); spawnFallback(); }
+);
+
+// ── 마우스 ──
+let rawMX = 0, rawMY = 0;
+let tgtCamX = 0, tgtCamY = 0;
+let smCamX = 0, smCamY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  rawMX = (e.clientX / W() - 0.5) * 2;   // -1 ~ 1
+  rawMY = (e.clientY / H() - 0.5) * 2;   // -1 ~ 1
+  tgtCamX =  rawMX * CONFIG.PARALLAX.camX;
+  tgtCamY = -rawMY * CONFIG.PARALLAX.camY;
+});
+
+// 커서
+const cursorEl  = document.getElementById('cursor');
+const cursorRng = document.getElementById('cursor-ring');
+let cx = W()/2, cy = H()/2, rx = cx, ry = cy;
+document.addEventListener('mousemove', (e) => { cx = e.clientX; cy = e.clientY; });
+setInterval(() => {
+  rx += (cx - rx) * 0.12;
+  ry += (cy - ry) * 0.12;
+  cursorEl.style.left  = cx + 'px';
+  cursorEl.style.top   = cy + 'px';
+  cursorRng.style.left = rx + 'px';
+  cursorRng.style.top  = ry + 'px';
+}, 16);
+
+// 리사이즈
+window.addEventListener('resize', () => {
+  camera.aspect = W() / H();
+  camera.updateProjectionMatrix();
+  renderer.setSize(W(), H());
+});
+
+// ── 렌더 루프 ──
+const clock = new THREE.Clock();
+let prevT = 0;
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const elapsed = clock.getElapsedTime();
+  const delta   = elapsed - prevT;
+  prevT = elapsed;
+
+  if (modelGroup) {
+    // 오토 로테이션
+    if (CONFIG.ROTATE.enabled) {
+      modelGroup.rotation.y += CONFIG.ROTATE.speed * delta;
+    }
+    // 부유
+    modelGroup.position.y = Math.sin(elapsed * CONFIG.FLOAT.speed) * CONFIG.FLOAT.height;
+  }
+
+  // 카메라 패럴랙스 (부드럽게 추적)
+  smCamX += (tgtCamX - smCamX) * CONFIG.PARALLAX.smooth;
+  smCamY += (tgtCamY - smCamY) * CONFIG.PARALLAX.smooth;
+  camera.position.x = CAM_BASE.x + smCamX;
+  camera.position.y = CAM_BASE.y + smCamY;
+  camera.lookAt(0, 0, 0);
+
+  // 키라이트 마우스 따라오기
+  keyLight.position.x = CONFIG.LIGHT.key.pos[0] + rawMX * CONFIG.PARALLAX.lightX;
+  keyLight.position.y = CONFIG.LIGHT.key.pos[1] - rawMY * CONFIG.PARALLAX.lightY;
+
+  renderer.render(scene, camera);
+}
+
+animate();
+</script>
+
+<!--
+════════════════════════════════════════════════════════════
+  R3F 버전 사용법 (별도 파일: HeroScene.jsx)
+════════════════════════════════════════════════════════════
+
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useGLTF, Float, Environment, OrbitControls } from '@react-three/drei'
+import { useRef } from 'react'
+
+// CONFIG
+const CAMERA_CONFIG      = { fov: 45, position: [0, 0, 5.2] }
+const FLOAT_CONFIG       = { speed: 1.4, rotationIntensity: 0.4, floatIntensity: 0.13 }
+const LIGHT_CONFIG       = { keyColor: '#99aaff', keyIntensity: 4.5, fillColor: '#ff3366', fillIntensity: 1.3 }
+
+function Model({ modelUrl }) {
+  const { scene } = useGLTF(modelUrl)
+  const ref = useRef()
+  useFrame((state) => {
+    const mx = state.mouse.x * 0.6
+    const my = -state.mouse.y * 0.3
+    ref.current.rotation.y += 0.004
+    state.camera.position.x += (mx - state.camera.position.x) * 0.05
+    state.camera.position.y += (my - state.camera.position.y) * 0.05
+    state.camera.lookAt(0, 0, 0)
+  })
+  return <primitive ref={ref} object={scene} />
+}
+
+export default function HeroScene({
+  modelUrl       = '/models/abstract_core.glb',
+  baseColor      = '#99aaff',
+  lightColor     = '#99aaff',
+  floatIntensity = 0.13,
+}) {
+  return (
+    <Canvas camera={CAMERA_CONFIG} style={{ background: 'transparent' }}>
+      <ambientLight intensity={0.7} />
+      <directionalLight color={lightColor} intensity={4.5} position={[3, 4, 3]} />
+      <pointLight color="#ff3366" intensity={1.3} position={[-4, 1, -2]} distance={18} />
+      <Float speed={1.4} rotationIntensity={0.4} floatIntensity={floatIntensity}>
+        <Model modelUrl={modelUrl} />
+      </Float>
+    </Canvas>
+  )
+}
+
+useGLTF.preload('/models/abstract_core.glb')
+
+════════════════════════════════════════════════════════════
+  Awwwards 퀄리티 추가 효과 (키워드 리스트)
+════════════════════════════════════════════════════════════
+
+  1. 커서        — Kinet.js tube trail / custom canvas trail
+  2. 포스트프로세싱 — @react-three/postprocessing: Bloom, ChromaticAberration, Vignette
+  3. 배경         — HDRI environment map (drei <Environment preset="city" />)
+  4. 머티리얼     — MeshTransmissionMaterial (유리/액체), MeshReflectorMaterial (바닥 반사)
+  5. 파티클       — points + custom GLSL attractor shader
+  6. 카메라       — CameraShake (drei), dolly-zoom 효과
+  7. 텍스트       — drei <Text3D> + matcap material
+  8. 스크롤       — R3F ScrollControls + 씬 전환 카메라 fly-through
+  9. 오디오       — Web Audio API + analyzer → 모델 진동 연동
+
+-->
+</body>
+</html>

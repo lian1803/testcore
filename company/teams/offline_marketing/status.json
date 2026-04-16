@@ -1,0 +1,46 @@
+{
+  "team": "offline_marketing",
+  "last_updated": "2026-04-04T17:49:48.351284",
+  "kpi": {
+    "계약전환율": null,
+    "답장률": null,
+    "클로징사이클_일": null,
+    "월계약건수": 2
+  },
+  "current_version": "v2",
+  "data_count": 5,
+  "results_log": [
+    {
+      "timestamp": "2026-04-04T17:47:41.974197",
+      "type": "계약",
+      "value": 1,
+      "reason": "미용실"
+    },
+    {
+      "timestamp": "2026-04-04T17:48:08.809615",
+      "type": "계약",
+      "value": 1,
+      "reason": "포에트리헤어"
+    },
+    {
+      "timestamp": "2026-04-04T17:48:12.225694",
+      "type": "거절",
+      "value": 1,
+      "reason": "비싼이유"
+    },
+    {
+      "timestamp": "2026-04-04T17:48:15.199819",
+      "type": "DM발송",
+      "value": 3,
+      "reason": "미용실"
+    },
+    {
+      "timestamp": "2026-04-04T17:48:17.945810",
+      "type": "답장",
+      "value": 1,
+      "reason": ""
+    }
+  ],
+  "last_improvement_reason": "가격 저항으로 인한 거절",
+  "next_action": "데이터 수집 대기 (5건 이상 시 자동 분석)"
+}

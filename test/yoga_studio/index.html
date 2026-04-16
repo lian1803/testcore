@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOULFLOW - Yoga Studio</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- PixiJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
+
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C8873A;
+    --gold-light: rgba(200, 135, 58, 0.15);
+    --brown: #8B5E3C;
+    --cream: #F5F0E8;
+    --espresso: #2C1810;
+    --white: #FFFFFF;
+
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  html {
+    overflow: hidden;
+    height: 100%;
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--espresso);
+    font-family: var(--font-body);
+    overflow: hidden;
+    height: 100%;
+    cursor: none;
+  }
+
+  /* ===== CUSTOM CURSOR ===== */
+  .cursor-ring {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+  }
+  .cursor-dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10001;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+  }
+  .cursor-ring.hover {
+    width: 40px;
+    height: 40px;
+    border-color: var(--brown);
+  }
+
+  /* ===== GRAIN OVERLAY ===== */
+  .grain-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    mix-blend-mode: multiply;
+  }
+
+  /* ===== SECTIONS WRAPPER ===== */
+  .sections-wrapper {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+  }
+
+  section {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+    overflow: hidden;
+  }
+  section.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ===== NAV DOTS ===== */
+  .nav-dots {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1000;
+  }
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .nav-dot.active {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+
+  /* ===== SCENE 1: HERO ===== */
+  .hero {
+    position: relative;
+    flex-direction: column;
+    background: var(--cream);
+  }
+  .hero-canvas-wrap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--espresso);
+    overflow: hidden;
+  }
+  .hero-title-inner {
+    display: block;
+    clip-path: inset(0 100% 0 0);
+  }
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    color: var(--brown);
+    margin-top: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    letter-spacing: 0.1em;
+  }
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+  }
+  .hero-scroll-hint span {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--brown);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--gold);
+    transform-origin: top;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { scaleY: 1; opacity: 0.4; }
+    50% { scaleY: 0.5; opacity: 1; }
+  }
+
+  /* ===== SCENE 2: PHILOSOPHY ===== */
+  .philosophy {
+    flex-direction: column;
+    background: var(--cream);
+    padding: 0 clamp(24px, 8vw, 160px);
+  }
+  .philosophy-text {
+    text-align: center;
+  }
+  .philosophy-line {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--espresso);
+    line-height: 1.4;
+    display: block;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .philosophy-line .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .brush-stroke {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 12px;
+    overflow: visible;
+  }
+  .brush-stroke path {
+    stroke: var(--gold);
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    stroke-linecap: round;
+  }
+  .philosophy-body {
+    font-family: var(--font-body);
+    font-size: clamp(0.875rem, 1.2vw, 1.125rem);
+    color: var(--brown);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-top: 48px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* ===== SCENE 3: PROGRAMS ===== */
+  .programs {
+    flex-direction: column;
+    background: var(--cream);
+    padding: 0 clamp(24px, 6vw, 120px);
+  }
+  .programs-label {
+    font-family: var(--font-display);
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .programs-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--espresso);
+    margin-bottom: 56px;
+  }
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    width: 100%;
+    max-width: 1080px;
+  }
+  .program-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 48px 32px;
+    opacity: 0;
+    transform: translateY(80px);
+    transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s;
+    cursor: pointer;
+  }
+  .program-card:hover {
+    transform: perspective(1000px) rotateY(3deg) rotateX(-2deg);
+    box-shadow: 0 24px 48px rgba(44,24,16,0.1);
+  }
+  .program-card h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 400;
+    color: var(--espresso);
+    margin-bottom: 16px;
+  }
+  .program-card p {
+    font-family: var(--font-body);
+    font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+    color: var(--brown);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .program-card .program-meta {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ===== SCENE 4: SPACE ===== */
+  .space {
+    flex-direction: column;
+    background: var(--cream);
+    padding: 0 clamp(24px, 6vw, 120px);
+  }
+  .space-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .space-label {
+    font-family: var(--font-display);
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .space-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--espresso);
+  }
+  .space-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 880px;
+  }
+  .space-item {
+    aspect-ratio: 4/3;
+    border-radius: 4px;
+    overflow: hidden;
+    clip-path: inset(100% 0 0 0);
+    cursor: pointer;
+  }
+  .space-item-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.6s;
+  }
+  .space-item:hover .space-item-inner {
+    transform: scale(1.05);
+    filter: hue-rotate(8deg);
+  }
+  .space-item:nth-child(1) .space-item-inner {
+    background: linear-gradient(135deg, #D4C5A9 0%, #C8873A 50%, #8B5E3C 100%);
+  }
+  .space-item:nth-child(2) .space-item-inner {
+    background: linear-gradient(135deg, #E8DFD0 0%, #C8A882 50%, #8B7355 100%);
+  }
+  .space-item:nth-child(3) .space-item-inner {
+    background: linear-gradient(135deg, #C8B898 0%, #A08060 50%, #6B4E3D 100%);
+  }
+  .space-item:nth-child(4) .space-item-inner {
+    background: linear-gradient(135deg, #F0E6D6 0%, #D4B896 50%, #A08060 100%);
+  }
+
+  /* ===== SCENE 5: INSTRUCTOR ===== */
+  .instructor {
+    background: var(--cream);
+    padding: 0 clamp(24px, 8vw, 160px);
+    gap: clamp(40px, 6vw, 96px);
+  }
+  .instructor-image {
+    flex: 1;
+    max-width: 400px;
+    aspect-ratio: 3/4;
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .instructor-image-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #D4C5A9 0%, #A08060 60%, #6B4E3D 100%);
+  }
+  .instructor-text {
+    flex: 1;
+    max-width: 480px;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .instructor-label {
+    font-family: var(--font-display);
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .instructor-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 300;
+    color: var(--espresso);
+    margin-bottom: 8px;
+  }
+  .instructor-role {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--brown);
+    margin-bottom: 32px;
+  }
+  .instructor-bio {
+    font-family: var(--font-body);
+    font-size: clamp(0.875rem, 1.1vw, 1rem);
+    color: var(--brown);
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+  .instructor-credentials {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .instructor-credentials li {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--espresso);
+    padding-left: 16px;
+    position: relative;
+  }
+  .instructor-credentials li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  /* ===== SCENE 6: CTA ===== */
+  .cta-section {
+    flex-direction: column;
+    background: var(--cream);
+    text-align: center;
+  }
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 300;
+    color: var(--espresso);
+    line-height: 1.2;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .cta-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.8vw, 1.375rem);
+    font-weight: 300;
+    color: var(--brown);
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .cta-button {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: clamp(0.875rem, 1.1vw, 1rem);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--cream);
+    background: var(--gold);
+    border: none;
+    border-radius: 100px;
+    padding: 20px 56px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .cta-button:hover {
+    background: var(--brown);
+    transform: scale(1.03);
+  }
+  .cta-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 32px clamp(24px, 6vw, 120px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(200,135,58,0.15);
+    opacity: 0;
+  }
+  .cta-footer-logo {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--espresso);
+  }
+  .cta-footer-info {
+    display: flex;
+    gap: 32px;
+  }
+  .cta-footer-info span {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--brown);
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 768px) {
+    .cursor-ring, .cursor-dot { display: none; }
+    body { cursor: auto; }
+    .nav-dots { right: 16px; }
+    .programs-grid { grid-template-columns: 1fr; gap: 24px; }
+    .space-grid { grid-template-columns: 1fr; }
+    .instructor { flex-direction: column; padding: 0 24px; }
+    .instructor-image { max-width: 280px; }
+    .cta-footer { flex-direction: column; gap: 16px; text-align: center; }
+    .cta-footer-info { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- SVG Grain Overlay -->
+<svg class="grain-overlay" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid slice">
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<!-- Nav Dots -->
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-index="0"></div>
+  <div class="nav-dot" data-index="1"></div>
+  <div class="nav-dot" data-index="2"></div>
+  <div class="nav-dot" data-index="3"></div>
+  <div class="nav-dot" data-index="4"></div>
+  <div class="nav-dot" data-index="5"></div>
+</nav>
+
+<div class="sections-wrapper">
+
+  <!-- SCENE 1: HERO -->
+  <section class="hero active" id="scene1">
+    <div class="hero-canvas-wrap" id="heroCanvas"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-title-inner" id="heroTitleInner">SOULFLOW</span>
+      </h1>
+      <p class="hero-subtitle" id="heroSubtitle">숨을 따라가면, 나를 만난다</p>
+    </div>
+    <div class="hero-scroll-hint" id="heroScroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: PHILOSOPHY -->
+  <section class="philosophy" id="scene2">
+    <div class="philosophy-text">
+      <span class="philosophy-line" id="philoLine1">숨을 따라가면,</span>
+      <span class="philosophy-line" id="philoLine2">
+        <span id="philoNa">나를</span> 만난다
+        <svg class="brush-stroke" viewBox="0 0 200 12" id="brushStroke">
+          <path d="M5 8 Q30 2, 60 7 T120 5 T195 7"/>
+        </svg>
+      </span>
+    </div>
+    <p class="philosophy-body" id="philoBody">
+      소울플로우는 단순한 요가 스튜디오가 아닙니다.<br>
+      내면의 고요함을 찾고, 몸과 마음이 하나 되는 경험을 선사합니다.<br>
+      당신만의 리듬으로, 당신만의 흐름을 만들어가세요.
+    </p>
+  </section>
+
+  <!-- SCENE 3: PROGRAMS -->
+  <section class="programs" id="scene3">
+    <span class="programs-label">Programs</span>
+    <h2 class="programs-title">세 가지 여정</h2>
+    <div class="programs-grid">
+      <div class="program-card" id="card1">
+        <h3>Hatha Flow</h3>
+        <p>호흡과 함께 흐르는 전통 하타 요가. 몸의 균형을 찾고, 유연성과 근력을 동시에 키워갑니다.</p>
+        <span class="program-meta">60min &middot; All levels</span>
+      </div>
+      <div class="program-card" id="card2">
+        <h3>Meditation</h3>
+        <p>고요함 속에서 나를 만나는 시간. 마음챙김 명상과 호흡법으로 일상의 스트레스를 내려놓습니다.</p>
+        <span class="program-meta">45min &middot; Beginner</span>
+      </div>
+      <div class="program-card" id="card3">
+        <h3>Private</h3>
+        <p>1:1 맞춤 프로그램. 개인의 몸 상태와 목표에 맞춘 완전한 케어를 경험하세요.</p>
+        <span class="program-meta">75min &middot; Personalized</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 4: SPACE -->
+  <section class="space" id="scene4">
+    <div class="space-header">
+      <span class="space-label">Space</span>
+      <h2 class="space-title">고요한 공간</h2>
+    </div>
+    <div class="space-grid">
+      <div class="space-item" id="spaceItem1">
+        <div class="space-item-inner"></div>
+      </div>
+      <div class="space-item" id="spaceItem2">
+        <div class="space-item-inner"></div>
+      </div>
+      <div class="space-item" id="spaceItem3">
+        <div class="space-item-inner"></div>
+      </div>
+      <div class="space-item" id="spaceItem4">
+        <div class="space-item-inner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 5: INSTRUCTOR -->
+  <section class="instructor" id="scene5">
+    <div class="instructor-image" id="instrImage">
+      <div class="instructor-image-inner"></div>
+    </div>
+    <div class="instructor-text" id="instrText">
+      <span class="instructor-label">Instructor</span>
+      <h2 class="instructor-name">김서윤</h2>
+      <p class="instructor-role">Lead Instructor &amp; Founder</p>
+      <p class="instructor-bio">
+        15년간의 수련과 지도 경험을 바탕으로, 각자의 몸이 가진 고유한 리듬을 존중하는 요가를 지향합니다.
+        인도 리시케시에서의 수련과 뉴욕에서의 교육 경험이 소울플로우의 철학을 만들었습니다.
+      </p>
+      <ul class="instructor-credentials">
+        <li>RYT-500 국제 공인 요가 강사</li>
+        <li>인도 Rishikesh Yoga Alliance 수료</li>
+        <li>마음챙김 명상 전문 과정 이수</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SCENE 6: CTA -->
+  <section class="cta-section" id="scene6">
+    <h2 class="cta-title" id="ctaTitle">첫 수업,<br>무료 체험</h2>
+    <p class="cta-subtitle" id="ctaSub">당신의 흐름을 찾는 첫 걸음</p>
+    <a href="#" class="cta-button" id="ctaBtn">무료 체험 예약하기</a>
+    <footer class="cta-footer" id="ctaFooter">
+      <span class="cta-footer-logo">SOULFLOW</span>
+      <div class="cta-footer-info">
+        <span>서울특별시 강남구 도산대로 123</span>
+        <span>02-1234-5678</span>
+        <span>hello@soulflow.kr</span>
+      </div>
+    </footer>
+  </section>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ===== CURSOR ===== */
+  const ring = document.getElementById('cursorRing');
+  const dot = document.getElementById('cursorDot');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+  });
+
+  function animateCursor() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Hover effect on interactive elements
+  const hoverTargets = document.querySelectorAll('a, button, .program-card, .space-item, .nav-dot');
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+
+  /* ===== FULLPAGE SNAP ===== */
+  const sections = document.querySelectorAll('section');
+  const dots = document.querySelectorAll('.nav-dot');
+  let currentIndex = 0;
+  let isAnimating = false;
+  const TRANSITION_DURATION = 0.9;
+
+  function goToSection(index) {
+    if (index === currentIndex || isAnimating || index < 0 || index >= sections.length) return;
+    isAnimating = true;
+
+    const outSection = sections[currentIndex];
+    const inSection = sections[index];
+    const direction = index > currentIndex ? 1 : -1;
+
+    // Update dots
+    dots.forEach(d => d.classList.remove('active'));
+    dots[index].classList.add('active');
+
+    // Show incoming section
+    inSection.style.visibility = 'visible';
+    inSection.style.opacity = '0';
+    gsap.set(inSection, { y: direction * 60 });
+
+    // Animate out
+    gsap.to(outSection, {
+      opacity: 0,
+      y: -direction * 40,
+      duration: TRANSITION_DURATION * 0.6,
+      ease: 'power2.in',
+      onComplete: () => {
+        outSection.classList.remove('active');
+        outSection.style.visibility = 'hidden';
+      }
+    });
+
+    // Animate in
+    gsap.to(inSection, {
+      opacity: 1,
+      y: 0,
+      duration: TRANSITION_DURATION,
+      ease: 'power2.out',
+      delay: 0.1,
+      onComplete: () => {
+        inSection.classList.add('active');
+        currentIndex = index;
+        isAnimating = false;
+        triggerSectionAnimation(index);
+      }
+    });
+  }
+
+  // Wheel handler
+  let lastWheelTime = 0;
+  document.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const now = Date.now();
+    if (now - lastWheelTime < 1000) return;
+    lastWheelTime = now;
+
+    if (e.deltaY > 0) {
+      goToSection(currentIndex + 1);
+    } else {
+      goToSection(currentIndex - 1);
+    }
+  }, { passive: false });
+
+  // Touch handler
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 50) {
+      goToSection(currentIndex + (diff > 0 ? 1 : -1));
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToSection(currentIndex + 1); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); goToSection(currentIndex - 1); }
+  });
+
+  // Nav dots click
+  dots.forEach(d => {
+    d.addEventListener('click', () => goToSection(parseInt(d.dataset.index)));
+  });
+
+  /* ===== PIXI.JS HERO ===== */
+  let pixiApp = null;
+
+  async function initPixi() {
+    const container = document.getElementById('heroCanvas');
+    const app = new PIXI.Application();
+    await app.init({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      backgroundAlpha: 0,
+      resizeTo: container,
+      antialias: true,
+    });
+    container.appendChild(app.canvas);
+    pixiApp = app;
+
+    // Breathing Circle — radial gradient via canvas texture
+    const gradSize = 512;
+    const gradCanvas = document.createElement('canvas');
+    gradCanvas.width = gradSize;
+    gradCanvas.height = gradSize;
+    const gctx = gradCanvas.getContext('2d');
+    const grad = gctx.createRadialGradient(gradSize/2, gradSize/2, 0, gradSize/2, gradSize/2, gradSize/2);
+    grad.addColorStop(0, 'rgba(200, 135, 58, 0.15)');
+    grad.addColorStop(0.5, 'rgba(200, 135, 58, 0.07)');
+    grad.addColorStop(1, 'rgba(200, 135, 58, 0)');
+    gctx.fillStyle = grad;
+    gctx.fillRect(0, 0, gradSize, gradSize);
+
+    const gradTexture = PIXI.Texture.from(gradCanvas);
+    const breathCircle = new PIXI.Sprite(gradTexture);
+    breathCircle.anchor.set(0.5);
+    breathCircle.x = app.screen.width / 2;
+    breathCircle.y = app.screen.height / 2;
+    const baseScale = Math.max(app.screen.width, app.screen.height) / gradSize * 1.2;
+    breathCircle.scale.set(baseScale);
+    app.stage.addChild(breathCircle);
+
+    // Displacement filter — Perlin noise via canvas
+    const noiseSize = 256;
+    const noiseCanvas = document.createElement('canvas');
+    noiseCanvas.width = noiseSize;
+    noiseCanvas.height = noiseSize;
+    const nctx = noiseCanvas.getContext('2d');
+    const noiseData = nctx.createImageData(noiseSize, noiseSize);
+    for (let i = 0; i < noiseData.data.length; i += 4) {
+      const v = Math.random() * 255;
+      noiseData.data[i] = v;
+      noiseData.data[i+1] = v;
+      noiseData.data[i+2] = v;
+      noiseData.data[i+3] = 255;
+    }
+    nctx.putImageData(noiseData, 0, 0);
+
+    const noiseTexture = PIXI.Texture.from(noiseCanvas);
+    const noiseSprite = new PIXI.Sprite(noiseTexture);
+    noiseSprite.texture.source.addressMode = 'repeat';
+    const displacementFilter = new PIXI.DisplacementFilter({ sprite: noiseSprite, scale: { x: 18, y: 14 } });
+    app.stage.addChild(noiseSprite);
+    app.stage.filters = [displacementFilter];
+
+    // Animate
+    let elapsed = 0;
+    app.ticker.add((ticker) => {
+      elapsed += ticker.deltaTime * 0.01;
+
+      // Breathing
+      const breathScale = baseScale * (1.0 + 0.25 * Math.sin(elapsed * Math.PI * 0.5));
+      breathCircle.scale.set(breathScale);
+
+      // Drift noise
+      noiseSprite.x = Math.sin(elapsed * 0.3) * 30;
+      noiseSprite.y = Math.cos(elapsed * 0.2) * 20;
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+      breathCircle.x = app.screen.width / 2;
+      breathCircle.y = app.screen.height / 2;
+    });
+  }
+
+  /* ===== SECTION ANIMATIONS ===== */
+  const animatedSections = new Set();
+
+  function triggerSectionAnimation(index) {
+    if (animatedSections.has(index)) return;
+    animatedSections.add(index);
+
+    switch(index) {
+      case 1: animatePhilosophy(); break;
+      case 2: animatePrograms(); break;
+      case 3: animateSpace(); break;
+      case 4: animateInstructor(); break;
+      case 5: animateCTA(); break;
+    }
+  }
+
+  // Hero animation (runs on load)
+  function animateHero() {
+    animatedSections.add(0);
+
+    gsap.to('#heroTitleInner', {
+      clipPath: 'inset(0 0% 0 0)',
+      duration: 1.2,
+      delay: 0.8,
+      ease: 'power3.inOut'
+    });
+
+    gsap.to('#heroSubtitle', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 1.6,
+      ease: 'power2.out'
+    });
+
+    gsap.to('#heroScroll', {
+      opacity: 1,
+      duration: 0.6,
+      delay: 2.4,
+      ease: 'power2.out'
+    });
+  }
+
+  // Philosophy
+  function animatePhilosophy() {
+    // SplitText-like char reveal
+    const lines = [document.getElementById('philoLine1'), document.getElementById('philoLine2')];
+
+    lines.forEach((line, lineIdx) => {
+      const brushSvg = line.querySelector('.brush-stroke');
+      const originalText = line.childNodes;
+      const chars = [];
+
+      // Extract text content and wrap each character
+      const textContent = line.textContent.trim();
+      // Clear and rebuild with individual chars
+      const brushHTML = brushSvg ? brushSvg.outerHTML : '';
+      line.innerHTML = '';
+
+      for (let i = 0; i < textContent.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = textContent[i] === ' ' ? '\u00A0' : textContent[i];
+        line.appendChild(span);
+        chars.push(span);
+      }
+
+      if (brushSvg && lineIdx === 1) {
+        line.innerHTML += brushHTML;
+      }
+
+      gsap.to(chars, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.04,
+        delay: lineIdx * 0.6,
+        ease: 'power2.out'
+      });
+    });
+
+    // Brush stroke draw-on
+    gsap.to('#brushStroke path', {
+      strokeDashoffset: 0,
+      duration: 0.8,
+      delay: 1.2,
+      ease: 'power2.inOut'
+    });
+
+    // Body text
+    gsap.to('#philoBody', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 1.6,
+      ease: 'power2.out'
+    });
+  }
+
+  // Programs
+  function animatePrograms() {
+    const cards = document.querySelectorAll('.program-card');
+    gsap.to(cards, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: 'power2.out'
+    });
+  }
+
+  // Space
+  function animateSpace() {
+    const items = document.querySelectorAll('.space-item');
+    items.forEach((item, i) => {
+      gsap.to(item, {
+        clipPath: 'inset(0% 0 0 0)',
+        duration: 0.8,
+        delay: 0.1 + i * 0.1,
+        ease: 'power3.inOut'
+      });
+    });
+  }
+
+  // Instructor
+  function animateInstructor() {
+    gsap.to('#instrImage', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.2,
+      ease: 'power2.out'
+    });
+    gsap.to('#instrText', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.4,
+      ease: 'power2.out'
+    });
+  }
+
+  // CTA
+  function animateCTA() {
+    gsap.to('#ctaTitle', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.2,
+      ease: 'power2.out'
+    });
+    gsap.to('#ctaSub', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      delay: 0.5,
+      ease: 'power2.out'
+    });
+    gsap.to('#ctaBtn', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      delay: 0.7,
+      ease: 'power2.out'
+    });
+    gsap.to('#ctaFooter', {
+      opacity: 1,
+      duration: 0.6,
+      delay: 1.0,
+      ease: 'power2.out'
+    });
+  }
+
+  /* ===== INIT ===== */
+  window.addEventListener('DOMContentLoaded', () => {
+    initPixi();
+    animateHero();
+  });
+
+})();
+</script>
+
+</body>
+</html>

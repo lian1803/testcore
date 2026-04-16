@@ -1,0 +1,250 @@
+[
+  {
+    "query": "강남역 미용실",
+    "place_id": "1519115071",
+    "status": "ok",
+    "elapsed": 35.535569,
+    "photo_urls_ok": true,
+    "photo_urls_count": 11,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "레이어드컷",
+      "신논현역미용실",
+      "강남역미용실"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "홍대 입구 미용실",
+    "place_id": "36084433",
+    "status": "ok",
+    "elapsed": 37.397313,
+    "photo_urls_ok": true,
+    "photo_urls_count": 8,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "홍대미용실",
+      "홍대레이어드컷",
+      "미용실"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "강남 네일샵",
+    "place_id": "1181064140",
+    "status": "ok",
+    "elapsed": 40.082823,
+    "photo_urls_ok": true,
+    "photo_urls_count": 3,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "그라데이션네일",
+      "강남역네일",
+      "물어뜯는손톱관리"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "강남 피부관리숍",
+    "place_id": "1513665456",
+    "status": "ok",
+    "elapsed": 31.811945,
+    "photo_urls_ok": true,
+    "photo_urls_count": 6,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "피부관리",
+      "체형관리",
+      "경락"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "강남역 고깃집",
+    "place_id": "1028354634",
+    "status": "ok",
+    "elapsed": 33.509761,
+    "photo_urls_ok": true,
+    "photo_urls_count": 52,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "고기집",
+      "삼겹살",
+      "회식"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "홍대 이태리안",
+    "place_id": null,
+    "status": "no_place_id",
+    "elapsed": 3.15886
+  },
+  {
+    "query": "을지로 감자탕",
+    "place_id": "275980821",
+    "status": "ok",
+    "elapsed": 32.650569,
+    "photo_urls_ok": true,
+    "photo_urls_count": 25,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 3,
+    "keywords_sample": [
+      "양념뼈숯불구이",
+      "우거지감자탕",
+      "감자탕"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "성수동 카페",
+    "place_id": "2004674248",
+    "status": "ok",
+    "elapsed": 34.267314,
+    "photo_urls_ok": true,
+    "photo_urls_count": 5,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "etfbakery",
+      "성수베이커리",
+      "성수빵집"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "홍대 카페",
+    "place_id": null,
+    "status": "no_place_id",
+    "elapsed": 4.562447
+  },
+  {
+    "query": "목동 수학학원",
+    "place_id": "1896162714",
+    "status": "ok",
+    "elapsed": 42.715744,
+    "photo_urls_ok": true,
+    "photo_urls_count": 3,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 4,
+    "keywords_sample": [
+      "목동재수학원",
+      "목동단과학원",
+      "강남하이퍼학원"
+    ],
+    "review_texts_ok": false,
+    "review_texts_count": 0
+  },
+  {
+    "query": "강남 필라테스",
+    "place_id": "1291150548",
+    "status": "ok",
+    "elapsed": 31.880795,
+    "photo_urls_ok": false,
+    "photo_urls_count": 2,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "압구정필라테스",
+      "압구정로데오필라테스",
+      "청담필라테스"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "강남역 피부과",
+    "place_id": "1416915961",
+    "status": "ok",
+    "elapsed": 33.837732,
+    "photo_urls_ok": false,
+    "photo_urls_count": 2,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "강남역피부과",
+      "울쎄라",
+      "보톡스"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "강남 한우",
+    "place_id": "1007931298",
+    "status": "ok",
+    "elapsed": 35.113687,
+    "photo_urls_ok": true,
+    "photo_urls_count": 37,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": true,
+    "keywords_count": 5,
+    "keywords_sample": [
+      "한우오마카세",
+      "콜키지프리",
+      "서울한우오마카세"
+    ],
+    "review_texts_ok": true,
+    "review_texts_count": 10
+  },
+  {
+    "query": "을지로 라면",
+    "place_id": "20835039",
+    "status": "ok",
+    "elapsed": 30.914775,
+    "photo_urls_ok": true,
+    "photo_urls_count": 40,
+    "owner_reply_ok": true,
+    "owner_reply_rate": 0.0,
+    "has_owner_reply": true,
+    "keywords_ok": false,
+    "keywords_count": 0,
+    "keywords_sample": [],
+    "review_texts_ok": true,
+    "review_texts_count": 5
+  }
+]

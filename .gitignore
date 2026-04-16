@@ -1,0 +1,98 @@
+# Python
+company/venv/
+company/__pycache__/
+company/**/__pycache__/
+*.pyc
+*.pyo
+
+# team 폴더 내 venv/빌드/dist
+team/**/.venv*/
+team/**/venv/
+team/**/build/
+team/**/dist/
+team/**/__pycache__/
+team/**/*.exe
+team/**/*.pyz
+team/**/*.pkg
+
+# Node
+node_modules/
+zip/node_modules/
+
+# 환경변수 (API 키) — 절대 커밋 금지
+# 중앙 마스터: core/company/.env (유일. 다른 곳에 .env 두지 말 것)
+**/.env
+**/.env.local
+**/.env.*.local
+!**/.env.example
+!**/.env.*.example
+.nano-banana-config.json
+**/api키*
+**/*secret*
+**/*token*.json
+# MCP 설정 (키 있으면 위험)
+.mcp.local.json
+~/.claude/.mcp.json
+
+# Claude 개인 데이터
+.claude/settings.local.json
+memory/
+STATUS.md
+PROJECTS.md
+
+# 개인 문서 (core-shell 업로드 금지)
+team/
+보고사항들.md
+회사 조직도.md
+디자인참고 계정.txt
+
+# 로그
+*.log
+
+# 잡파일
+pip_err.txt
+pip_out.txt
+*.png
+company/answers.txt
+company/대화.txt
+company/새 텍스트 문서.txt
+company/TEST_RESULT_*.md
+company/outputs/
+company/utils/video_cloner_tmp/
+company/knowledge/base/
+company/knowledge/teams/
+company/knowledge/inbox/
+company/knowledge/layers/data/
+company/knowledge/index.json
+company/knowledge/__pycache__/
+
+# 빌드 결과물
+zip/dist/
+zip/.wrangler/
+
+# 대용량 캐시·빌드 산출물 (GitHub 50MB+ 회피)
+**/.next/
+**/.turbo/
+**/turbopack/
+**/.wrangler/
+**/dist/
+**/build/
+**/venv/
+**/__pycache__/
+**/*.pack
+**/*.sst
+**/node.exe
+
+# 미디어 / 비디오 임시
+**/video_cloner_tmp/
+company/utils/video_cloner_tmp/
+**/*.mp4
+**/*.mov
+**/*.webm
+
+# Naver Diagnosis 캐시/로그
+**/naver_diagnosis.db
+**/diagnosis.db
+**/pdf_output/
+**/ppt_output/
+**/insta_screenshots/

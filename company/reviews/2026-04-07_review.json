@@ -1,0 +1,13 @@
+{
+  "scan_date": "2026-04-07",
+  "remote": "core-shell",
+  "new_commits": [],
+  "new_branches": [],
+  "summary": {
+    "total_commits": 0,
+    "adopt": 0,
+    "adapt": 0,
+    "skip": 0,
+    "conflict": 0
+  }
+}

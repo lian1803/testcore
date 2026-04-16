@@ -1,0 +1,1005 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - region
+    - generic [ref=e3]:
+      - link "Skip to content" [ref=e4] [cursor=pointer]:
+        - /url: "#start-of-content"
+      - banner [ref=e6]:
+        - heading "Navigation Menu" [level=2] [ref=e7]
+        - generic [ref=e9]:
+          - button "Toggle navigation" [ref=e11] [cursor=pointer]
+          - link "Homepage" [ref=e17] [cursor=pointer]:
+            - /url: /
+            - img [ref=e18]
+          - generic [ref=e20]:
+            - link "Sign in" [ref=e21] [cursor=pointer]:
+              - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fomnyx2%2Fnaver_place_crawling%2Fblob%2Fmaster%2Fstore_crawler.py
+            - button "Appearance settings" [ref=e24] [cursor=pointer]:
+              - img
+    - main [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e32]:
+            - img [ref=e33]
+            - link "omnyx2" [ref=e36] [cursor=pointer]:
+              - /url: /omnyx2
+            - generic [ref=e37]: /
+            - strong [ref=e38]:
+              - link "naver_place_crawling" [ref=e39] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling
+            - generic [ref=e40]: Public
+          - generic [ref=e41]:
+            - list:
+              - listitem [ref=e42]:
+                - link "You must be signed in to change notification settings" [ref=e43] [cursor=pointer]:
+                  - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                  - img [ref=e44]
+                  - text: Notifications
+              - listitem [ref=e46]:
+                - link "Fork 1" [ref=e47] [cursor=pointer]:
+                  - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                  - img [ref=e48]
+                  - text: Fork
+                  - generic "1" [ref=e50]
+              - listitem [ref=e51]:
+                - link "You must be signed in to star a repository" [ref=e53] [cursor=pointer]:
+                  - /url: /login?return_to=%2Fomnyx2%2Fnaver_place_crawling
+                  - img [ref=e54]
+                  - text: Star
+                  - generic "0 users starred this repository" [ref=e56]: "0"
+        - navigation "Repository" [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "Code" [ref=e60] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling
+                - img [ref=e61]
+                - generic [ref=e63]: Code
+            - listitem [ref=e64]:
+              - link "Issues" [ref=e65] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/issues
+                - img [ref=e66]
+                - generic [ref=e69]: Issues
+            - listitem [ref=e70]:
+              - link "Pull requests" [ref=e71] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/pulls
+                - img [ref=e72]
+                - generic [ref=e74]: Pull requests
+            - listitem [ref=e75]:
+              - link "Actions" [ref=e76] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/actions
+                - img [ref=e77]
+                - generic [ref=e79]: Actions
+            - listitem [ref=e80]:
+              - link "Projects" [ref=e81] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/projects
+                - img [ref=e82]
+                - generic [ref=e84]: Projects
+            - listitem [ref=e85]:
+              - link "Security and quality" [ref=e86] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/security
+                - img [ref=e87]
+                - generic [ref=e89]: Security and quality
+            - listitem [ref=e90]:
+              - link "Insights" [ref=e91] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/pulse
+                - img [ref=e92]
+                - generic [ref=e94]: Insights
+      - generic [ref=e105]:
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - heading "Expand file tree" [level=2] [ref=e112]:
+              - button "Expand file tree" [ref=e113] [cursor=pointer]:
+                - img [ref=e114]
+            - button "master branch" [ref=e118] [cursor=pointer]:
+              - generic [ref=e119]:
+                - generic [ref=e121]:
+                  - img [ref=e123]
+                  - generic [ref=e126]: master
+                - generic:
+                  - img
+            - generic [ref=e128]:
+              - navigation "Breadcrumbs" [ref=e129]:
+                - heading "Breadcrumbs" [level=2] [ref=e130]
+                - list [ref=e131]:
+                  - listitem [ref=e132]:
+                    - link "naver_place_crawling" [ref=e133] [cursor=pointer]:
+                      - /url: /omnyx2/naver_place_crawling/tree/master
+              - generic [ref=e134]:
+                - text: /
+                - heading "store_crawler.py" [level=1] [ref=e135]
+              - button "Copy path" [ref=e136] [cursor=pointer]:
+                - img [ref=e137]
+          - generic [ref=e142]:
+            - generic [ref=e145]:
+              - img [ref=e147]
+              - combobox "Go to file" [ref=e149]
+            - button "More file actions" [ref=e150] [cursor=pointer]:
+              - img [ref=e151]
+        - generic [ref=e153]:
+          - generic [ref=e155]:
+            - heading "Latest commit" [level=2] [ref=e156]
+            - generic [ref=e157]:
+              - generic [ref=e159]:
+                - link "omnyx2" [ref=e160] [cursor=pointer]:
+                  - /url: /omnyx2
+                  - img "omnyx2" [ref=e161]
+                - link "commits by omnyx2" [ref=e162] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/commits?author=omnyx2
+                  - text: omnyx2
+              - link "bug.." [ref=e166] [cursor=pointer]:
+                - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+            - generic [ref=e167]:
+              - generic [ref=e169]:
+                - link "Commit bf93f70" [ref=e170] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/commit/bf93f708f0cd1e48b5ab79e2ca21d6b2efe8f1b4
+                  - text: bf93f70
+                - text: ·
+                - generic "Dec 9, 2020, 5:41 AM GMT+9" [ref=e171]: Dec 9, 20206 years ago
+              - generic [ref=e172]:
+                - heading "History" [level=2] [ref=e173]
+                - link "View commit history for this file." [ref=e175] [cursor=pointer]:
+                  - /url: /omnyx2/naver_place_crawling/commits/master/store_crawler.py
+                  - generic [ref=e176]:
+                    - generic:
+                      - img
+          - generic [ref=e178]:
+            - generic "3.7 KB" [ref=e182]: 121 lines (106 loc) · 3.7 KB
+            - generic [ref=e184]:
+              - heading "File metadata and controls" [level=2] [ref=e185]
+              - list "File view" [ref=e187]:
+                - listitem [ref=e188]:
+                  - button "Code" [ref=e189] [cursor=pointer]:
+                    - generic [ref=e191]: Code
+                - listitem [ref=e192]:
+                  - button "Blame" [ref=e193] [cursor=pointer]:
+                    - generic [ref=e195]: Blame
+              - generic [ref=e196]:
+                - generic [ref=e197]:
+                  - generic [ref=e198]:
+                    - link "Raw" [ref=e200] [cursor=pointer]:
+                      - /url: https://github.com/omnyx2/naver_place_crawling/raw/refs/heads/master/store_crawler.py
+                      - generic [ref=e202]: Raw
+                    - button "Copy raw file" [ref=e204] [cursor=pointer]:
+                      - img [ref=e205]
+                    - button "Download raw file" [ref=e209] [cursor=pointer]:
+                      - img [ref=e210]
+                  - generic [ref=e213]:
+                    - button "You must be signed in to make or propose changes" [disabled] [ref=e215]:
+                      - img [ref=e216]
+                    - button "More edit options" [ref=e219] [cursor=pointer]:
+                      - img [ref=e220]
+                - button "Open symbols panel" [ref=e222] [cursor=pointer]:
+                  - img [ref=e223]
+            - region [ref=e226]:
+              - generic [ref=e230]:
+                - textbox "file content" [ref=e233]: "from bs4 import BeautifulSoup import urllib.request from _io import (DEFAULT_BUFFER_SIZE, BlockingIOError, UnsupportedOperation, open, FileIO, BytesIO, StringIO, BufferedReader, BufferedWriter, BufferedRWPair, BufferedRandom, IncrementalNewlineDecoder, TextIOWrapper) import sys def spider(place_id): place_id = str(place_id) url = 'https://store.naver.com/restaurants/detail?id=%s&tab=main' % place_id # source_code = requests.get(url) source_code = urllib.request.urlopen(url) plain_text = source_code.read().decode('utf-8') soup = BeautifulSoup(plain_text, 'lxml') store_data_context = {} menu_arr = [] # # get name # try: # # for name in soup.find('strong', {\"class\": \"name\"}): # print(name) # except: # print(\"none_addr\") # # get category # try: # # for category in soup.find('span', {\"class\": \"category\"}): # print(category) # except: # print(\"none_category\") # blog review num try: review_num = soup.find('div', {\"class\": \"info_inner\"}) str1 = review_num.getText() for s in review_num.find('a', {\"class\":\"link\"}): if s.isdigit(): store_data_context[\"blogReviewNum\"] = s except: store_data_context[\"blogReviewNum\"] = \"none_review_num\" # print(\"none_review_num\") # # get call num # try: # # for callnum in soup.find('div', {\"class\": \"txt\"}): # print(callnum)- # except: # print(\"none_call_num\") # # # get addr # try: # count = 0 # # for taddr in soup.find_all('span', {\"class\": \"addr\"}): # print(taddr.getText()) # count += 1 # if count > 1: # break # except: # print(\"none_addr\") # get work time try: for time in soup.find('div', {\"class\": \"list_item list_item_biztime\"}): ttime = time.getText() ttime_open = ttime[3:8] ttime_close = ttime[11:16] ttime_desc = '' if len(ttime) >= 16: ttime_desc = ttime[16:] store_data_context[\"ttime_open\"] = ttime_open store_data_context[\"ttime_close\"] = ttime_close store_data_context[\"ttime_desc\"] = ttime_desc # print(\"time: %s\" % (ttime_open + ' ' + ttime_close + ' ' + ttime_desc)) elif len(ttime) >= 3: store_data_context[\"ttime_open\"] = ttime_open store_data_context[\"ttime_close\"] = ttime_close store_data_context[\"ttime_desc\"] = \"none_desc\" # print(\"etime: %s\" % (ttime_open + ' ' + ttime_close)) else: pass except: store_data_context[\"ttime_open\"] = \"none_open\" store_data_context[\"ttime_close\"] = \"none_close\" store_data_context[\"ttime_desc\"] = \"none_desc\" # print(\"none+desc\") # try: # for time in soup.find('span', {\"class\": \"time\"}): # print(time.getText()) # except: # print(\"none_time\") # get menu try: for search in soup.find_all('div', {\"class\": \"list_menu_inner\"}): tsearch = search.getText() if '이미지' in tsearch: pass else: pin_point = tsearch.find('원') + 1 menu_price = tsearch[0: pin_point] menu_name = tsearch[pin_point:] menu_arr.append({menu_name: menu_price}) # print(menu_name + \" \" + menu_price) store_data_context['menu'] = menu_arr except: pass # print(\"none_menu\") return store_data_context"
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic [ref=e234]:
+                        - generic [ref=e235] [cursor=pointer]: "1"
+                        - generic [ref=e236] [cursor=pointer]: "2"
+                        - generic [ref=e237] [cursor=pointer]: "3"
+                        - generic [ref=e238] [cursor=pointer]: "4"
+                        - generic [ref=e239] [cursor=pointer]: "5"
+                        - generic [ref=e240] [cursor=pointer]: "6"
+                        - generic [ref=e241] [cursor=pointer]: "7"
+                        - generic [ref=e242] [cursor=pointer]: "8"
+                        - generic [ref=e243] [cursor=pointer]: "9"
+                        - generic [ref=e244] [cursor=pointer]:
+                          - text: "10"
+                          - button [ref=e245]:
+                            - img [ref=e246]
+                        - generic [ref=e248] [cursor=pointer]: "11"
+                        - generic [ref=e249] [cursor=pointer]: "12"
+                        - generic [ref=e250] [cursor=pointer]: "13"
+                        - generic [ref=e251] [cursor=pointer]: "14"
+                        - generic [ref=e252] [cursor=pointer]: "15"
+                        - generic [ref=e253] [cursor=pointer]: "16"
+                        - generic [ref=e254] [cursor=pointer]: "17"
+                        - generic [ref=e255] [cursor=pointer]: "18"
+                        - generic [ref=e256] [cursor=pointer]: "19"
+                        - generic [ref=e257] [cursor=pointer]: "20"
+                        - generic [ref=e258] [cursor=pointer]: "21"
+                        - generic [ref=e259] [cursor=pointer]: "22"
+                        - generic [ref=e260] [cursor=pointer]: "23"
+                        - generic [ref=e261] [cursor=pointer]: "24"
+                        - generic [ref=e262] [cursor=pointer]: "25"
+                        - generic [ref=e263] [cursor=pointer]: "26"
+                        - generic [ref=e264] [cursor=pointer]: "27"
+                        - generic [ref=e265] [cursor=pointer]: "28"
+                        - generic [ref=e266] [cursor=pointer]: "29"
+                        - generic [ref=e267] [cursor=pointer]: "30"
+                        - generic [ref=e268] [cursor=pointer]: "31"
+                        - generic [ref=e269] [cursor=pointer]: "32"
+                        - generic [ref=e270] [cursor=pointer]: "33"
+                        - generic [ref=e271] [cursor=pointer]: "34"
+                        - generic [ref=e272] [cursor=pointer]: "35"
+                        - generic [ref=e273] [cursor=pointer]: "36"
+                        - generic [ref=e274] [cursor=pointer]: "37"
+                        - generic [ref=e275] [cursor=pointer]: "38"
+                        - generic [ref=e276] [cursor=pointer]: "39"
+                        - generic [ref=e277] [cursor=pointer]: "40"
+                        - generic [ref=e278] [cursor=pointer]: "41"
+                        - generic [ref=e279] [cursor=pointer]: "42"
+                        - generic [ref=e280] [cursor=pointer]: "43"
+                        - generic [ref=e281] [cursor=pointer]: "44"
+                        - generic [ref=e282] [cursor=pointer]: "45"
+                        - generic [ref=e283] [cursor=pointer]: "46"
+                        - generic [ref=e284] [cursor=pointer]: "47"
+                        - generic [ref=e285] [cursor=pointer]: "48"
+                        - generic [ref=e286] [cursor=pointer]: "49"
+                        - generic [ref=e287] [cursor=pointer]: "50"
+                        - generic [ref=e288] [cursor=pointer]: "51"
+                        - generic [ref=e289] [cursor=pointer]: "52"
+                        - generic [ref=e290] [cursor=pointer]: "53"
+                        - generic [ref=e291] [cursor=pointer]: "54"
+                        - generic [ref=e292] [cursor=pointer]: "55"
+                        - generic [ref=e293] [cursor=pointer]: "56"
+                        - generic [ref=e294] [cursor=pointer]: "57"
+                        - generic [ref=e295] [cursor=pointer]: "58"
+                        - generic [ref=e296] [cursor=pointer]: "59"
+                        - generic [ref=e297] [cursor=pointer]: "60"
+                        - generic [ref=e298] [cursor=pointer]: "61"
+                        - generic [ref=e299] [cursor=pointer]: "62"
+                        - generic [ref=e300] [cursor=pointer]: "63"
+                        - generic [ref=e301] [cursor=pointer]: "64"
+                        - generic [ref=e302] [cursor=pointer]: "65"
+                        - generic [ref=e303] [cursor=pointer]: "66"
+                        - generic [ref=e304] [cursor=pointer]: "67"
+                        - generic [ref=e305] [cursor=pointer]: "68"
+                        - generic [ref=e306] [cursor=pointer]: "69"
+                        - generic [ref=e307] [cursor=pointer]: "70"
+                        - generic [ref=e308] [cursor=pointer]: "71"
+                        - generic [ref=e309] [cursor=pointer]: "72"
+                        - generic [ref=e310] [cursor=pointer]: "73"
+                        - generic [ref=e311] [cursor=pointer]: "74"
+                        - generic [ref=e312] [cursor=pointer]: "75"
+                        - generic [ref=e313] [cursor=pointer]: "76"
+                        - generic [ref=e314] [cursor=pointer]: "77"
+                        - generic [ref=e315] [cursor=pointer]: "78"
+                        - generic [ref=e316] [cursor=pointer]: "79"
+                        - generic [ref=e317] [cursor=pointer]: "80"
+                        - generic [ref=e318] [cursor=pointer]: "81"
+                        - generic [ref=e319] [cursor=pointer]: "82"
+                        - generic [ref=e320] [cursor=pointer]: "83"
+                        - generic [ref=e321] [cursor=pointer]: "84"
+                        - generic [ref=e322] [cursor=pointer]: "85"
+                        - generic [ref=e323] [cursor=pointer]: "86"
+                        - generic [ref=e324] [cursor=pointer]: "87"
+                        - generic [ref=e325] [cursor=pointer]: "88"
+                        - generic [ref=e326] [cursor=pointer]: "89"
+                        - generic [ref=e327] [cursor=pointer]: "90"
+                        - generic [ref=e328] [cursor=pointer]: "91"
+                        - generic [ref=e329] [cursor=pointer]: "92"
+                        - generic [ref=e330] [cursor=pointer]: "93"
+                        - generic [ref=e331] [cursor=pointer]: "94"
+                        - generic [ref=e332] [cursor=pointer]: "95"
+                        - generic [ref=e333] [cursor=pointer]: "96"
+                        - generic [ref=e334] [cursor=pointer]: "97"
+                        - generic [ref=e335] [cursor=pointer]: "98"
+                        - generic [ref=e336] [cursor=pointer]: "99"
+                        - generic [ref=e337] [cursor=pointer]: "100"
+                        - generic [ref=e338] [cursor=pointer]: "101"
+                        - generic [ref=e339] [cursor=pointer]: "102"
+                        - generic [ref=e340] [cursor=pointer]: "103"
+                        - generic [ref=e341] [cursor=pointer]: "104"
+                        - generic [ref=e342] [cursor=pointer]: "105"
+                        - generic [ref=e343] [cursor=pointer]: "106"
+                        - generic [ref=e344] [cursor=pointer]: "107"
+                        - generic [ref=e345] [cursor=pointer]: "108"
+                        - generic [ref=e346] [cursor=pointer]: "109"
+                        - generic [ref=e347] [cursor=pointer]: "110"
+                        - generic [ref=e348] [cursor=pointer]: "111"
+                        - generic [ref=e349] [cursor=pointer]: "112"
+                        - generic [ref=e350] [cursor=pointer]: "113"
+                        - generic [ref=e351] [cursor=pointer]: "114"
+                        - generic [ref=e352] [cursor=pointer]: "115"
+                        - generic [ref=e353] [cursor=pointer]: "116"
+                        - generic [ref=e354] [cursor=pointer]: "117"
+                        - generic [ref=e355] [cursor=pointer]: "118"
+                        - generic [ref=e356] [cursor=pointer]: "119"
+                        - generic [ref=e357] [cursor=pointer]: "120"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: from
+                              - generic: bs4
+                              - generic: import
+                              - generic: BeautifulSoup
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: import
+                              - generic: urllib
+                              - text: .
+                              - generic: request
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: from
+                              - generic: _io
+                              - generic: import
+                              - text: (
+                              - generic: DEFAULT_BUFFER_SIZE
+                              - text: ","
+                              - generic: BlockingIOError
+                              - text: ","
+                              - generic: UnsupportedOperation
+                              - text: ","
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: open
+                              - text: ","
+                              - generic: FileIO
+                              - text: ","
+                              - generic: BytesIO
+                              - text: ","
+                              - generic: StringIO
+                              - text: ","
+                              - generic: BufferedReader
+                              - text: ","
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: BufferedWriter
+                              - text: ","
+                              - generic: BufferedRWPair
+                              - text: ","
+                              - generic: BufferedRandom
+                              - text: ","
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: IncrementalNewlineDecoder
+                              - text: ","
+                              - generic: TextIOWrapper
+                              - text: )
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: import
+                              - generic: sys
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: def
+                              - generic: spider
+                              - text: (
+                              - generic: place_id
+                              - text: "):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: place_id
+                              - generic: =
+                              - generic: str
+                              - text: (
+                              - generic: place_id
+                              - text: )
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: url
+                              - generic: =
+                              - generic: "'https://store.naver.com/restaurants/detail?id=%s&tab=main'"
+                              - generic: "%"
+                              - generic: place_id
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# source_code = requests.get(url)"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: source_code
+                              - generic: =
+                              - generic: urllib
+                              - text: .
+                              - generic: request
+                              - text: .
+                              - generic: urlopen
+                              - text: (
+                              - generic: url
+                              - text: )
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: plain_text
+                              - generic: =
+                              - generic: source_code
+                              - text: .
+                              - generic: read
+                              - text: ().
+                              - generic: decode
+                              - text: (
+                              - generic: "'utf-8'"
+                              - text: )
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: soup
+                              - generic: =
+                              - generic: BeautifulSoup
+                              - text: (
+                              - generic: plain_text
+                              - text: ","
+                              - generic: "'lxml'"
+                              - text: )
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - generic: =
+                              - text: "{}"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: menu_arr
+                              - generic: =
+                              - text: "[]"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# # get name"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# try:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "#"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# for name in soup.find('strong', {\"class\": \"name\"}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(name)"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# except:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_addr\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# # get category"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# try:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "#"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# for category in soup.find('span', {\"class\": \"category\"}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(category)"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# except:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_category\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# blog review num"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: try
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: review_num
+                              - generic: =
+                              - generic: soup
+                              - text: .
+                              - generic: find
+                              - text: (
+                              - generic: "'div'"
+                              - text: ", {"
+                              - generic: "\"class\""
+                              - text: ":"
+                              - generic: "\"info_inner\""
+                              - text: "})"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: str1
+                              - generic: =
+                              - generic: review_num
+                              - text: .
+                              - generic: getText
+                              - text: ()
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: for
+                              - generic: s
+                              - generic: in
+                              - generic: review_num
+                              - text: .
+                              - generic: find
+                              - text: (
+                              - generic: "'a'"
+                              - text: ", {"
+                              - generic: "\"class\""
+                              - text: ":"
+                              - generic: "\"link\""
+                              - text: "}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: if
+                              - generic: s
+                              - text: .
+                              - generic: isdigit
+                              - text: "():"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"blogReviewNum\""
+                              - text: "]"
+                              - generic: =
+                              - generic: s
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: except
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"blogReviewNum\""
+                              - text: "]"
+                              - generic: =
+                              - generic: "\"none_review_num\""
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_review_num\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# # get call num"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# try:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "#"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# for callnum in soup.find('div', {\"class\": \"txt\"}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(callnum)-"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# except:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_call_num\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "#"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# # get addr"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# try:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# count = 0"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "#"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# for taddr in soup.find_all('span', {\"class\": \"addr\"}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(taddr.getText())"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# count += 1"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# if count > 1:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# break"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# except:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_addr\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# get work time"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: try
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: for
+                              - generic: time
+                              - generic: in
+                              - generic: soup
+                              - text: .
+                              - generic: find
+                              - text: (
+                              - generic: "'div'"
+                              - text: ", {"
+                              - generic: "\"class\""
+                              - text: ":"
+                              - generic: "\"list_item list_item_biztime\""
+                              - text: "}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: ttime
+                              - generic: =
+                              - generic: time
+                              - text: .
+                              - generic: getText
+                              - text: ()
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: ttime_open
+                              - generic: =
+                              - generic: ttime
+                              - text: "["
+                              - generic: "3"
+                              - text: ":"
+                              - generic: "8"
+                              - text: "]"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: ttime_close
+                              - generic: =
+                              - generic: ttime
+                              - text: "["
+                              - generic: "11"
+                              - text: ":"
+                              - generic: "16"
+                              - text: "]"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: ttime_desc
+                              - generic: =
+                              - generic: "''"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: if
+                              - generic: len
+                              - text: (
+                              - generic: ttime
+                              - text: )
+                              - generic: ">="
+                              - generic: "16"
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: ttime_desc
+                              - generic: =
+                              - generic: ttime
+                              - text: "["
+                              - generic: "16"
+                              - text: :]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_open\""
+                              - text: "]"
+                              - generic: =
+                              - generic: ttime_open
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_close\""
+                              - text: "]"
+                              - generic: =
+                              - generic: ttime_close
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_desc\""
+                              - text: "]"
+                              - generic: =
+                              - generic: ttime_desc
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"time: %s\" % (ttime_open + ' ' + ttime_close + ' ' + ttime_desc))"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: elif
+                              - generic: len
+                              - text: (
+                              - generic: ttime
+                              - text: )
+                              - generic: ">="
+                              - generic: "3"
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_open\""
+                              - text: "]"
+                              - generic: =
+                              - generic: ttime_open
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_close\""
+                              - text: "]"
+                              - generic: =
+                              - generic: ttime_close
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_desc\""
+                              - text: "]"
+                              - generic: =
+                              - generic: "\"none_desc\""
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"etime: %s\" % (ttime_open + ' ' + ttime_close))"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: else
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: pass
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: except
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_open\""
+                              - text: "]"
+                              - generic: =
+                              - generic: "\"none_open\""
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_close\""
+                              - text: "]"
+                              - generic: =
+                              - generic: "\"none_close\""
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "\"ttime_desc\""
+                              - text: "]"
+                              - generic: =
+                              - generic: "\"none_desc\""
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none+desc\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# try:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# for time in soup.find('span', {\"class\": \"time\"}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(time.getText())"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# except:"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_time\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# get menu"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: try
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: for
+                              - generic: search
+                              - generic: in
+                              - generic: soup
+                              - text: .
+                              - generic: find_all
+                              - text: (
+                              - generic: "'div'"
+                              - text: ", {"
+                              - generic: "\"class\""
+                              - text: ":"
+                              - generic: "\"list_menu_inner\""
+                              - text: "}):"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: tsearch
+                              - generic: =
+                              - generic: search
+                              - text: .
+                              - generic: getText
+                              - text: ()
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: if
+                              - generic: "'이미지'"
+                              - generic: in
+                              - generic: tsearch
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: pass
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: else
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: pin_point
+                              - generic: =
+                              - generic: tsearch
+                              - text: .
+                              - generic: find
+                              - text: (
+                              - generic: "'원'"
+                              - text: )
+                              - generic: +
+                              - generic: "1"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: menu_price
+                              - generic: =
+                              - generic: tsearch
+                              - text: "["
+                              - generic: "0"
+                              - text: ":"
+                              - generic: pin_point
+                              - text: "]"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: menu_name
+                              - generic: =
+                              - generic: tsearch
+                              - text: "["
+                              - generic: pin_point
+                              - text: :]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: menu_arr
+                              - text: .
+                              - generic: append
+                              - text: "({"
+                              - generic: menu_name
+                              - text: ":"
+                              - generic: menu_price
+                              - text: "})"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(menu_name + \" \" + menu_price)"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: store_data_context
+                              - text: "["
+                              - generic: "'menu'"
+                              - text: "]"
+                              - generic: =
+                              - generic: menu_arr
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: except
+                              - text: ":"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: pass
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: "# print(\"none_menu\")"
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: return
+                              - generic: store_data_context
+  - alert [ref=e361]

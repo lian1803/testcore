@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Awwwards",
+    "url": "https://www.awwwards.com/",
+    "title": "Awwwards - Website Awards - Best Web Design Trends",
+    "description": "Web Design Awards",
+    "screenshot": "C:\\Users\\lian1\\Documents\\Work\\core\\company\\teams\\디자인스카우팅팀\\screenshots\\awwwards_20260410_031545.png",
+    "captured_at": "20260410_031545"
+  },
+  {
+    "name": "Dribbble",
+    "url": "https://dribbble.com/search/web-design",
+    "title": "Browse thousands of Web Design images for design inspiration | Dribbble",
+    "description": "Design Community",
+    "screenshot": "C:\\Users\\lian1\\Documents\\Work\\core\\company\\teams\\디자인스카우팅팀\\screenshots\\dribbble_20260410_031551.png",
+    "captured_at": "20260410_031551"
+  },
+  {
+    "name": "Lapa.ninja",
+    "url": "https://www.lapa.ninja/",
+    "title": "Landing Page Design Examples: 7,300+ Best Landing Pages | Lapa Ninja",
+    "description": "Landing Page Inspiration",
+    "screenshot": "C:\\Users\\lian1\\Documents\\Work\\core\\company\\teams\\디자인스카우팅팀\\screenshots\\lapa.ninja_20260410_031559.png",
+    "captured_at": "20260410_031559"
+  },
+  {
+    "name": "Land-book",
+    "url": "https://land-book.com/",
+    "title": "Website Inspiration",
+    "description": "Website Inspiration",
+    "screenshot": null,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://land-book.com/\", waiting until \"networkidle\"\n",
+    "captured_at": "20260410_031629"
+  }
+]

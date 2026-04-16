@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>화원 — Hero</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #fdf6ee;
+    --green: #3a5a40;
+    --blush: #e8b4a0;
+    --gold: #c9a96e;
+    --dark: #1a1a18;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--dark);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    overflow: hidden;
+  }
+
+  /* ── 히어로 ── */
+  .hero {
+    position: relative;
+    width: 100vw; height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ── 비디오 레이어들 ── */
+  .video-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.6s ease-in-out;
+  }
+  .video-layer.active { opacity: 1; }
+
+  /* ── 오버레이 ── */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom,
+        rgba(20,18,14,0.3)  0%,
+        rgba(20,18,14,0.05) 35%,
+        rgba(20,18,14,0.5)  75%,
+        rgba(20,18,14,0.88) 100%
+      );
+    z-index: 1;
+  }
+
+  /* ── 꽃잎 파티클 ── */
+  .petals { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .petal {
+    position: absolute;
+    border-radius: 80% 0 55% 0;
+    opacity: 0;
+    animation: petalFall linear infinite;
+  }
+
+  /* ── 로고 ── */
+  .logo {
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--cream);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    opacity: 0;
+    animation: fadeDown 0.9s ease 0.3s forwards;
+  }
+
+  /* ── 내비 ── */
+  .nav {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    z-index: 3;
+    display: flex;
+    gap: 32px;
+    opacity: 0;
+    animation: fadeDown 0.9s ease 0.45s forwards;
+  }
+  .nav a {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.72);
+    text-decoration: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    transition: color 0.2s;
+  }
+  .nav a:hover { color: var(--cream); }
+
+  /* ── 콘텐츠 ── */
+  .hero__content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    text-align: center;
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 24px;
+  }
+
+  .hero__eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  /* 챕터 높이 잡는 wrapper */
+  .chapters-wrapper {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero__title {
+    font-size: clamp(44px, 7vw, 96px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .hero__title em {
+    font-style: italic;
+    color: var(--blush);
+  }
+
+  /* 챕터별 텍스트 전환 */
+  .chapter {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    pointer-events: none;
+  }
+  .chapter.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .chapter__sub {
+    font-size: clamp(14px, 1.6vw, 17px);
+    font-weight: 400;
+    color: rgba(253,246,238,0.7);
+    letter-spacing: 0.04em;
+    max-width: 460px;
+    line-height: 1.75;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  /* CTA (첫 챕터만) */
+  .hero__cta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .btn-primary {
+    padding: 14px 36px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 500;
+    transition: opacity 0.25s;
+  }
+  .btn-primary:hover { opacity: 0.8; }
+  .btn-ghost {
+    padding: 14px 36px;
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(253,246,238,0.4);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    transition: border-color 0.25s;
+  }
+  .btn-ghost:hover { border-color: var(--cream); }
+
+  /* ── 챕터 인디케이터 ── */
+  .chapters-nav {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.8s forwards;
+  }
+
+  .dots {
+    display: flex;
+    gap: 10px;
+  }
+  .dot {
+    width: 28px;
+    height: 2px;
+    background: rgba(253,246,238,0.3);
+    cursor: pointer;
+    transition: background 0.4s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .dot::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    transition: left 0s;
+  }
+  .dot.active::after {
+    left: 0;
+    transition: left var(--dot-duration, 5s) linear;
+  }
+  .dot.done { background: rgba(201,169,110,0.5); }
+
+  .scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .scroll-hint span {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.45);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .scroll-line {
+    width: 1px; height: 36px;
+    background: linear-gradient(to bottom, rgba(253,246,238,0.45), transparent);
+    animation: scrollPulse 2.5s ease-in-out 2.2s infinite;
+  }
+
+  /* ── 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.45; }
+    50%       { opacity: 0.9; }
+  }
+  @keyframes petalFall {
+    0%   { opacity: 0;   transform: translateY(-30px) rotate(0deg) translateX(0); }
+    8%   { opacity: 0.55; }
+    88%  { opacity: 0.25; }
+    100% { opacity: 0;   transform: translateY(108vh) rotate(540deg) translateX(70px); }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero" id="hero">
+
+  <!-- 비디오 레이어 4개 -->
+  <video class="video-layer active" id="v0" autoplay muted playsinline
+    src="https://v3b.fal.media/files/b/0a95e952/InaqFik8W4y7i8L8INdjP_output.mp4"></video>
+  <video class="video-layer" id="v1" muted playsinline
+    src="https://v3b.fal.media/files/b/0a95f277/1_qG2pFih5Ck6cPvM0IfH_output.mp4"></video>
+  <video class="video-layer" id="v2" muted playsinline
+    src="https://v3b.fal.media/files/b/0a95f286/tfwW_dsMuk8zeG5YIZSBx_output.mp4"></video>
+  <video class="video-layer" id="v3" muted playsinline
+    src="https://v3b.fal.media/files/b/0a95f269/q1t2_6TvgpkYYNXfgdurr_output.mp4"></video>
+
+  <!-- 오버레이 -->
+  <div class="hero__overlay"></div>
+
+  <!-- 꽃잎 -->
+  <div class="petals" id="petals"></div>
+
+  <!-- 로고 -->
+  <div class="logo">Hwa · Won</div>
+
+  <!-- 내비 -->
+  <nav class="nav">
+    <a href="#">컬렉션</a>
+    <a href="#">정원 이야기</a>
+    <a href="#">예약</a>
+  </nav>
+
+  <!-- 메인 콘텐츠 영역 -->
+  <div class="hero__content">
+    <p class="hero__eyebrow">Spring Collection 2026</p>
+
+    <div class="chapters-wrapper">
+      <!-- 챕터 0: 화원 전경 -->
+      <div class="chapter active" id="c0">
+        <h1 class="hero__title">꽃이 피는<br><em>자리</em></h1>
+        <p class="chapter__sub">자연이 빚어낸 빛과 향기.<br>화원에서 당신만의 봄을 만나세요.</p>
+        <div class="hero__cta">
+          <button class="btn-primary">컬렉션 보기</button>
+          <button class="btn-ghost">정원 예약</button>
+        </div>
+      </div>
+
+      <!-- 챕터 1: 이슬 장미 -->
+      <div class="chapter" id="c1">
+        <h1 class="hero__title">새벽이<br><em>닿는 곳</em></h1>
+        <p class="chapter__sub">이슬이 맺힌 꽃잎 위로<br>첫 햇살이 스며드는 순간.</p>
+      </div>
+
+      <!-- 챕터 2: 꽃길 -->
+      <div class="chapter" id="c2">
+        <h1 class="hero__title">걷는 것만으로<br><em>충분한</em></h1>
+        <p class="chapter__sub">꽃잎이 깔린 돌길을 따라<br>천천히, 깊게 숨 쉬어보세요.</p>
+      </div>
+
+      <!-- 챕터 3: 황혼 -->
+      <div class="chapter" id="c3">
+        <h1 class="hero__title">빛이 지는<br><em>시간</em></h1>
+        <p class="chapter__sub">황혼이 내려앉은 화원엔<br>반딧불과 별빛이 피어납니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 챕터 인디케이터 -->
+  <div class="chapters-nav">
+    <div class="dots">
+      <div class="dot active" data-index="0"></div>
+      <div class="dot" data-index="1"></div>
+      <div class="dot" data-index="2"></div>
+      <div class="dot" data-index="3"></div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+// ── 꽃잎 파티클 ──
+const petalColors = ['#e8b4a0','#f2cfc2','#d4a5c9','#f9dde0','#fce4b3','#c9a96e','#f7e1d7'];
+const container = document.getElementById('petals');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  const size = 5 + Math.random() * 9;
+  Object.assign(p.style, {
+    left: `${Math.random() * 100}%`,
+    width: `${size}px`,
+    height: `${size * 1.65}px`,
+    background: petalColors[Math.floor(Math.random() * petalColors.length)],
+    animationDuration: `${9 + Math.random() * 13}s`,
+    animationDelay: `${Math.random() * 14}s`,
+  });
+  container.appendChild(p);
+}
+
+// ── 영상 + 챕터 전환 ──
+const videos   = [0,1,2,3].map(i => document.getElementById(`v${i}`));
+const chapters = [0,1,2,3].map(i => document.getElementById(`c${i}`));
+const dots     = document.querySelectorAll('.dot');
+const FADE     = 1600; // ms (CSS transition 1.6s)
+const DOT_DUR  = 5;    // 초 (진행바)
+
+let current = 0;
+let transitioning = false;
+
+// 다음 영상 미리 로드
+videos.forEach((v, i) => { if (i !== 0) v.load(); });
+
+function goTo(next) {
+  if (transitioning || next === current) return;
+  transitioning = true;
+
+  const prev = current;
+  current = next;
+
+  // 다음 영상 재생 준비
+  videos[next].currentTime = 0;
+  videos[next].play().catch(() => {});
+
+  // 크로스페이드
+  videos[next].classList.add('active');
+  setTimeout(() => {
+    videos[prev].classList.remove('active');
+    videos[prev].pause();
+  }, FADE);
+
+  // 챕터 텍스트 전환
+  chapters[prev].classList.remove('active');
+  setTimeout(() => chapters[next].classList.add('active'), 400);
+
+  // 닷 업데이트
+  dots.forEach((d, i) => {
+    d.classList.remove('active', 'done');
+    if (i < next) d.classList.add('done');
+  });
+  dots[next].style.setProperty('--dot-duration', `${DOT_DUR}s`);
+  // 강제 reflow 후 active (애니메이션 재시작)
+  void dots[next].offsetWidth;
+  dots[next].classList.add('active');
+
+  setTimeout(() => { transitioning = false; }, FADE + 200);
+}
+
+// 영상 끝나면 자동으로 다음 챕터
+videos.forEach((v, i) => {
+  v.addEventListener('ended', () => {
+    const next = (i + 1) % videos.length;
+    goTo(next);
+  });
+
+  // timeupdate — 끝 1.8초 전에 다음 영상 미리 시작(소리 없음, opacity 0)
+  v.addEventListener('timeupdate', () => {
+    if (v.duration && v.currentTime >= v.duration - 1.8) {
+      const next = (i + 1) % videos.length;
+      if (!transitioning && current === i) {
+        // 다음 영상 미리 시작해두기 (fade는 ended에서)
+        videos[next].currentTime = 0;
+        videos[next].play().catch(() => {});
+      }
+    }
+  });
+});
+
+// 닷 클릭
+dots.forEach(d => {
+  d.addEventListener('click', () => goTo(parseInt(d.dataset.index)));
+});
+
+// 첫 번째 닷 진행바 시작
+dots[0].style.setProperty('--dot-duration', `${DOT_DUR}s`);
+setTimeout(() => { dots[0].classList.add('active'); }, 100);
+
+// 첫 영상 재생
+videos[0].play().catch(() => {});
+</script>
+
+</body>
+</html>

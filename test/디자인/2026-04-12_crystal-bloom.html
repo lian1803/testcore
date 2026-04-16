@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crystal — Bloom Hero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; cursor:none; }
+    html, body { width:100%; height:100%; overflow:hidden; background:#000008; }
+    #c  { position:fixed; inset:0; z-index:1; }
+    canvas { display:block; }
+
+    /* grain */
+    #grain { position:fixed; inset:0; pointer-events:none; z-index:3; }
+
+    /* ui */
+    #ui {
+      position:fixed; inset:0; z-index:5; pointer-events:none;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:0;
+    }
+    #label {
+      font-family:'Inter',sans-serif; font-size:clamp(0.45rem,.75vw,.58rem);
+      letter-spacing:.6em; color:rgba(100,180,255,.5); text-transform:uppercase;
+      opacity:0; margin-bottom:1rem;
+    }
+    #title {
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(3.5rem,12vw,9rem);
+      font-weight:200; color:#fff; letter-spacing:.2em; line-height:1;
+      opacity:0; transform:translateY(28px);
+    }
+    #sub {
+      margin-top:1.2rem; font-family:'Inter',sans-serif;
+      font-size:clamp(.75rem,1.4vw,.88rem); font-weight:300;
+      color:rgba(255,255,255,.3); letter-spacing:.1em;
+      opacity:0; transform:translateY(10px); text-align:center;
+    }
+    #cta {
+      margin-top:2.4rem; padding:.78rem 2.4rem; background:transparent;
+      border:1px solid rgba(80,160,255,.35); color:rgba(100,180,255,.85);
+      font-family:'Space Grotesk',sans-serif; font-size:.63rem;
+      letter-spacing:.38em; text-transform:uppercase;
+      pointer-events:all; opacity:0; transform:translateY(10px);
+      transition:background .3s,border-color .3s;
+    }
+    #cta:hover { background:rgba(40,80,200,.15); border-color:rgba(100,180,255,.75); }
+
+    /* cursor */
+    #cur  { position:fixed; width:5px; height:5px; background:rgba(120,200,255,.95);
+            border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    #ring { position:fixed; width:28px; height:28px;
+            border:1px solid rgba(80,160,255,.3); border-radius:50%;
+            pointer-events:none; z-index:9998; transform:translate(-50%,-50%); }
+  </style>
+</head>
+<body>
+
+<div id="c"></div>
+
+<svg id="grain" width="100%" height="100%">
+  <filter id="fn"><feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="4" seed="3"/>
+  <feDisplacementMap in="SourceGraphic" scale="1"/></filter>
+  <rect width="100%" height="100%" filter="url(#fn)" opacity=".032"/>
+</svg>
+
+<div id="ui">
+  <div id="label">Interactive 3D</div>
+  <div id="title">CRYSTAL</div>
+  <div id="sub">Move to shift the light. The structure responds.</div>
+  <button id="cta">Explore</button>
+</div>
+
+<div id="cur"></div>
+<div id="ring"></div>
+
+<!-- Three.js core -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Postprocessing chain (load order matters) -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<!-- GLTF for bird model -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════
+const CONFIG = {
+  CAMERA:   { fov:50, pos:[0,0,6], near:.05, far:100 },
+  ROTATE:   { speed:.15 },
+  FLOAT:    { height:.1, speed:.7 },
+  PARALLAX: { camX:.7, camY:.35, smooth:.05 },
+
+  // UnrealBloomPass 파라미터 — 이게 핵심
+  BLOOM: {
+    strength:  2.2,   // 글로우 강도 (1.5~3.0)
+    radius:    0.9,   // 글로우 번짐 (0.5~1.2)
+    threshold: 0.78,  // 이 밝기 이상만 bloom (0.5~0.9)
+  },
+
+  LIGHT: {
+    ambient: { color:0x0a0520, intensity:1.0 },
+    key:     { color:0x44aaff, intensity:8.0,  pos:[ 3, 4,  3] },
+    fill:    { color:0xaa44ff, intensity:4.0,  pos:[-4, 1, -2] },
+    rim:     { color:0xffffff, intensity:3.0,  pos:[ 0,-2, -5] },
+  },
+};
+// ════════════════════════════════════════════════════════════
+
+const W = () => window.innerWidth, H = () => window.innerHeight;
+
+// ── Renderer ──
+const renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+renderer.setSize(W(), H());
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.outputEncoding = THREE.sRGBEncoding;
+document.getElementById('c').appendChild(renderer.domElement);
+
+// ── Scene + Camera ──
+const scene  = new THREE.Scene();
+scene.fog    = new THREE.FogExp2(0x000008, 0.018);
+const camera = new THREE.PerspectiveCamera(CONFIG.CAMERA.fov, W()/H(), .05, 100);
+const CB     = { x:0, y:0, z:CONFIG.CAMERA.pos[2] };
+camera.position.set(...CONFIG.CAMERA.pos);
+
+// ── Lights ──
+scene.add(new THREE.AmbientLight(CONFIG.LIGHT.ambient.color, CONFIG.LIGHT.ambient.intensity));
+const kL = new THREE.PointLight(CONFIG.LIGHT.key.color,  CONFIG.LIGHT.key.intensity,  25);
+kL.position.set(...CONFIG.LIGHT.key.pos);  scene.add(kL);
+const fL = new THREE.PointLight(CONFIG.LIGHT.fill.color, CONFIG.LIGHT.fill.intensity, 20);
+fL.position.set(...CONFIG.LIGHT.fill.pos); scene.add(fL);
+const rL = new THREE.PointLight(CONFIG.LIGHT.rim.color,  CONFIG.LIGHT.rim.intensity,  18);
+rL.position.set(...CONFIG.LIGHT.rim.pos);  scene.add(rL);
+
+// ── EffectComposer + UnrealBloomPass ──
+const composer   = new THREE.EffectComposer(renderer);
+composer.addPass(new THREE.RenderPass(scene, camera));
+const bloomPass  = new THREE.UnrealBloomPass(
+  new THREE.Vector2(W(), H()),
+  CONFIG.BLOOM.strength,
+  CONFIG.BLOOM.radius,
+  CONFIG.BLOOM.threshold
+);
+composer.addPass(bloomPass);
+
+// ── 크리스탈 씬 빌드 ──
+const mainGroup = new THREE.Group();
+scene.add(mainGroup);
+
+// 메인 크리스탈 — IcosahedronGeometry (20면체)
+const cGeo = new THREE.IcosahedronGeometry(1.15, 1);
+const cMat = new THREE.MeshPhysicalMaterial({
+  color:              0xaaccff,
+  emissive:           0x1133aa,
+  emissiveIntensity:  0.55,
+  roughness:          0.0,
+  metalness:          0.05,
+  clearcoat:          1.0,
+  clearcoatRoughness: 0.0,
+  transparent:        true,
+  opacity:            0.88,
+  side:               THREE.DoubleSide,
+});
+const mainCrystal = new THREE.Mesh(cGeo, cMat);
+mainGroup.add(mainCrystal);
+
+// 와이어프레임 레이어 (엣지 강조)
+mainGroup.add(new THREE.Mesh(cGeo, new THREE.MeshBasicMaterial({
+  color: 0x88ccff, wireframe:true, transparent:true, opacity:.18,
+})));
+
+// 크리스탈 내부 발광 포인트 → bloom에서 터짐
+const inner1 = new THREE.PointLight(0x66bbff, 4.0, 2.2);
+const inner2 = new THREE.PointLight(0xff66aa, 2.5, 1.8);
+inner2.position.set(.4, .5, .2);
+const inner3 = new THREE.PointLight(0xaaffdd, 2.0, 1.6);
+inner3.position.set(-.3, -.4, .3);
+mainCrystal.add(inner1, inner2, inner3);
+
+// ── 위성 크리스탈 (6개, 공전) ──
+const satGroup = new THREE.Group();
+const satColors = [0x66aaff, 0xff66cc, 0x66ffcc, 0xffaa44, 0xaa66ff, 0xffffff];
+const satellites = [];
+
+for (let i = 0; i < 6; i++) {
+  const angle  = (i / 6) * Math.PI * 2;
+  const r      = 2.4 + (i % 2) * 0.3;
+  const yOff   = Math.sin(i * 1.3) * 0.6;
+  const size   = 0.18 + (i % 3) * 0.09;
+
+  const sat = new THREE.Group();
+  sat.position.set(Math.sin(angle)*r, yOff, Math.cos(angle)*r);
+
+  const mesh = new THREE.Mesh(
+    new THREE.OctahedronGeometry(size, 0),
+    new THREE.MeshPhysicalMaterial({
+      color:              satColors[i],
+      emissive:           satColors[i],
+      emissiveIntensity:  2.8,    // 높게 → bloom에서 강하게 빛남
+      roughness:          0.0,
+      metalness:          0.1,
+      clearcoat:          1.0,
+    })
+  );
+  sat.add(mesh);
+
+  // 각 위성 내부 미니 포인트라이트
+  const sl = new THREE.PointLight(satColors[i], 1.5, 2.0);
+  sat.add(sl);
+
+  satGroup.add(sat);
+  satellites.push({ group:sat, baseAngle:angle, radius:r, yOff, speed:.3 + i*.04 });
+}
+scene.add(satGroup);
+
+// ── 파티클 성장 ──
+const pCnt = 300;
+const pArr = new Float32Array(pCnt * 3);
+for (let i=0; i<pCnt*3; i++) pArr[i] = (Math.random()-.5)*30;
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(pArr,3));
+scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+  color:0x8899bb, size:.04, transparent:true, opacity:.45,
+  sizeAttenuation:true, depthWrite:false,
+})));
+
+// ── 등장 애니메이션 ──
+mainGroup.scale.setScalar(0);
+gsap.to(mainGroup.scale, { x:1,y:1,z:1, duration:2.0, ease:'elastic.out(1,.5)', delay:.3 });
+
+satGroup.scale.setScalar(0);
+gsap.to(satGroup.scale, { x:1,y:1,z:1, duration:1.8, ease:'power3.out', delay:.8 });
+
+// 크리스탈 emissive pulse
+gsap.to(cMat, { emissiveIntensity:1.2, duration:1.8, repeat:-1, yoyo:true, ease:'sine.inOut' });
+gsap.to(inner1, { intensity:6.0, duration:2.0, repeat:-1, yoyo:true, ease:'sine.inOut' });
+
+// ── 텍스트 등장 ──
+const tl = gsap.timeline({ delay:1.2 });
+tl.to('#label', { opacity:1, duration:.9 });
+tl.to('#title', { opacity:1, y:0, duration:1.3, ease:'power3.out' }, '-=.3');
+tl.to('#sub',   { opacity:1, y:0, duration:.9,  ease:'power2.out' }, '-=.5');
+tl.to('#cta',   { opacity:1, y:0, duration:.8,  ease:'power2.out' }, '-=.4');
+
+// ── 마우스 ──
+let rMX=0, rMY=0, tCX=0, tCY=0, sCX=0, sCY=0;
+document.addEventListener('mousemove', e => {
+  rMX = (e.clientX/W()-.5)*2; rMY = (e.clientY/H()-.5)*2;
+  tCX = rMX * CONFIG.PARALLAX.camX;
+  tCY = -rMY * CONFIG.PARALLAX.camY;
+});
+
+const curEl = document.getElementById('cur'), ringEl = document.getElementById('ring');
+let cx=W()/2,cy=H()/2,rx=cx,ry=cy;
+document.addEventListener('mousemove', e=>{ cx=e.clientX; cy=e.clientY; });
+setInterval(()=>{
+  rx+=(cx-rx)*.12; ry+=(cy-ry)*.12;
+  curEl.style.cssText  += `left:${cx}px;top:${cy}px;`;
+  ringEl.style.cssText += `left:${rx}px;top:${ry}px;`;
+},16);
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = W()/H(); camera.updateProjectionMatrix();
+  renderer.setSize(W(),H()); composer.setSize(W(),H());
+  bloomPass.setSize(W(),H());
+});
+
+// ── 렌더 루프 ──
+const clock = new THREE.Clock(); let prevT=0;
+
+(function animate() {
+  requestAnimationFrame(animate);
+  const e = clock.getElapsedTime(), dt = e-prevT; prevT=e;
+
+  // 메인 크리스탈
+  mainGroup.rotation.y += CONFIG.ROTATE.speed * dt;
+  mainGroup.rotation.x  = Math.sin(e * .25) * .12;
+  mainGroup.position.y  = Math.sin(e * CONFIG.FLOAT.speed) * CONFIG.FLOAT.height;
+
+  // 위성 공전
+  satellites.forEach((s, i) => {
+    const a = s.baseAngle + e * s.speed;
+    s.group.position.x = Math.sin(a) * s.radius;
+    s.group.position.z = Math.cos(a) * s.radius;
+    s.group.position.y = s.yOff + Math.sin(e*.5 + i) * .15;
+    s.group.rotation.y += .8 * dt;
+  });
+
+  // 파티클 느리게 회전
+  pGeo.attributes.position.array.forEach((_, idx) => {
+    if (idx % 3 === 0) {
+      const x = pGeo.attributes.position.array[idx];
+      const z = pGeo.attributes.position.array[idx+2];
+      const ang = Math.atan2(x,z) + dt*.02;
+      const r   = Math.sqrt(x*x+z*z);
+      pGeo.attributes.position.array[idx]   = Math.sin(ang)*r;
+      pGeo.attributes.position.array[idx+2] = Math.cos(ang)*r;
+    }
+  });
+  pGeo.attributes.position.needsUpdate = true;
+
+  // 카메라 패럴랙스
+  sCX += (tCX-sCX)*CONFIG.PARALLAX.smooth;
+  sCY += (tCY-sCY)*CONFIG.PARALLAX.smooth;
+  camera.position.x = CB.x + sCX;
+  camera.position.y = CB.y + sCY;
+  camera.lookAt(0,0,0);
+
+  // 키라이트 마우스 추적
+  kL.position.x = CONFIG.LIGHT.key.pos[0] + rMX * 2.5;
+  kL.position.y = CONFIG.LIGHT.key.pos[1] - rMY * 2.0;
+
+  // UnrealBloomPass로 렌더 (renderer.render 대신!)
+  composer.render();
+})();
+</script>
+</body>
+</html>

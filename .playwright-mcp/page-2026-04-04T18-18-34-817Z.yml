@@ -1,0 +1,11 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - heading "로드 중..." [level=2] [ref=e4]
+      - paragraph [ref=e5]: "-"
+    - button "← 뒤로" [ref=e6] [cursor=pointer]
+  - generic [ref=e7]:
+    - generic [ref=e9]: 로드 중...
+    - generic [ref=e11]:
+      - textbox "고객 응답을 여기에 복붕하세요..." [ref=e12]
+      - button "⚡ 전송" [ref=e13] [cursor=pointer]

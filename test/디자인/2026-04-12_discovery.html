@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DISCOVERY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-snap-type: y mandatory; overflow-y: scroll; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ── Scroll snap sections ── */
+    section {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── SVG Grain overlay ── */
+    #grain {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      pointer-events:none; z-index:100; opacity:0.025;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCENE 1 — THE FISSURE (Hero)
+    ════════════════════════════════════════════ */
+    #scene-1 { background: #000; }
+    #hero-canvas {
+      position:absolute; top:0; left:0; width:100%; height:100%; display:block;
+    }
+    .hero-text-layer {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none; z-index:10;
+    }
+    .discovery-wrap {
+      display:flex; gap:0.04em; letter-spacing:0.18em;
+      clip-path: inset(0 100% 0 0);
+      perspective:800px; transform-style:preserve-3d;
+    }
+    .d-char {
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(3rem, 9vw, 8rem);
+      font-weight:200; color:#fff;
+      text-shadow: 0 0 20px #6366f1, 0 0 60px #6366f1, 0 0 120px #a78bfa;
+      display:inline-block; opacity:0;
+      transform: translateY(30px) scale(0.6);
+      will-change: transform, opacity;
+    }
+    .whiteout-overlay {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background:#22d3ee; opacity:0; pointer-events:none; z-index:20;
+    }
+
+    /* ── Cursor ── */
+    #hero-cursor {
+      position:fixed; top:0; left:0;
+      pointer-events:none; z-index:9999;
+      transform:translate(-50%,-50%);
+    }
+    .cur-dot {
+      position:absolute; width:3px; height:3px; background:#22d3ee;
+      border-radius:50%; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      transition:transform .15s ease;
+    }
+    .cur-cross { position:absolute; background:rgba(167,139,250,.6); transition:transform .3s ease; }
+    .cur-top,.cur-bottom { width:1px; height:8px; left:50%; }
+    .cur-left,.cur-right { width:8px; height:1px; top:50%; }
+    .cur-top    { bottom:calc(50% + 4px); transform:translateX(-50%); }
+    .cur-bottom { top:calc(50% + 4px);    transform:translateX(-50%); }
+    .cur-left   { right:calc(50% + 4px);  transform:translateY(-50%); }
+    .cur-right  { left:calc(50% + 4px);   transform:translateY(-50%); }
+    #hero-cursor.hovered .cur-top    { transform:translateX(-50%) rotate(45deg); }
+    #hero-cursor.hovered .cur-bottom { transform:translateX(-50%) rotate(45deg); }
+    #hero-cursor.hovered .cur-left   { transform:translateY(-50%) rotate(45deg); }
+    #hero-cursor.hovered .cur-right  { transform:translateY(-50%) rotate(45deg); }
+    #hero-cursor.clicked .cur-dot { transform:translate(-50%,-50%) scale(2); }
+
+    /* ═══════════════════════════════════════════
+       SCENE 2 — THE ABYSS MAP
+    ════════════════════════════════════════════ */
+    #scene-2 { background: radial-gradient(ellipse at 50% 50%, #0d0a1a 0%, #000 100%); }
+    #map-canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .map-text {
+      position:absolute; bottom:15vh; left:10vw;
+      z-index:10; pointer-events:none;
+    }
+    .map-text .line1 {
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      font-weight:300; color:rgba(255,255,255,.85);
+      opacity:0; transform:translateY(20px);
+      letter-spacing:.06em;
+    }
+    .map-text .line2 {
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(1rem, 2.4vw, 1.8rem);
+      font-weight:200; color:#22d3ee;
+      opacity:0; transform:translateY(20px);
+      margin-top:.4em; letter-spacing:.04em;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCENE 3 — BIOLUMINESCENCE
+    ════════════════════════════════════════════ */
+    #scene-3 { background: radial-gradient(ellipse at 50% 60%, #060a12 0%, #000 100%); }
+    #bio-canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .bio-text {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      text-align:center; z-index:10; pointer-events:none;
+    }
+    .bio-text .b1, .bio-text .b2 {
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:200; color:#fff; display:block;
+      opacity:0; filter:blur(4px);
+    }
+    .bio-text .b1 { font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing:.08em; }
+    .bio-text .b2 { font-size: clamp(1.2rem, 3.2vw, 2.4rem); margin-top:.3em; color:#a78bfa; }
+
+    /* ═══════════════════════════════════════════
+       SCENE 4 — CONSTELLATION SURGE
+    ════════════════════════════════════════════ */
+    #scene-4 { background:#000; }
+    #const-canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .explore-text {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(5rem, 13vw, 12rem);
+      font-weight:200; color:#fff; letter-spacing:.15em;
+      z-index:10; pointer-events:none; opacity:0;
+      text-shadow: 0 0 40px rgba(99,102,241,.4);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCENE 5 — THE ARCHIVE
+    ════════════════════════════════════════════ */
+    #scene-5 { background: linear-gradient(180deg, #050510 0%, #000 100%); overflow:hidden; }
+    .archive-wrapper {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center; gap:4vw;
+      padding:0 6vw;
+    }
+    .archive-card {
+      flex:0 0 16vw; height:55vh; min-width:140px;
+      border:1px solid rgba(99,102,241,.25);
+      border-radius:4px; position:relative;
+      display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+      padding:1.5rem 1rem;
+      opacity:.3; transform:translateY(30px);
+      transition:opacity .4s, border-color .4s;
+      background: linear-gradient(180deg, rgba(10,8,30,.9) 0%, rgba(5,3,18,.95) 100%);
+    }
+    .archive-card.active { opacity:1; border-color:rgba(99,102,241,.8); }
+    .card-glyph {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:60%; height:60%; opacity:0;
+    }
+    .card-glyph svg { width:100%; height:100%; }
+    .archive-card.active .card-glyph { opacity:1; transition:opacity .6s .2s; }
+    .card-label {
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(.6rem, 1.2vw, .9rem);
+      font-weight:400; letter-spacing:.3em;
+      color:#22d3ee; opacity:0; transition:opacity .4s .3s;
+      text-transform:uppercase;
+    }
+    .archive-card.active .card-label { opacity:1; }
+
+    /* ═══════════════════════════════════════════
+       SCENE 6 — THRESHOLD
+    ════════════════════════════════════════════ */
+    #scene-6 { background:#000; }
+    #thresh-canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .thresh-text-top {
+      position:absolute; top:15vh; left:50%;
+      transform:translateX(-50%);
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(1rem, 2.5vw, 2rem);
+      font-weight:300; letter-spacing:.5em;
+      color:#fff; z-index:10; pointer-events:none; opacity:0;
+      white-space:nowrap;
+    }
+    .thresh-text-center {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(0);
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight:200; letter-spacing:.15em;
+      color:#22d3ee; z-index:10; pointer-events:none; opacity:0;
+      text-shadow: 0 0 30px #22d3ee, 0 0 80px rgba(34,211,238,.5);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCENE 7 — ARRIVAL
+    ════════════════════════════════════════════ */
+    #scene-7 { background:radial-gradient(ellipse at 50% 50%, #0a0a1a 0%, #000 100%); }
+    #arrival-canvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .arrival-content {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      text-align:center; z-index:10; pointer-events:none;
+    }
+    .arrival-headline {
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(1.5rem, 4vw, 3.2rem);
+      font-weight:300; color:#fff;
+      letter-spacing:.06em; opacity:0; line-height:1.3;
+    }
+    .arrival-cta {
+      display:inline-block; margin-top:3rem;
+      padding:1rem 3rem;
+      border:1px solid #a78bfa; border-radius:2px;
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(.75rem, 1.5vw, 1rem);
+      font-weight:400; letter-spacing:.2em; color:#fff;
+      text-transform:uppercase; text-decoration:none;
+      opacity:0; transform:translateY(20px);
+      transition:background .3s, border-color .3s;
+      cursor:none;
+    }
+    .arrival-cta:hover { background:#6366f1; border-color:#6366f1; }
+    .arrival-sub {
+      display:block; margin-top:1rem;
+      font-size: clamp(.6rem, 1vw, .75rem);
+      letter-spacing:.15em; color:rgba(255,255,255,.35);
+      opacity:0;
+    }
+
+    /* ── Nav dots ── */
+    #nav-dots {
+      position:fixed; right:2rem; top:50%; transform:translateY(-50%);
+      display:flex; flex-direction:column; gap:.6rem; z-index:200;
+    }
+    .nav-dot {
+      width:5px; height:5px; border-radius:50%;
+      background:rgba(255,255,255,.2);
+      transition:background .3s, transform .3s;
+      cursor:none;
+    }
+    .nav-dot.active { background:#22d3ee; transform:scale(1.4); }
+  </style>
+</head>
+<body>
+
+<!-- SVG Grain -->
+<svg id="grain" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" seed="5"/>
+    <feDisplacementMap in="SourceGraphic" scale="1"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise)" opacity="0.025"/>
+</svg>
+
+<!-- Cursor -->
+<div id="hero-cursor">
+  <div class="cur-dot"></div>
+  <div class="cur-cross cur-top"></div>
+  <div class="cur-cross cur-bottom"></div>
+  <div class="cur-cross cur-left"></div>
+  <div class="cur-cross cur-right"></div>
+</div>
+
+<!-- Nav Dots -->
+<nav id="nav-dots">
+  <div class="nav-dot active" data-scene="0"></div>
+  <div class="nav-dot" data-scene="1"></div>
+  <div class="nav-dot" data-scene="2"></div>
+  <div class="nav-dot" data-scene="3"></div>
+  <div class="nav-dot" data-scene="4"></div>
+  <div class="nav-dot" data-scene="5"></div>
+  <div class="nav-dot" data-scene="6"></div>
+</nav>
+
+<!-- ═══ SCENE 1 ═══════════════════════════════════════ -->
+<section id="scene-1">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-text-layer">
+    <div class="discovery-wrap" id="discovery-wrap">
+      <span class="d-char" data-i="0">D</span>
+      <span class="d-char" data-i="1">I</span>
+      <span class="d-char" data-i="2">S</span>
+      <span class="d-char" data-i="3">C</span>
+      <span class="d-char" data-i="4">O</span>
+      <span class="d-char" data-i="5">V</span>
+      <span class="d-char" data-i="6">E</span>
+      <span class="d-char" data-i="7">R</span>
+      <span class="d-char" data-i="8">Y</span>
+    </div>
+  </div>
+  <div class="whiteout-overlay" id="whiteout"></div>
+</section>
+
+<!-- ═══ SCENE 2 ═══════════════════════════════════════ -->
+<section id="scene-2">
+  <canvas id="map-canvas"></canvas>
+  <div class="map-text" id="map-text">
+    <div class="line1" id="map-line1">모든 발견은</div>
+    <div class="line2" id="map-line2">어둠 속 한 점의 빛에서 시작된다</div>
+  </div>
+</section>
+
+<!-- ═══ SCENE 3 ═══════════════════════════════════════ -->
+<section id="scene-3">
+  <canvas id="bio-canvas"></canvas>
+  <div class="bio-text" id="bio-text">
+    <span class="b1" id="bio-b1">알려지지 않은 것이</span>
+    <span class="b2" id="bio-b2">가장 아름답다</span>
+  </div>
+</section>
+
+<!-- ═══ SCENE 4 ═══════════════════════════════════════ -->
+<section id="scene-4">
+  <canvas id="const-canvas"></canvas>
+  <div class="explore-text" id="explore-text">EXPLORE</div>
+</section>
+
+<!-- ═══ SCENE 5 ═══════════════════════════════════════ -->
+<section id="scene-5">
+  <div class="archive-wrapper" id="archive-wrapper">
+    <div class="archive-card" data-kw="QUESTION">
+      <div class="card-glyph">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="25" r="12" stroke="#6366f1" stroke-width="1"/>
+          <path d="M30 40 L30 50" stroke="#6366f1" stroke-width="1"/>
+          <circle cx="30" cy="54" r="2" fill="#6366f1"/>
+        </svg>
+      </div>
+      <span class="card-label">QUESTION</span>
+    </div>
+    <div class="archive-card" data-kw="VENTURE">
+      <div class="card-glyph">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 50 L30 10 L50 50" stroke="#6366f1" stroke-width="1"/>
+          <path d="M18 35 L42 35" stroke="#6366f1" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="card-label">VENTURE</span>
+    </div>
+    <div class="archive-card" data-kw="WONDER">
+      <div class="card-glyph">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="18" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 4"/>
+          <circle cx="30" cy="30" r="6"  stroke="#22d3ee" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="card-label">WONDER</span>
+    </div>
+    <div class="archive-card" data-kw="REVEAL">
+      <div class="card-glyph">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 30 Q30 5 55 30 Q30 55 5 30Z" stroke="#a78bfa" stroke-width="1"/>
+          <circle cx="30" cy="30" r="5" fill="#22d3ee"/>
+        </svg>
+      </div>
+      <span class="card-label">REVEAL</span>
+    </div>
+    <div class="archive-card" data-kw="EVOLVE">
+      <div class="card-glyph">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 8 C45 8 52 20 52 30 C52 45 42 54 30 54 C18 54 8 45 8 30 C8 20 15 8 30 8" stroke="#6366f1" stroke-width="1"/>
+          <path d="M30 18 C38 18 42 24 42 30 C42 38 36 42 30 42" stroke="#22d3ee" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="card-label">EVOLVE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCENE 6 ═══════════════════════════════════════ -->
+<section id="scene-6">
+  <canvas id="thresh-canvas"></canvas>
+  <div class="thresh-text-top" id="thresh-top">ARE YOU READY</div>
+  <div class="thresh-text-center" id="thresh-center">TO DISCOVER</div>
+</section>
+
+<!-- ═══ SCENE 7 ═══════════════════════════════════════ -->
+<section id="scene-7">
+  <canvas id="arrival-canvas"></canvas>
+  <div class="arrival-content">
+    <div class="arrival-headline" id="arrival-hl">지금 바로 탐험을 시작하라</div>
+    <a href="#" class="arrival-cta" id="arrival-cta">BEGIN YOUR DISCOVERY</a>
+    <span class="arrival-sub" id="arrival-sub">SCROLL UP TO RETURN · THE FISSURE AWAITS</span>
+  </div>
+</section>
+
+<!-- ── CDN ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════════
+//  CURSOR
+// ══════════════════════════════════════════════════════
+const cursorEl = document.getElementById('hero-cursor');
+let mX=-200, mY=-200, cX=-200, cY=-200;
+document.addEventListener('mousemove', e => { mX=e.clientX; mY=e.clientY; });
+document.querySelectorAll('a,button,[role="button"],.archive-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorEl.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursorEl.classList.remove('hovered'));
+});
+document.addEventListener('click', () => {
+  cursorEl.classList.add('clicked');
+  setTimeout(() => cursorEl.classList.remove('clicked'), 150);
+});
+function cursorTick() {
+  cX += (mX - cX) * 0.14;
+  cY += (mY - cY) * 0.14;
+  cursorEl.style.transform = `translate(${cX}px,${cY}px) translate(-50%,-50%)`;
+  requestAnimationFrame(cursorTick);
+}
+cursorTick();
+
+// ══════════════════════════════════════════════════════
+//  NAV DOTS
+// ══════════════════════════════════════════════════════
+const sections = document.querySelectorAll('section');
+const dots     = document.querySelectorAll('.nav-dot');
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = Array.from(sections).indexOf(e.target);
+      dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+    }
+  });
+}, { threshold: 0.5 });
+sections.forEach(s => io.observe(s));
+
+dots.forEach((d,i) => {
+  d.addEventListener('click', () => sections[i].scrollIntoView({ behavior:'smooth' }));
+});
+
+// ══════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════
+function h(n){ return ((Math.sin(n)*43758.5453)%1+1)%1; }
+function noise3(x,y,z){
+  const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z);
+  const fx=x-ix,fy=y-iy,fz=z-iz;
+  const ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy),uz=fz*fz*(3-2*fz);
+  const a=h(ix+iy*57+iz*113),b=h(ix+1+iy*57+iz*113),
+        c=h(ix+(iy+1)*57+iz*113),d=h(ix+1+(iy+1)*57+iz*113),
+        e=h(ix+iy*57+(iz+1)*113),f=h(ix+1+iy*57+(iz+1)*113),
+        g=h(ix+(iy+1)*57+(iz+1)*113),k=h(ix+1+(iy+1)*57+(iz+1)*113);
+  return a*(1-ux)*(1-uy)*(1-uz)+b*ux*(1-uy)*(1-uz)+c*(1-ux)*uy*(1-uz)+d*ux*uy*(1-uz)
+        +e*(1-ux)*(1-uy)*uz    +f*ux*(1-uy)*uz    +g*(1-ux)*uy*uz    +k*ux*uy*uz;
+}
+
+// ══════════════════════════════════════════════════════
+//  SCENE 1 — THE FISSURE
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas  = document.getElementById('hero-canvas');
+  const section = document.getElementById('scene-1');
+  const renderer= new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000,1);
+
+  const scene3 = new THREE.Scene();
+  scene3.fog   = new THREE.FogExp2(0x000000, 0.10);
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0,0,12);
+
+  // Manual bloom
+  const RT = { minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,type:THREE.HalfFloatType };
+  const rtMain   = new THREE.WebGLRenderTarget(window.innerWidth,window.innerHeight,RT);
+  const rtBloom1 = new THREE.WebGLRenderTarget(window.innerWidth>>1,window.innerHeight>>1,RT);
+  const rtBloom2 = new THREE.WebGLRenderTarget(window.innerWidth>>1,window.innerHeight>>1,RT);
+  const quadGeo = new THREE.PlaneGeometry(2,2);
+  const orthoC  = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+  const orthoS  = new THREE.Scene();
+  const qMesh   = new THREE.Mesh(quadGeo);
+  orthoS.add(qMesh);
+
+  const extractMat = new THREE.ShaderMaterial({
+    uniforms:{ tDiffuse:{value:null}, threshold:{value:0.15} },
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
+    fragmentShader:`uniform sampler2D tDiffuse; uniform float threshold; varying vec2 vUv;
+      void main(){ vec4 c=texture2D(tDiffuse,vUv); float l=dot(c.rgb,vec3(.299,.587,.114));
+        float e=smoothstep(threshold,threshold+.2,l); gl_FragColor=vec4(c.rgb*e,1.); }`,
+    depthTest:false,depthWrite:false
+  });
+  const blurMatH = new THREE.ShaderMaterial({
+    uniforms:{ tDiffuse:{value:null}, resolution:{value:new THREE.Vector2(window.innerWidth>>1,window.innerHeight>>1)}, direction:{value:new THREE.Vector2(1,0)}, radius:{value:2.0} },
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
+    fragmentShader:`uniform sampler2D tDiffuse; uniform vec2 resolution,direction; uniform float radius; varying vec2 vUv;
+      void main(){ vec2 ts=radius/resolution; vec4 col=vec4(0.); float w[9]; w[0]=.0625;w[1]=.125;w[2]=.0625;w[3]=.125;w[4]=.25;w[5]=.125;w[6]=.0625;w[7]=.125;w[8]=.0625;
+      int idx=0; for(int i=-1;i<=1;i++){ for(int j=-1;j<=1;j++){ col+=texture2D(tDiffuse,vUv+vec2(float(i),float(j))*ts*direction)*w[idx]; idx++; }} gl_FragColor=col; }`,
+    depthTest:false,depthWrite:false
+  });
+  const blurMatV = blurMatH.clone();
+  blurMatV.uniforms.direction = {value:new THREE.Vector2(0,1)};
+  const compMat = new THREE.ShaderMaterial({
+    uniforms:{ tBase:{value:null}, tBloom:{value:null}, bloomStrength:{value:0.} },
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
+    fragmentShader:`uniform sampler2D tBase,tBloom; uniform float bloomStrength; varying vec2 vUv;
+      void main(){ vec4 b=texture2D(tBase,vUv); vec4 bl=texture2D(tBloom,vUv); gl_FragColor=vec4(b.rgb+bl.rgb*bloomStrength,1.); }`,
+    depthTest:false,depthWrite:false
+  });
+
+  function buildSlab(sign){
+    const geo = new THREE.PlaneGeometry(14,22,60,80);
+    const pos = geo.attributes.position;
+    for(let i=0;i<pos.count;i++){
+      const x=pos.getX(i),y=pos.getY(i);
+      const n=noise3(x*.4+3.7,y*.3+1.2,.8)*2-1;
+      pos.setZ(i,n*.4);
+      const ep=1-Math.min(Math.abs(x)/7,1);
+      pos.setX(i,x+(noise3(y*1.5+10,x*2,5)*.3)*ep*sign*-.3);
+    }
+    geo.computeVertexNormals(); return geo;
+  }
+  const SLAB_VS=`varying vec2 vUv; varying vec3 vNormal;
+    void main(){ vUv=uv; vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`;
+  const SLAB_FS=`precision highp float;
+    uniform float uTime,uVeinBright,uSide; varying vec2 vUv; varying vec3 vNormal;
+    float hh(float n){ return fract(sin(n)*43758.5453); }
+    float ns(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f);
+      float a=hh(i.x+i.y*57.),b=hh(i.x+1.+i.y*57.),c=hh(i.x+(i.y+1.)*57.),d=hh(i.x+1.+(i.y+1.)*57.);
+      return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
+    float fbm(vec2 p){ return .5*ns(p)+.25*ns(p*2.)+.125*ns(p*4.)+.0625*ns(p*8.); }
+    void main(){ float rock=fbm(vUv*6.+1.3); vec3 base=mix(vec3(.03,.03,.04),vec3(.12,.10,.13),rock);
+      float edgeU=uSide>0.?vUv.x:1.-vUv.x; float vm=pow(edgeU,3.);
+      float vein=pow(fbm(vUv*vec2(2.,8.)+vec2(uTime*.05,0.)),2.5)*vm;
+      float pulse=.65+.35*sin(uTime*(6.2832/.8));
+      vec3 vc=vec3(.388,.4,.945)*vein*uVeinBright*pulse*3.;
+      float fres=1.-abs(dot(vNormal,vec3(0.,0.,1.)));
+      vec3 fc=vec3(.388,.4,.945)*pow(fres,4.)*uVeinBright*.5;
+      gl_FragColor=vec4(base+vc+fc,1.); }`;
+
+  function makeSlab(sign){
+    const mat=new THREE.ShaderMaterial({ uniforms:{uTime:{value:0},uVeinBright:{value:.3},uSide:{value:sign}}, vertexShader:SLAB_VS, fragmentShader:SLAB_FS });
+    return new THREE.Mesh(buildSlab(sign),mat);
+  }
+  const slabL=makeSlab(-1), slabR=makeSlab(1);
+  const HALF=7;
+  slabL.position.set(-HALF-.01,0,0); slabR.position.set(HALF+.01,0,0);
+  scene3.add(slabL,slabR);
+
+  const fissureMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uBright:{value:1},uScale:{value:1}},
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`precision highp float; uniform float uTime,uBright,uScale; varying vec2 vUv;
+      void main(){ float cx=abs(vUv.x-.5)*2.; float g=exp(-cx*cx*25./max(uScale,.01));
+        float fl=.85+.15*sin(uTime*12.7+vUv.y*8.3); gl_FragColor=vec4(vec3(.388,.4,.945)*g*fl*uBright,g*uBright); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const fissureMesh=new THREE.Mesh(new THREE.PlaneGeometry(.02,22),fissureMat);
+  fissureMesh.position.z=.05; scene3.add(fissureMesh);
+
+  const intMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uAlpha:{value:0},uWidth:{value:1}},
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`precision highp float; uniform float uTime,uAlpha,uWidth; varying vec2 vUv;
+      void main(){ float cx=abs(vUv.x-.5)*2.; float g=pow(1.-cx,1.5); float pls=.7+.3*sin(uTime*7.9);
+        vec3 col=mix(vec3(.388,.4,.945),vec3(.133,.827,.933),cx); gl_FragColor=vec4(col*g*pls*2.,g*uAlpha); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const intMesh=new THREE.Mesh(new THREE.PlaneGeometry(.04,22),intMat);
+  intMesh.position.z=.03; scene3.add(intMesh);
+
+  const PC=900, pPos=new Float32Array(PC*3), pSeed=new Float32Array(PC);
+  for(let i=0;i<PC;i++){ pPos[i*3]=(Math.random()-.5)*.08; pPos[i*3+1]=(Math.random()-.5)*20; pPos[i*3+2]=(Math.random()-.5)*2+.1; pSeed[i]=Math.random()*6.28; }
+  const pGeo=new THREE.BufferGeometry();
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  pGeo.setAttribute('seed',new THREE.BufferAttribute(pSeed,1));
+  const pMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uAlpha:{value:0},uGapHalf:{value:.01},uSize:{value:window.devicePixelRatio*2.5}},
+    vertexShader:`attribute float seed; uniform float uTime,uGapHalf,uSize; varying float vA;
+      void main(){ vec3 p=position; float t=mod(uTime*.4+seed,1.); p.y=mix(-10.,10.,t);
+        float dr=sin(uTime*2.3+seed*7.1)*.015; p.x=clamp(p.x+dr,-uGapHalf*.8,uGapHalf*.8);
+        vA=1.-abs(t*2.-1.); gl_PointSize=uSize*vA; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }`,
+    fragmentShader:`varying float vA; void main(){ float d=length(gl_PointCoord-vec2(.5)); if(d>.5)discard; gl_FragColor=vec4(.388,.776,1.,(1.-d*2.)*vA); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const particles=new THREE.Points(pGeo,pMat); scene3.add(particles);
+
+  const state={gapHalf:.01,bloom:.2,vein:.3,camZ:12,pA:0,intA:0};
+  const chars=document.querySelectorAll('.d-char');
+  const dWrap=document.getElementById('discovery-wrap');
+  const wOut=document.getElementById('whiteout');
+
+  const tl=gsap.timeline();
+  tl.to(state,{duration:2,gapHalf:1.5,bloom:.9,vein:1,pA:1,intA:1,ease:'power2.inOut'},0);
+  tl.call(()=>{
+    gsap.to(dWrap,{duration:.05,clipPath:'inset(0 0% 0 0)'});
+    chars.forEach((ch,i)=>{
+      gsap.fromTo(ch,{opacity:0,scale:.6,y:30},{delay:i*.15,duration:.5,opacity:1,scale:1,y:0,ease:'power3.out'});
+    });
+  },[],2.0);
+  tl.to(state,{duration:2,camZ:-8,ease:'power3.in'},2.0);
+  tl.call(()=>{
+    chars.forEach(ch=>{
+      gsap.to(ch,{duration:1.4,z:(Math.random()-.5)*800,x:(Math.random()-.5)*80,y:(Math.random()-.5)*60,opacity:.25,ease:'power2.in'});
+    });
+  },[],2.6);
+  tl.to(state,{duration:.5,gapHalf:9,ease:'power4.in'},3.5);
+  tl.to(wOut,{duration:.15,opacity:.9,ease:'power2.in'},4.0).to(wOut,{duration:.4,opacity:0,ease:'power2.out'},4.15);
+  tl.call(()=>{
+    chars.forEach((ch,i)=>{
+      gsap.to(ch,{delay:i*.04,duration:.55,z:0,x:0,y:0,opacity:1,ease:'power2.out'});
+    });
+    gsap.to(chars,{delay:.35,duration:.5,textShadow:'0 0 20px #22d3ee,0 0 60px #22d3ee,0 0 120px #22d3ee',ease:'power2.out'});
+  },[],4.6);
+
+  window.addEventListener('resize',()=>{
+    const W=window.innerWidth,H=window.innerHeight;
+    camera.aspect=W/H; camera.updateProjectionMatrix();
+    renderer.setSize(W,H); rtMain.setSize(W,H);
+    rtBloom1.setSize(W>>1,H>>1); rtBloom2.setSize(W>>1,H>>1);
+    blurMatH.uniforms.resolution.value.set(W>>1,H>>1);
+    blurMatV.uniforms.resolution.value.set(W>>1,H>>1);
+  });
+
+  const clock=new THREE.Clock();
+  function renderBloom(){
+    renderer.setRenderTarget(rtMain); renderer.render(scene3,camera);
+    qMesh.material=extractMat; extractMat.uniforms.tDiffuse.value=rtMain.texture;
+    renderer.setRenderTarget(rtBloom1); renderer.render(orthoS,orthoC);
+    qMesh.material=blurMatH; blurMatH.uniforms.tDiffuse.value=rtBloom1.texture;
+    renderer.setRenderTarget(rtBloom2); renderer.render(orthoS,orthoC);
+    qMesh.material=blurMatV; blurMatV.uniforms.tDiffuse.value=rtBloom2.texture;
+    renderer.setRenderTarget(rtBloom1); renderer.render(orthoS,orthoC);
+    qMesh.material=compMat; compMat.uniforms.tBase.value=rtMain.texture;
+    compMat.uniforms.tBloom.value=rtBloom1.texture; compMat.uniforms.bloomStrength.value=state.bloom;
+    renderer.setRenderTarget(null); renderer.render(orthoS,orthoC);
+  }
+  function loop1(){
+    requestAnimationFrame(loop1);
+    const t=clock.getElapsedTime();
+    camera.position.z=state.camZ;
+    slabL.position.x=-HALF-state.gapHalf; slabR.position.x=HALF+state.gapHalf;
+    [slabL.material,slabR.material].forEach(m=>{ m.uniforms.uTime.value=t; m.uniforms.uVeinBright.value=state.vein; });
+    fissureMesh.scale.x=Math.max(state.gapHalf/.01,1);
+    fissureMat.uniforms.uTime.value=t; fissureMat.uniforms.uBright.value=Math.min(state.vein*1.5,3); fissureMat.uniforms.uScale.value=state.gapHalf;
+    intMesh.scale.x=Math.max(state.gapHalf*4,1);
+    intMat.uniforms.uTime.value=t; intMat.uniforms.uAlpha.value=state.intA; intMat.uniforms.uWidth.value=Math.min(state.gapHalf,4);
+    pMat.uniforms.uTime.value=t; pMat.uniforms.uAlpha.value=state.pA*Math.min(state.gapHalf*.7,1); pMat.uniforms.uGapHalf.value=state.gapHalf*.6;
+    const batch=25,start=Math.floor((t*120)%(PC/batch))*batch;
+    for(let i=start;i<Math.min(start+batch,PC);i++){ pPos[i*3]=(Math.random()-.5)*state.gapHalf*1.4; }
+    pGeo.attributes.position.needsUpdate=true;
+    renderBloom();
+  }
+  loop1();
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 2 — THE ABYSS MAP
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('map-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene3=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,.1,100);
+  camera.position.set(0,6,0); camera.lookAt(0,0,0);
+
+  // Unfolding map panels
+  const PANELS=6;
+  const panelGroup=new THREE.Group(); scene3.add(panelGroup);
+  const panels=[];
+  for(let i=0;i<PANELS;i++){
+    const geo=new THREE.PlaneGeometry(2.5,2.5,1,1);
+    const mat=new THREE.MeshBasicMaterial({color:0x0a081e,side:THREE.DoubleSide,transparent:true,opacity:.9,wireframe:false});
+    const mesh=new THREE.Mesh(geo,mat);
+    mesh.rotation.x=-Math.PI/2;
+    const col=i%3, row=Math.floor(i/3);
+    mesh.position.set(col*2.6-2.6, 0, row*2.6-1.3);
+    panels.push(mesh); panelGroup.add(mesh);
+  }
+  // Contour lines
+  const cMat=new THREE.LineBasicMaterial({color:0xa78bfa,transparent:true,opacity:0});
+  const cLines=[];
+  for(let row=0;row<3;row++){
+    for(let col=0;col<3;col++){
+      for(let k=0;k<3;k++){
+        const pts=[]; const steps=20;
+        for(let s=0;s<=steps;s++){
+          const t=s/steps;
+          pts.push(new THREE.Vector3(col*2.6-2.6+(t*2.5-.5),k*.05,row*2.6-1.3+(Math.sin(t*Math.PI*2+k)*.3)));
+        }
+        const geo=new THREE.BufferGeometry().setFromPoints(pts);
+        const line=new THREE.Line(geo,cMat.clone());
+        cLines.push(line); panelGroup.add(line);
+      }
+    }
+  }
+  // Glow nodes
+  const nodeMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0}},
+    vertexShader:`uniform float uTime; varying float vA;
+      void main(){ float pulse=.8+.2*sin(uTime*(6.2832/1.5)+position.x*3.+position.z*2.); vA=pulse;
+        gl_PointSize=12.*pulse; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`varying float vA; void main(){ float d=length(gl_PointCoord-vec2(.5)); if(d>.5)discard; gl_FragColor=vec4(.133,.827,.933,(1.-d*2.)*vA); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const nodePositions=[];
+  for(let i=0;i<8;i++) nodePositions.push(
+    (Math.random()*6-3), .06, (Math.random()*6-3)
+  );
+  const nodeGeo=new THREE.BufferGeometry();
+  nodeGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(nodePositions),3));
+  const nodes=new THREE.Points(nodeGeo,nodeMat); scene3.add(nodes);
+
+  const tl2=gsap.timeline({paused:true});
+  // Camera orbit
+  tl2.to(camera.position,{x:3,y:2,z:5,duration:1.2,ease:'power2.out',onUpdate:()=>camera.lookAt(0,0,0)},0);
+  // Panels unfold
+  panels.forEach((p,i)=>{
+    tl2.to(p.rotation,{x:0,duration:.6,ease:'power2.out'},i*.2);
+    tl2.to(p.material,{opacity:1,duration:.4},i*.2);
+  });
+  // Contour draw-on
+  cLines.forEach((l,i)=>{
+    tl2.to(l.material,{opacity:.5,duration:.5,ease:'power2.out'},.5+i*.05);
+  });
+  // Text
+  const l1=document.getElementById('map-line1'), l2=document.getElementById('map-line2');
+  tl2.to(l1,{opacity:1,y:0,duration:.5,ease:'power2.out'},1.2);
+  tl2.to(l2,{opacity:1,y:0,duration:.5,ease:'power2.out'},1.8);
+
+  const io2=new IntersectionObserver(([e])=>{
+    if(e.isIntersecting){ tl2.play(); }
+  },{threshold:.4});
+  io2.observe(document.getElementById('scene-2'));
+
+  window.addEventListener('resize',()=>{ const W=window.innerWidth,H=window.innerHeight; camera.aspect=W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H); });
+  const clk=new THREE.Clock();
+  (function loop(){ requestAnimationFrame(loop); nodeMat.uniforms.uTime.value=clk.getElapsedTime(); renderer.render(scene3,camera); })();
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 3 — BIOLUMINESCENCE
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('bio-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene3=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,.1,100);
+  camera.position.set(0,-4,6); camera.lookAt(0,-1,0);
+
+  // Core icosahedron
+  const coreGeo=new THREE.IcosahedronGeometry(1.2,4);
+  const corePos=coreGeo.attributes.position;
+  const coreBase=new Float32Array(corePos.array); // save original
+  const coreMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0}},
+    vertexShader:`uniform float uTime; varying vec3 vN;
+      float hh(float n){ return fract(sin(n)*43758.5453); }
+      float ns(vec3 p){ vec3 i=floor(p),f=fract(p); f=f*f*(3.-2.*f);
+        return mix(mix(mix(hh(i.x+i.y*57.+i.z*113.),hh(i.x+1.+i.y*57.+i.z*113.),f.x),
+                   mix(hh(i.x+(i.y+1.)*57.+i.z*113.),hh(i.x+1.+(i.y+1.)*57.+i.z*113.),f.x),f.y),
+              mix(mix(hh(i.x+i.y*57.+(i.z+1.)*113.),hh(i.x+1.+i.y*57.+(i.z+1.)*113.),f.x),
+                  mix(hh(i.x+(i.y+1.)*57.+(i.z+1.)*113.),hh(i.x+1.+(i.y+1.)*57.+(i.z+1.)*113.),f.x),f.y),f.z); }
+      void main(){ vN=normalize(normal);
+        float d=ns(position*2.+uTime*.3)*.25;
+        vec3 pos=position+normal*d;
+        float breathe=1.+.04*sin(uTime*(6.2832/3.));
+        pos*=breathe;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.); }`,
+    fragmentShader:`varying vec3 vN; void main(){
+      float f=pow(1.-abs(dot(vN,vec3(0.,0.,1.))),2.);
+      vec3 col=mix(vec3(.388,.4,.945),vec3(.659,.545,.98),f);
+      gl_FragColor=vec4(col,.85); }`,
+    transparent:true,side:THREE.DoubleSide
+  });
+  const core=new THREE.Mesh(coreGeo,coreMat); core.position.y=-1; scene3.add(core);
+
+  // Tentacles
+  const tentacles=[];
+  for(let i=0;i<12;i++){
+    const angle=(i/12)*Math.PI*2;
+    const pts=[];
+    for(let s=0;s<=8;s++){
+      const t=s/8;
+      pts.push(new THREE.Vector3(Math.cos(angle)*t*2,Math.sin(angle*.5)*t*2-(t*t*.5),Math.sin(angle)*t*2));
+    }
+    const curve=new THREE.CatmullRomCurve3(pts);
+    const tubGeo=new THREE.TubeGeometry(curve,12,.04,6,false);
+    const tubMat=new THREE.MeshBasicMaterial({color:0x6366f1,transparent:true,opacity:.6});
+    const tube=new THREE.Mesh(tubGeo,tubMat);
+    tube.position.y=-1;
+    tube.userData={angle,phase:i*.52};
+    tentacles.push(tube); scene3.add(tube);
+    // tip glow
+    const tipGeo=new THREE.SphereGeometry(.08,6,6);
+    const tipMat=new THREE.MeshBasicMaterial({color:0x22d3ee});
+    const tip=new THREE.Mesh(tipGeo,tipMat);
+    tip.position.copy(pts[pts.length-1]).add(new THREE.Vector3(0,-1,0));
+    scene3.add(tip); tube.userData.tip=tip;
+  }
+
+  // Ambient particles
+  const apCount=200, apPos=new Float32Array(apCount*3);
+  for(let i=0;i<apCount;i++){
+    apPos[i*3]=(Math.random()-.5)*12;
+    apPos[i*3+1]=(Math.random()-.5)*10-2;
+    apPos[i*3+2]=(Math.random()-.5)*8;
+  }
+  const apGeo=new THREE.BufferGeometry(); apGeo.setAttribute('position',new THREE.BufferAttribute(apPos,3));
+  const apMat=new THREE.PointsMaterial({color:0xa78bfa,size:.04,transparent:true,opacity:.25,blending:THREE.AdditiveBlending,depthWrite:false});
+  scene3.add(new THREE.Points(apGeo,apMat));
+
+  const tl3=gsap.timeline({paused:true});
+  tl3.to(camera.position,{y:-1,z:3,duration:2,ease:'power2.out',onUpdate:()=>camera.lookAt(0,-1,0)},0);
+  tl3.to(document.getElementById('bio-b1'),{opacity:1,filter:'blur(0px)',duration:.6,ease:'power2.out'},1.0);
+  tl3.to(document.getElementById('bio-b2'),{opacity:1,filter:'blur(0px)',duration:.6,ease:'power2.out'},1.8);
+
+  const io3=new IntersectionObserver(([e])=>{ if(e.isIntersecting) tl3.play(); },{threshold:.4});
+  io3.observe(document.getElementById('scene-3'));
+
+  window.addEventListener('resize',()=>{ const W=window.innerWidth,H=window.innerHeight; camera.aspect=W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H); });
+  const clk=new THREE.Clock();
+  (function loop(){
+    requestAnimationFrame(loop);
+    const t=clk.getElapsedTime();
+    coreMat.uniforms.uTime.value=t;
+    tentacles.forEach((tb,i)=>{
+      const sway=Math.sin(t+tb.userData.phase)*.4;
+      tb.rotation.z=sway*.3; tb.rotation.x=Math.cos(t*.7+tb.userData.phase)*.2;
+    });
+    // drift particles up
+    for(let i=0;i<apCount;i++){
+      apPos[i*3+1]+=.002;
+      if(apPos[i*3+1]>3) apPos[i*3+1]=-8;
+    }
+    apGeo.attributes.position.needsUpdate=true;
+    renderer.render(scene3,camera);
+  })();
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 4 — CONSTELLATION SURGE
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('const-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene3=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.1,100);
+  camera.position.set(0,0,8);
+
+  const N=40;
+  const pos=[], vel=[], nodes=[];
+  for(let i=0;i<N;i++){
+    pos.push(new THREE.Vector3(0,0,0));
+    const spd=2+Math.random()*3;
+    const phi=Math.acos(2*Math.random()-1), theta=Math.random()*Math.PI*2;
+    vel.push(new THREE.Vector3(Math.sin(phi)*Math.cos(theta)*spd,Math.sin(phi)*Math.sin(theta)*spd,Math.cos(phi)*spd*.3));
+  }
+  const nMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0}},
+    vertexShader:`attribute float aSize; varying float vA;
+      void main(){ vA=1.; gl_PointSize=aSize; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`varying float vA; void main(){ float d=length(gl_PointCoord-vec2(.5)); if(d>.5)discard; gl_FragColor=vec4(.659,.545,.98,.9); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const nGeo=new THREE.BufferGeometry();
+  const nPosArr=new Float32Array(N*3), nSizeArr=new Float32Array(N);
+  for(let i=0;i<N;i++){ nSizeArr[i]=(4+Math.random()*8)*window.devicePixelRatio; }
+  nGeo.setAttribute('position',new THREE.BufferAttribute(nPosArr,3));
+  nGeo.setAttribute('aSize',new THREE.BufferAttribute(nSizeArr,1));
+  const nodePts=new THREE.Points(nGeo,nMat); scene3.add(nodePts);
+
+  // Edge lines
+  const edgeMat=new THREE.LineBasicMaterial({color:0x6366f1,transparent:true,opacity:.4,blending:THREE.AdditiveBlending});
+  const edgeLines=[];
+  for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+    const g=new THREE.BufferGeometry();
+    const pts2=new Float32Array(6);
+    g.setAttribute('position',new THREE.BufferAttribute(pts2,3));
+    const line=new THREE.Line(g,edgeMat.clone());
+    line.userData={i,j,pts:pts2}; line.visible=false;
+    edgeLines.push(line); scene3.add(line);
+  }
+
+  const exploreText=document.getElementById('explore-text');
+  let surged=false;
+  const tl4=gsap.timeline({paused:true,onStart:()=>{ surged=true; }});
+  tl4.to(exploreText,{opacity:1,duration:1.5,ease:'power2.out'},1.2);
+
+  const io4=new IntersectionObserver(([e])=>{ if(e.isIntersecting&&!surged) tl4.play(); },{threshold:.4});
+  io4.observe(document.getElementById('scene-4'));
+
+  window.addEventListener('resize',()=>{ const W=window.innerWidth,H=window.innerHeight; camera.aspect=W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H); });
+  const clk=new THREE.Clock();
+  let elapsed4=0;
+  (function loop(){
+    requestAnimationFrame(loop);
+    const dt=Math.min(clk.getDelta(),.03);
+    if(surged&&elapsed4<3){
+      elapsed4+=dt;
+      const t=elapsed4;
+      for(let i=0;i<N;i++){
+        pos[i].addScaledVector(vel[i],dt*(1-t*.2));
+        vel[i].multiplyScalar(.97);
+        nPosArr[i*3]=pos[i].x; nPosArr[i*3+1]=pos[i].y; nPosArr[i*3+2]=pos[i].z;
+      }
+      nGeo.attributes.position.needsUpdate=true;
+      edgeLines.forEach(l=>{
+        const pi=pos[l.userData.i], pj=pos[l.userData.j];
+        const dist=pi.distanceTo(pj);
+        if(dist<3.5){ l.visible=true; l.material.opacity=Math.max(0,.4*(1-dist/3.5));
+          l.userData.pts.set([pi.x,pi.y,pi.z,pj.x,pj.y,pj.z]); l.geometry.attributes.position.needsUpdate=true;
+        } else { l.visible=false; }
+      });
+    }
+    renderer.render(scene3,camera);
+  })();
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 5 — THE ARCHIVE (CSS + SVG, no Three.js needed)
+// ══════════════════════════════════════════════════════
+(function(){
+  const cards=document.querySelectorAll('.archive-card');
+  let activeIdx=0;
+  function setActive(i){
+    cards.forEach((c,j)=>c.classList.toggle('active',j===i));
+    activeIdx=i;
+  }
+  setActive(2);
+  const io5=new IntersectionObserver(([e])=>{
+    if(e.isIntersecting){
+      cards.forEach((c,i)=>{
+        gsap.to(c,{opacity:i===2?1:.3,y:0,duration:.6,delay:i*.1,ease:'power2.out'});
+      });
+      let cur=0;
+      const cycle=setInterval(()=>{ cur=(cur+1)%5; setActive(cur); },2000);
+      io5.disconnect();
+    }
+  },{threshold:.4});
+  io5.observe(document.getElementById('scene-5'));
+  cards.forEach((c,i)=>c.addEventListener('mouseenter',()=>setActive(i)));
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 6 — THRESHOLD
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('thresh-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene3=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.1,100);
+  camera.position.set(0,0,10);
+
+  // Door frame — two pillars + arch
+  const pillarMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0}},
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`uniform float uTime; varying vec2 vUv;
+      void main(){ float flow=mod(vUv.y-uTime*2.,1.); float line=exp(-pow(flow-.5,2.)*80.);
+        gl_FragColor=vec4(.388,.4,.945,line*.9); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const makeBeam=(x)=>{
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(.06,12),pillarMat.clone());
+    m.position.set(x,0,0); return m;
+  };
+  const pL=makeBeam(-3.5), pR=makeBeam(3.5); scene3.add(pL,pR);
+
+  // Arch
+  const archPts=[];
+  for(let i=0;i<=32;i++){
+    const a=(i/32)*Math.PI;
+    archPts.push(new THREE.Vector3(Math.cos(a)*3.5,Math.sin(a)*3.5+0,0));
+  }
+  const archGeo=new THREE.BufferGeometry().setFromPoints(archPts);
+  const archLine=new THREE.Line(archGeo,new THREE.LineBasicMaterial({color:0xa78bfa,transparent:true,opacity:.6}));
+  scene3.add(archLine);
+
+  // Fog inside
+  const fogMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uDensity:{value:0}},
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`precision highp float; uniform float uTime,uDensity; varying vec2 vUv;
+      float hh(float n){ return fract(sin(n)*43758.5453); }
+      float ns(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f);
+        return mix(mix(hh(i.x+i.y*57.),hh(i.x+1.+i.y*57.),f.x),mix(hh(i.x+(i.y+1.)*57.),hh(i.x+1.+(i.y+1.)*57.),f.x),f.y); }
+      void main(){ vec2 uv=vUv; uv.x=(uv.x-.5)/1.*1.+.5;
+        float cx=abs(uv.x-.5)*2.; float cy=abs(uv.y-.5)*2.;
+        if(cx>.95||cy>.95){ discard; }
+        float n=.5*ns(uv*3.+uTime*.2)+.25*ns(uv*6.+uTime*.4)+.25*ns(uv*12.);
+        float edge=(1.-cx)*(1.-cy); float fog=n*edge*uDensity;
+        gl_FragColor=vec4(.133,.827,.933,fog*.7); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const fogMesh=new THREE.Mesh(new THREE.PlaneGeometry(7,12),fogMat); fogMesh.position.z=-.5; scene3.add(fogMesh);
+
+  const tl6=gsap.timeline({paused:true});
+  tl6.to(camera.position,{z:1,duration:3,ease:'power2.inOut'},0);
+  tl6.to(fogMat.uniforms.uDensity,{value:.8,duration:1.5,ease:'power2.in'},1.5);
+  const topEl=document.getElementById('thresh-top'), cenEl=document.getElementById('thresh-center');
+  tl6.call(()=>{
+    const letters=[...topEl.innerText].map((c,i)=>`<span style="display:inline-block;opacity:0">${c==' '?'&nbsp;':c}</span>`).join('');
+    topEl.innerHTML=letters;
+    topEl.style.opacity=1;
+    document.querySelectorAll('#thresh-top span').forEach((s,i)=>{
+      gsap.to(s,{delay:i*.08,duration:.3,opacity:1,ease:'power2.out'});
+    });
+  },[],1.0);
+  tl6.to(cenEl,{opacity:1,scale:1,duration:.8,ease:'back.out(1.2)'},2.8);
+
+  const io6=new IntersectionObserver(([e])=>{ if(e.isIntersecting) tl6.play(); },{threshold:.4});
+  io6.observe(document.getElementById('scene-6'));
+
+  window.addEventListener('resize',()=>{ const W=window.innerWidth,H=window.innerHeight; camera.aspect=W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H); });
+  const clk=new THREE.Clock();
+  (function loop(){
+    requestAnimationFrame(loop);
+    const t=clk.getElapsedTime();
+    [pL.material,pR.material].forEach(m=>m.uniforms.uTime.value=t);
+    fogMat.uniforms.uTime.value=t;
+    renderer.render(scene3,camera);
+  })();
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCENE 7 — ARRIVAL
+// ══════════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('arrival-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene3=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.1,100);
+  camera.position.set(0,0,0);
+
+  // Orbiting remnants from previous scenes
+  const orbitMat=new THREE.LineBasicMaterial({color:0x6366f1,transparent:true,opacity:.3});
+  const orbs=[];
+  for(let i=0;i<12;i++){
+    const r=4+Math.random()*4, spd=.05+Math.random()*.15, phase=Math.random()*Math.PI*2;
+    const size=.3+Math.random()*.5;
+    const types=['line','circle','tri'];
+    const type=types[i%3];
+    let geo;
+    if(type==='circle'){ const pts=[]; for(let k=0;k<=16;k++) pts.push(new THREE.Vector3(Math.cos(k/16*Math.PI*2)*size,Math.sin(k/16*Math.PI*2)*size,0)); geo=new THREE.BufferGeometry().setFromPoints(pts); }
+    else if(type==='tri'){ geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,size,0),new THREE.Vector3(-size*.8,-size*.5,0),new THREE.Vector3(size*.8,-size*.5,0),new THREE.Vector3(0,size,0)]); }
+    else { geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-size,0,0),new THREE.Vector3(size,0,0)]); }
+    const line=new THREE.Line(geo,orbitMat.clone());
+    line.userData={r,spd,phase,tilt:(Math.random()-.5)*Math.PI*.5};
+    orbs.push(line); scene3.add(line);
+  }
+
+  // Closing fissure (re-appears, now from inside looking out)
+  const fissureMat7=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uWidth:{value:3}},
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`precision highp float; uniform float uTime,uWidth; varying vec2 vUv;
+      void main(){ float cx=abs(vUv.x-.5)*2.; float g=exp(-cx*cx*25./max(uWidth,.05));
+        float fl=.8+.2*sin(uTime*8.+vUv.y*6.); vec3 col=mix(vec3(.388,.4,.945),vec3(.133,.827,.933),1.-cx);
+        gl_FragColor=vec4(col*g*fl*1.5,g*.8); }`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const fiss7=new THREE.Mesh(new THREE.PlaneGeometry(6,20),fissureMat7);
+  fiss7.position.z=-5; scene3.add(fiss7);
+
+  const tl7=gsap.timeline({paused:true});
+  tl7.to(fissureMat7.uniforms.uWidth,{value:.2,duration:4,ease:'power2.inOut'},0);
+  tl7.to(document.getElementById('arrival-hl'),{opacity:1,duration:1,ease:'power2.out'},1);
+  tl7.to(document.getElementById('arrival-cta'),{opacity:1,y:0,duration:.6,ease:'power2.out'},2.5);
+  tl7.to(document.getElementById('arrival-sub'),{opacity:1,duration:.6,ease:'power2.out'},3.2);
+
+  const io7=new IntersectionObserver(([e])=>{ if(e.isIntersecting) tl7.play(); },{threshold:.4});
+  io7.observe(document.getElementById('scene-7'));
+
+  window.addEventListener('resize',()=>{ const W=window.innerWidth,H=window.innerHeight; camera.aspect=W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H); });
+  const clk=new THREE.Clock();
+  (function loop(){
+    requestAnimationFrame(loop);
+    const t=clk.getElapsedTime();
+    fissureMat7.uniforms.uTime.value=t;
+    orbs.forEach(o=>{
+      const a=t*o.userData.spd+o.userData.phase;
+      o.position.set(Math.cos(a)*o.userData.r,Math.sin(a*1.3)*.8,Math.sin(a)*o.userData.r*.6-6);
+      o.rotation.z=t*.2+o.userData.phase;
+    });
+    // Camera micro-drift
+    camera.position.x=Math.sin(t*.13)*.05;
+    camera.position.y=Math.cos(t*.11)*.05;
+    renderer.render(scene3,camera);
+  })();
+})();
+
+</script>
+</body>
+</html>

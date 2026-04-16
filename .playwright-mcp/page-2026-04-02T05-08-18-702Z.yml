@@ -1,0 +1,294 @@
+- generic [ref=e2]:
+  - region
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e9]:
+        - button "Toggle navigation" [ref=e11] [cursor=pointer]
+        - link "Homepage" [ref=e17] [cursor=pointer]:
+          - /url: /
+          - img [ref=e18]
+        - generic [ref=e20]:
+          - link "Sign in" [ref=e21] [cursor=pointer]:
+            - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fseolhalee%2FNaver-Place-scraper
+          - button "Appearance settings" [ref=e24] [cursor=pointer]:
+            - img
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img [ref=e33]
+          - link "seolhalee" [ref=e36] [cursor=pointer]:
+            - /url: /seolhalee
+          - generic [ref=e37]: /
+          - strong [ref=e38]:
+            - link "Naver-Place-scraper" [ref=e39] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper
+          - generic [ref=e40]: Public
+        - generic [ref=e41]:
+          - list:
+            - listitem [ref=e42]:
+              - link "You must be signed in to change notification settings" [ref=e43] [cursor=pointer]:
+                - /url: /login?return_to=%2Fseolhalee%2FNaver-Place-scraper
+                - img [ref=e44]
+                - text: Notifications
+            - listitem [ref=e46]:
+              - link "Fork 0" [ref=e47] [cursor=pointer]:
+                - /url: /login?return_to=%2Fseolhalee%2FNaver-Place-scraper
+                - img [ref=e48]
+                - text: Fork
+                - generic "0" [ref=e50]
+            - listitem [ref=e51]:
+              - link "You must be signed in to star a repository" [ref=e53] [cursor=pointer]:
+                - /url: /login?return_to=%2Fseolhalee%2FNaver-Place-scraper
+                - img [ref=e54]
+                - text: Star
+                - generic "1 user starred this repository" [ref=e56]: "1"
+      - navigation "Repository" [ref=e57]:
+        - list [ref=e58]:
+          - listitem [ref=e59]:
+            - link "Code" [ref=e60] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper
+              - img [ref=e61]
+              - generic [ref=e63]: Code
+          - listitem [ref=e64]:
+            - link "Issues" [ref=e65] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/issues
+              - img [ref=e66]
+              - generic [ref=e69]: Issues
+          - listitem [ref=e70]:
+            - link "Pull requests" [ref=e71] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/pulls
+              - img [ref=e72]
+              - generic [ref=e74]: Pull requests
+          - listitem [ref=e75]:
+            - link "Actions" [ref=e76] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/actions
+              - img [ref=e77]
+              - generic [ref=e79]: Actions
+          - listitem [ref=e80]:
+            - link "Projects" [ref=e81] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/projects
+              - img [ref=e82]
+              - generic [ref=e84]: Projects
+          - listitem [ref=e85]:
+            - link "Security and quality" [ref=e86] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/security
+              - img [ref=e87]
+              - generic [ref=e89]: Security and quality
+          - listitem [ref=e90]:
+            - link "Insights" [ref=e91] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/pulse
+              - img [ref=e92]
+              - generic [ref=e94]: Insights
+    - generic [ref=e107]:
+      - heading "seolhalee/Naver-Place-scraper" [level=1] [ref=e109]
+      - generic [ref=e110]:
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - button "master branch" [ref=e117] [cursor=pointer]:
+                - generic [ref=e118]:
+                  - generic [ref=e120]:
+                    - img [ref=e122]
+                    - generic [ref=e125]: master
+                  - generic:
+                    - img
+              - generic [ref=e126]:
+                - link "Go to Branches page" [ref=e127] [cursor=pointer]:
+                  - /url: /seolhalee/Naver-Place-scraper/branches
+                  - img [ref=e128]
+                - link "Go to Tags page" [ref=e130] [cursor=pointer]:
+                  - /url: /seolhalee/Naver-Place-scraper/tags
+                  - img [ref=e131]
+            - generic [ref=e133]:
+              - button "Go to file" [ref=e136] [cursor=pointer]:
+                - generic [ref=e138]: Go to file
+              - button "Code" [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]:
+                  - generic:
+                    - img
+                  - generic [ref=e141]: Code
+                  - generic:
+                    - img
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - heading "Folders and files" [level=2] [ref=e144]
+              - table "Folders and files" [ref=e145]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e146]:
+                  - row "Latest commit History View commit history for this file." [ref=e147]:
+                    - cell "Latest commit History View commit history for this file." [ref=e148]:
+                      - generic [ref=e149]:
+                        - heading "Latest commit" [level=2] [ref=e150]
+                        - generic [ref=e153]:
+                          - heading "History" [level=2] [ref=e154]
+                          - link "View commit history for this file." [ref=e156] [cursor=pointer]:
+                            - /url: /seolhalee/Naver-Place-scraper/commits/master/
+                            - generic [ref=e157]:
+                              - generic:
+                                - img
+                  - row "README.md, (File)" [ref=e158]:
+                    - cell "README.md, (File)" [ref=e159]:
+                      - generic [ref=e160]:
+                        - img [ref=e161]
+                        - link "README.md, (File)" [ref=e166] [cursor=pointer]:
+                          - /url: /seolhalee/Naver-Place-scraper/blob/master/README.md
+                          - text: README.md
+                    - cell [ref=e167]
+                    - cell [ref=e169]
+                  - row "coord_converter.ipynb, (File)" [ref=e172]:
+                    - cell "coord_converter.ipynb, (File)" [ref=e173]:
+                      - generic [ref=e174]:
+                        - img [ref=e175]
+                        - link "coord_converter.ipynb, (File)" [ref=e180] [cursor=pointer]:
+                          - /url: /seolhalee/Naver-Place-scraper/blob/master/coord_converter.ipynb
+                          - text: coord_converter.ipynb
+                    - cell [ref=e181]
+                    - cell [ref=e183]
+                  - row "correlation.ipynb, (File)" [ref=e186]:
+                    - cell "correlation.ipynb, (File)" [ref=e187]:
+                      - generic [ref=e188]:
+                        - img [ref=e189]
+                        - link "correlation.ipynb, (File)" [ref=e194] [cursor=pointer]:
+                          - /url: /seolhalee/Naver-Place-scraper/blob/master/correlation.ipynb
+                          - text: correlation.ipynb
+                    - cell [ref=e195]
+                    - cell [ref=e197]
+                  - row "web_scraper.ipynb, (File)" [ref=e200]:
+                    - cell "web_scraper.ipynb, (File)" [ref=e201]:
+                      - generic [ref=e202]:
+                        - img [ref=e203]
+                        - link "web_scraper.ipynb, (File)" [ref=e208] [cursor=pointer]:
+                          - /url: /seolhalee/Naver-Place-scraper/blob/master/web_scraper.ipynb
+                          - text: web_scraper.ipynb
+                    - cell [ref=e209]
+                    - cell [ref=e211]
+            - generic [ref=e215]:
+              - generic [ref=e216]:
+                - heading "Repository files navigation" [level=2] [ref=e217]
+                - navigation "Repository files" [ref=e218]:
+                  - list [ref=e219]:
+                    - listitem [ref=e220]:
+                      - link "README" [ref=e221] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e223]
+                        - generic [ref=e225]: README
+              - article [ref=e227]:
+                - generic [ref=e228]:
+                  - heading "Naver-Place-scraper" [level=1] [ref=e229]
+                  - 'link "Permalink: Naver-Place-scraper" [ref=e230] [cursor=pointer]':
+                    - /url: "#naver-place-scraper"
+                    - img [ref=e231]
+                - paragraph [ref=e233]: This is for web scraping of the search result in Naver Place service
+                - list [ref=e234]:
+                  - listitem [ref=e235]:
+                    - paragraph [ref=e236]: "coord_converter: it converts the coordinates of grid points from UTM-K to WGS84 system (which is the coordinate system that Naver Map uses). The result of conversion is saved as a csv file."
+                  - listitem [ref=e237]:
+                    - paragraph [ref=e238]: "web_scraper: this will extract the list of ID of the searched places on Naver Place for each boxes using url queries. The result of scraping is saved as a json file."
+                  - listitem [ref=e239]:
+                    - paragraph [ref=e240]: "correlation: this is for calculating the number of overlapped items and correlation coef.(Spearman's) between a default list of items and each age group's list. The result of calculation is saved as a csv file."
+        - generic [ref=e244]:
+          - generic [ref=e247]:
+            - heading "About" [level=2] [ref=e248]
+            - paragraph [ref=e249]: this is for web scraping of the search result of Naver Place service
+            - heading "Resources" [level=3] [ref=e250]
+            - link "Readme" [ref=e252] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e253]
+              - text: Readme
+            - link "Activity" [ref=e256] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/activity
+              - img [ref=e257]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e259]
+            - link "1 star" [ref=e261] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/stargazers
+              - img [ref=e262]
+              - strong [ref=e264]: "1"
+              - text: star
+            - heading "Watchers" [level=3] [ref=e265]
+            - link "1 watching" [ref=e267] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/watchers
+              - img [ref=e268]
+              - strong [ref=e270]: "1"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e271]
+            - link "0 forks" [ref=e273] [cursor=pointer]:
+              - /url: /seolhalee/Naver-Place-scraper/forks
+              - img [ref=e274]
+              - strong [ref=e276]: "0"
+              - text: forks
+            - link "Report repository" [ref=e278] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fseolhalee%2FNaver-Place-scraper&report=seolhalee+%28user%29
+          - generic [ref=e280]:
+            - heading "Releases" [level=2] [ref=e281]:
+              - link "Releases" [ref=e282] [cursor=pointer]:
+                - /url: /seolhalee/Naver-Place-scraper/releases
+            - generic [ref=e283]: No releases published
+          - generic "Loading latest packages" [ref=e286]:
+            - heading "Packages" [level=2] [ref=e287]:
+              - link "Packages" [ref=e288] [cursor=pointer]:
+                - /url: /users/seolhalee/packages?repo_name=Naver-Place-scraper
+          - generic "Loading contributors" [ref=e300]:
+            - generic:
+              - heading "Contributors" [level=2] [ref=e301]:
+                - link "Contributors" [ref=e302] [cursor=pointer]:
+                  - /url: /seolhalee/Naver-Place-scraper/graphs/contributors
+              - list [ref=e303]:
+                - listitem [ref=e304]
+                - listitem [ref=e306]
+                - listitem [ref=e308]
+          - generic [ref=e311]:
+            - heading "Languages" [level=2] [ref=e312]
+            - list [ref=e316]:
+              - listitem [ref=e317]:
+                - link "Jupyter Notebook 100.0%" [ref=e318] [cursor=pointer]:
+                  - /url: /seolhalee/Naver-Place-scraper/search?l=jupyter-notebook
+                  - img [ref=e319]
+                  - generic [ref=e321]: Jupyter Notebook
+                  - generic [ref=e322]: 100.0%
+  - contentinfo [ref=e324]:
+    - heading "Footer" [level=2] [ref=e325]
+    - generic [ref=e326]:
+      - generic [ref=e327]:
+        - link "GitHub Homepage" [ref=e328] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e329]
+        - generic [ref=e331]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e332]:
+        - heading "Footer navigation" [level=3] [ref=e333]
+        - list "Footer navigation" [ref=e334]:
+          - listitem [ref=e335]:
+            - link "Terms" [ref=e336] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e337]:
+            - link "Privacy" [ref=e338] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e339]:
+            - link "Security" [ref=e340] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e341]:
+            - link "Status" [ref=e342] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e343]:
+            - link "Community" [ref=e344] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e345]:
+            - link "Docs" [ref=e346] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e347]:
+            - link "Contact" [ref=e348] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e349]:
+            - button "Manage cookies" [ref=e351] [cursor=pointer]
+          - listitem [ref=e352]:
+            - button "Do not share my personal information" [ref=e354] [cursor=pointer]

@@ -1,0 +1,169 @@
+{
+  "design_md_references": [
+    {
+      "company": "airtable",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\airtable\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "clay",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\clay\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "cursor",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\cursor\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "linear.app",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\linear.app\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "notion",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\notion\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "replicate",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\replicate\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "supabase",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\supabase\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "vercel",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\vercel\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "figma",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\figma\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "cohere",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\cohere\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    },
+    {
+      "company": "stripe",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\design-systems\\design-md\\stripe\\README.md",
+      "relevance": "Related to saas_dashboard, clean_futuristic style"
+    }
+  ],
+  "component_references": [
+    {
+      "source": "uiverse",
+      "category": "cards",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\components\\uiverse\\cards",
+      "count": 726,
+      "type": "directory"
+    },
+    {
+      "source": "uiverse",
+      "category": "forms",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\components\\uiverse\\forms",
+      "count": 180,
+      "type": "directory"
+    }
+  ],
+  "3d_references": [
+    {
+      "name": "threejs-landing",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\3d\\threejs-landing",
+      "desc": "Three.js landing page - particles, 3D mesh, spatial interaction",
+      "techs": [
+        "Three.js",
+        "GSAP",
+        "Shaders"
+      ],
+      "match_scopes": [
+        "hero",
+        "background"
+      ]
+    },
+    {
+      "name": "threejs-portfolio",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\3d\\threejs-portfolio",
+      "desc": "Three.js portfolio - 3D models and camera animation",
+      "techs": [
+        "Three.js",
+        "WebGL"
+      ],
+      "match_scopes": [
+        "hero"
+      ]
+    },
+    {
+      "name": "r3f-example",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\3d\\r3f-example",
+      "desc": "R3F example collection - various 3D patterns",
+      "techs": [
+        "React Three Fiber",
+        "Drei"
+      ],
+      "match_scopes": [
+        "various"
+      ]
+    }
+  ],
+  "motion_references": [
+    {
+      "name": "anime",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\motion\\anime",
+      "desc": "Anime.js - lightweight animation library",
+      "techs": [
+        "Anime.js"
+      ],
+      "match_scopes": [
+        "scroll",
+        "timeline",
+        "easing"
+      ]
+    },
+    {
+      "name": "shadergradient",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\motion\\shadergradient",
+      "desc": "Shader Gradient - 3D gradient background with WebGL",
+      "techs": [
+        "WebGL",
+        "Shaders",
+        "Three.js"
+      ],
+      "match_scopes": [
+        "background"
+      ]
+    }
+  ],
+  "snippets": [
+    {
+      "name": "liquid-background.html",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\snippets\\liquid-background.html",
+      "desc": "Three.js liquid background effect"
+    },
+    {
+      "name": "codepen-3d-references.md",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\snippets\\codepen-3d-references.md",
+      "desc": "CodePen 3D references collection"
+    },
+    {
+      "name": "draftly-guide.md",
+      "path": "C:\\Users\\lian1\\Documents\\Work\\core\\design_system\\snippets\\draftly-guide.md",
+      "desc": "Draftly guide and examples"
+    }
+  ],
+  "summary": {
+    "site_type": "saas_dashboard",
+    "style": "clean_futuristic",
+    "3d_level": "hero_only",
+    "total_design_sources": 11,
+    "total_components": 906,
+    "total_3d_examples": 3,
+    "total_motion_libs": 2
+  }
+}

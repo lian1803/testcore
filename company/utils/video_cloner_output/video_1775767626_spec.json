@@ -1,0 +1,116 @@
+{
+  "overview": "Modern, dark-themed website showcasing various interactive and visually rich UI/UX components with vibrant animations and effects, emphasizing cutting-edge front-end development.",
+  "colors": {
+    "background": [
+      "#1a1a1a"
+    ],
+    "primary": [
+      "#FFFFFF"
+    ],
+    "text": [
+      "#FFFFFF"
+    ],
+    "accent": [
+      "#FF0077",
+      "#00CCFF",
+      "#FFD700",
+      "#6633FF",
+      "#00FF00",
+      "#FF4500"
+    ]
+  },
+  "typography": {
+    "heading": {
+      "family": "Inter",
+      "weight": "700",
+      "size_range": "clamp(2rem, 5vw, 4rem)"
+    },
+    "body": {
+      "family": "Inter",
+      "weight": "400",
+      "size_range": "1rem"
+    },
+    "accent_text": {
+      "style": "none",
+      "family": "Inter"
+    }
+  },
+  "layout": {
+    "structure": "Centered main heading and call-to-action text. The main content area dynamically displays full-screen interactive components. A split view is simulated with a code editor section overlaid on the top portion of the screen.",
+    "max_width": "100vw for component demos, text content is fluidly centered.",
+    "grid": "none",
+    "spacing": "Generous vertical spacing for text elements, interactive components fill the available viewport space."
+  },
+  "animations": [
+    {
+      "element": "Mouse cursor",
+      "type": "Tubes trail with gradient color shift",
+      "timing": "Continuous (based on mouse movement)",
+      "trigger": "Mouse movement"
+    },
+    {
+      "element": "Heading text",
+      "type": "Liquid distortion with rainbow gradient shift",
+      "timing": "0.5s ease-out",
+      "trigger": "Hover"
+    },
+    {
+      "element": "Background Orb/Particles",
+      "type": "Glowing particle field, interactive color change",
+      "timing": "0.8s ease-in-out (for color change), continuous (for particles)",
+      "trigger": "Load/Click on color selectors"
+    },
+    {
+      "element": "Circular menu items",
+      "type": "Radial expansion, icon rotation/bounce",
+      "timing": "0.3s ease-in-out",
+      "trigger": "Hover on menu trigger"
+    },
+    {
+      "element": "Add to Cart Button",
+      "type": "Background fill slide, icon fade/swap",
+      "timing": "0.4s ease-in-out",
+      "trigger": "Hover"
+    }
+  ],
+  "interactions": [
+    {
+      "element": "Mouse",
+      "event": "movement",
+      "effect": "Generates a glowing, multi-colored tube trail"
+    },
+    {
+      "element": "Text",
+      "event": "hover",
+      "effect": "Applies a liquid distortion and gradient color shift"
+    },
+    {
+      "element": "Color selectors (within Anomaly effect)",
+      "event": "click",
+      "effect": "Changes the primary glow color of the background orb"
+    },
+    {
+      "element": "Circular menu trigger",
+      "event": "hover",
+      "effect": "Expands menu items radially with icon animations"
+    },
+    {
+      "element": "Add to cart button",
+      "event": "hover",
+      "effect": "Triggers a background fill animation and icon change (e.g., from cart to checkmark)"
+    }
+  ],
+  "background_effects": "Solid dark background (#1a1a1a) to highlight interactive components. The components themselves often feature complex shader-based or particle effects as their backgrounds.",
+  "special_elements": [
+    "Interactive tubes cursor",
+    "Liquid text distortion effect",
+    "Dynamic glowing particle system (Anomaly)",
+    "Circular expanding menu",
+    "Animated 'Add to cart' button with internal sliding background"
+  ],
+  "css_variables": {
+    "--bg-primary": "#1a1a1a",
+    "--text-primary": "#FFFFFF"
+  },
+  "recreation_notes": "The primary challenge lies in accurately recreating the complex, GPU-intensive interactive animations and effects (liquid distortion, particle systems, interactive cursor trails). These likely involve WebGL, canvas, or advanced SVG/CSS properties, often combined with JavaScript for interactivity. Performance optimization for smooth animations across different devices is crucial. Each component acts as a distinct module, with the site serving as a gallery."
+}

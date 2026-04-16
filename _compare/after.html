@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lian Dash — After (인스타 참고)</title>
+<style>
+  :root {
+    --bg: #03030A;
+    --surface: #0A0A16;
+    --border: rgba(255,255,255,0.06);
+    --purple: #8B5CF6;
+    --teal: #0EA5E9;
+    --magenta: #D946EF;
+    --gold: #F59E0B;
+    --green: #10B981;
+    --text: #F0F0FF;
+    --sub: #8892A4;
+    --dim: #3D4455;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', sans-serif; overflow-x:hidden; cursor:none; }
+
+  /* CUSTOM CURSOR */
+  #cursor-dot { position:fixed; width:6px; height:6px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform 0.1s; }
+  #cursor-ring { position:fixed; width:32px; height:32px; border:1px solid rgba(139,92,246,0.6); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.12s ease; }
+
+  /* NAV */
+  nav { position:fixed; top:0; width:100%; z-index:100; height:60px; background:rgba(3,3,10,0.7); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 32px; justify-content:space-between; }
+  .nav-logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px; letter-spacing:-0.3px; }
+  .logo-glow { width:28px; height:28px; background:linear-gradient(135deg,var(--purple),var(--teal)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 0 20px rgba(139,92,246,0.5); }
+  .nav-links { display:flex; gap:32px; }
+  .nav-links a { font-size:13px; color:var(--sub); text-decoration:none; transition:color 0.2s; }
+  .nav-links a:hover { color:#fff; }
+  .nav-cta { padding:10px 22px; background:linear-gradient(135deg,var(--purple),var(--teal)); color:#fff; border-radius:10px; font-weight:700; font-size:13px; text-decoration:none; box-shadow:0 0 20px rgba(139,92,246,0.3); transition:box-shadow 0.2s; }
+  .nav-cta:hover { box-shadow:0 0 30px rgba(139,92,246,0.5); }
+
+  /* HERO */
+  .hero { position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 24px 0; overflow:hidden; }
+  canvas#bg-canvas { position:absolute; inset:0; z-index:0; }
+  .hero-inner { position:relative; z-index:10; max-width:720px; }
+
+  /* eyebrow */
+  .eyebrow { display:inline-flex; align-items:center; gap:8px; margin-bottom:28px; }
+  .eyebrow-line { width:32px; height:1px; background:linear-gradient(90deg,transparent,var(--purple)); }
+  .eyebrow-text { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; background:linear-gradient(90deg,var(--purple),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .eyebrow-line.right { background:linear-gradient(90deg,var(--teal),transparent); }
+
+  /* headline */
+  .hero-h1 { font-size:clamp(40px,7vw,80px); font-weight:900; line-height:1.0; letter-spacing:-2px; margin-bottom:8px; }
+  .hero-h1 .line1 { display:block; color:#fff; }
+  .hero-h1 .line2 { display:block; background:linear-gradient(90deg,var(--purple) 0%,var(--teal) 50%,var(--magenta) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero-sub { font-size:clamp(15px,2vw,18px); color:var(--sub); line-height:1.8; margin:20px 0 36px; max-width:520px; margin-left:auto; margin-right:auto; }
+
+  .hero-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:48px; }
+  .btn-hero { padding:16px 32px; background:linear-gradient(135deg,var(--purple),var(--teal)); color:#fff; border-radius:14px; font-weight:700; font-size:15px; text-decoration:none; position:relative; overflow:hidden; transition:transform 0.2s; }
+  .btn-hero:hover { transform:translateY(-2px); }
+  .btn-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent); }
+  .btn-ghost { padding:16px 32px; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); border-radius:14px; font-size:15px; background:rgba(255,255,255,0.03); cursor:pointer; transition:all 0.2s; backdrop-filter:blur(8px); }
+  .btn-ghost:hover { background:rgba(255,255,255,0.07); color:#fff; }
+
+  /* channel pills */
+  .channel-pills { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .pill { padding:6px 14px; border:1px solid var(--border); border-radius:999px; font-size:11px; font-weight:600; color:var(--sub); background:rgba(255,255,255,0.03); letter-spacing:0.5px; }
+  .pill.active { border-color:rgba(139,92,246,0.4); color:var(--purple); background:rgba(139,92,246,0.07); }
+
+  /* scroll indicator */
+  .scroll-hint { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .scroll-line { width:1px; height:48px; background:linear-gradient(to bottom,rgba(255,255,255,0.3),transparent); animation:scrollPulse 2s infinite; }
+  .scroll-text { font-size:10px; color:var(--dim); letter-spacing:2px; text-transform:uppercase; }
+  @keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+
+  /* ATMOSPHERE DIVIDER */
+  .atmos { width:100%; height:120px; background:linear-gradient(to bottom, transparent, rgba(139,92,246,0.04), transparent); position:relative; overflow:hidden; }
+  .atmos::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(14,165,233,0.06), transparent); }
+
+  /* STATS */
+  .stats-bar { background:rgba(10,10,22,0.8); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:36px 24px; position:relative; overflow:hidden; }
+  .stats-bar::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(139,92,246,0.03), transparent); }
+  .stats-inner { max-width:1120px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:center; gap:48px; position:relative; }
+  .stat { text-align:center; }
+  .stat-val { font-size:24px; font-weight:800; background:linear-gradient(135deg,#fff,rgba(139,92,246,0.9)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-0.5px; }
+  .stat-label { font-size:11px; color:var(--dim); margin-top:6px; text-transform:uppercase; letter-spacing:1px; }
+
+  /* SECTIONS */
+  .section-wrap { padding:100px 24px; max-width:1120px; margin:0 auto; }
+  .section-eyebrow { display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:20px; }
+  .section-eyebrow-text { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:var(--purple); }
+  .section-eyebrow-dot { width:4px; height:4px; border-radius:50%; background:var(--purple); }
+  .section-title { font-size:clamp(28px,4vw,44px); font-weight:800; text-align:center; margin-bottom:16px; letter-spacing:-1px; line-height:1.1; }
+  .section-sub { color:var(--sub); text-align:center; margin-bottom:56px; font-size:16px; line-height:1.7; max-width:560px; margin-left:auto; margin-right:auto; }
+
+  /* PAIN */
+  .pain-grid { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+  .pain-card { position:relative; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px 24px; text-align:center; width:220px; overflow:hidden; transition:transform 0.2s; }
+  .pain-card:hover { transform:translateY(-4px); }
+  .pain-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(139,92,246,0.05), transparent); }
+  .pain-time { font-size:32px; font-weight:900; color:rgba(239,68,68,0.8); letter-spacing:-1px; margin-bottom:8px; }
+  .pain-label { font-size:13px; color:var(--sub); font-weight:500; }
+  .pain-arrow { width:40px; height:40px; display:flex; align-items:center; justify-content:center; color:var(--dim); font-size:20px; }
+  .pain-total { text-align:center; margin-top:40px; padding:24px 32px; background:linear-gradient(135deg, rgba(239,68,68,0.08), rgba(139,92,246,0.06)); border:1px solid rgba(239,68,68,0.15); border-radius:20px; display:inline-block; }
+  .pain-total-text { font-size:clamp(18px,3vw,24px); font-weight:800; color:#fff; }
+  .pain-total-sub { font-size:13px; color:var(--sub); margin-top:6px; }
+
+  /* FEATURES */
+  .bento { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .bento-card { position:relative; background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:36px; overflow:hidden; transition:transform 0.25s, border-color 0.25s; }
+  .bento-card:hover { transform:translateY(-6px); }
+  .bento-card.span2 { grid-column:span 2; }
+  .bento-card.featured { border-color:rgba(139,92,246,0.3); background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(14,165,233,0.04)); }
+  .bento-card.featured:hover { border-color:rgba(139,92,246,0.5); }
+  .bento-card .glow { position:absolute; width:200px; height:200px; border-radius:50%; filter:blur(60px); opacity:0.15; pointer-events:none; }
+  .bento-icon { font-size:28px; margin-bottom:20px; }
+  .bento-tag { display:inline-block; padding:3px 10px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
+  .bento-tag.ai { background:rgba(139,92,246,0.15); color:var(--purple); border:1px solid rgba(139,92,246,0.2); }
+  .bento-tag.data { background:rgba(14,165,233,0.12); color:var(--teal); border:1px solid rgba(14,165,233,0.2); }
+  .bento-tag.kr { background:rgba(217,70,239,0.12); color:var(--magenta); border:1px solid rgba(217,70,239,0.2); }
+  .bento-card h3 { font-size:clamp(16px,2vw,20px); font-weight:800; margin-bottom:12px; letter-spacing:-0.3px; }
+  .bento-card p { color:var(--sub); font-size:14px; line-height:1.75; }
+
+  /* HOW IT WORKS */
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; position:relative; }
+  .steps::before { content:''; position:absolute; top:32px; left:calc(16.67% + 16px); right:calc(16.67% + 16px); height:1px; background:linear-gradient(90deg, var(--purple), var(--teal)); opacity:0.3; }
+  .step { text-align:center; padding:32px 20px; }
+  .step-num { width:64px; height:64px; border-radius:50%; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:20px; font-weight:900; position:relative; }
+  .step-num::after { content:''; position:absolute; inset:-1px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--teal)); opacity:0; transition:opacity 0.2s; z-index:-1; }
+  .step:hover .step-num::after { opacity:0.6; }
+  .step h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .step p { font-size:13px; color:var(--sub); line-height:1.7; }
+
+  /* PRICING */
+  .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .plan { background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:36px; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:transform 0.2s; }
+  .plan:hover { transform:translateY(-4px); }
+  .plan.featured { border-color:rgba(139,92,246,0.4); background:linear-gradient(135deg, rgba(139,92,246,0.07), rgba(10,10,22,0.9)); }
+  .plan-badge { position:absolute; top:20px; right:20px; padding:4px 12px; background:linear-gradient(135deg,var(--purple),var(--teal)); border-radius:999px; font-size:10px; font-weight:700; color:#fff; }
+  .plan-name { font-size:13px; font-weight:700; color:var(--sub); text-transform:uppercase; letter-spacing:2px; margin-bottom:16px; }
+  .plan-price-wrap { margin-bottom:8px; }
+  .plan-price { font-size:48px; font-weight:900; letter-spacing:-2px; }
+  .plan-price .currency { font-size:22px; font-weight:700; vertical-align:top; margin-top:10px; display:inline-block; }
+  .plan-price .period { font-size:14px; color:var(--sub); font-weight:400; }
+  .plan-desc { font-size:13px; color:var(--dim); margin-bottom:28px; line-height:1.6; }
+  .plan-btn { padding:14px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; margin-bottom:28px; transition:all 0.2s; }
+  .plan-btn.grad { background:linear-gradient(135deg,var(--purple),var(--teal)); color:#fff; border:none; }
+  .plan-btn.outline { background:transparent; border:1px solid var(--border); color:rgba(255,255,255,0.7); }
+  .plan-btn.outline:hover { border-color:rgba(139,92,246,0.4); color:#fff; }
+  .plan-features { list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .plan-features li { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--sub); }
+  .plan-features .check { color:var(--green); flex-shrink:0; font-size:14px; margin-top:1px; }
+
+  /* CTA SECTION */
+  .cta-section { position:relative; text-align:center; padding:120px 24px; overflow:hidden; }
+  .cta-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,92,246,0.12), rgba(14,165,233,0.06), transparent); }
+  .cta-section h2 { font-size:clamp(36px,6vw,68px); font-weight:900; letter-spacing:-2px; line-height:1.0; margin-bottom:20px; position:relative; }
+  .cta-section h2 span { display:block; background:linear-gradient(135deg,var(--purple),var(--teal),var(--magenta)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .cta-section p { color:var(--sub); font-size:18px; margin-bottom:40px; position:relative; }
+  .btn-cta-main { display:inline-block; padding:20px 44px; background:linear-gradient(135deg,var(--purple),var(--teal)); color:#fff; border-radius:16px; font-weight:800; font-size:16px; text-decoration:none; position:relative; overflow:hidden; transition:transform 0.2s; box-shadow:0 0 40px rgba(139,92,246,0.3); }
+  .btn-cta-main:hover { transform:translateY(-3px); box-shadow:0 0 60px rgba(139,92,246,0.4); }
+  .cta-note { margin-top:16px; font-size:13px; color:var(--dim); position:relative; }
+
+  /* FOOTER */
+  footer { background:rgba(5,5,12,0.9); border-top:1px solid var(--border); padding:56px 24px; }
+  .footer-inner { max-width:1120px; margin:0 auto; }
+  .footer-brand { margin-bottom:40px; }
+  .footer-brand p { font-size:13px; color:var(--dim); margin-top:8px; max-width:280px; line-height:1.7; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:32px; margin-bottom:40px; }
+  .footer-col h4 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--sub); margin-bottom:16px; }
+  .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col a { font-size:13px; color:var(--dim); text-decoration:none; transition:color 0.2s; }
+  .footer-col a:hover { color:#fff; }
+  .footer-bottom { border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .footer-bottom p { font-size:12px; color:var(--dim); }
+  .insta-ref { font-size:11px; color:var(--dim); background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.15); padding:4px 12px; border-radius:999px; }
+
+  /* LABEL */
+  .version-label { position:fixed; bottom:16px; right:16px; background:linear-gradient(135deg,var(--purple),var(--teal)); color:#fff; padding:8px 16px; border-radius:999px; font-size:11px; font-weight:700; z-index:9999; box-shadow:0 0 20px rgba(139,92,246,0.4); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:900px){
+    .bento { grid-template-columns:1fr; }
+    .bento-card.span2 { grid-column:span 1; }
+    .pricing-grid { grid-template-columns:1fr; }
+    .footer-grid { grid-template-columns:1fr 1fr; }
+    .steps { grid-template-columns:1fr; }
+    .steps::before { display:none; }
+    .nav-links { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div class="version-label">AFTER — 인스타 참고 적용</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-glow">⚡</div>
+    Lian Dash
+  </div>
+  <div class="nav-links">
+    <a href="#">기능</a>
+    <a href="#">가격</a>
+    <a href="#">블로그</a>
+  </div>
+  <a href="#" class="nav-cta">무료 시작 →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <canvas id="bg-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">AI × 마케팅 데이터</span>
+      <div class="eyebrow-line right"></div>
+    </div>
+    <h1 class="hero-h1">
+      <span class="line1">데이터의 혼돈을</span>
+      <span class="line2">명확함으로.</span>
+    </h1>
+    <p class="hero-sub">GA4·메타·네이버SA 분산된 데이터를 한 공간으로.<br>AI가 지금 바로 무엇을 해야 하는지 말해줍니다.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-hero">무료로 시작하기 →</a>
+      <button class="btn-ghost">데모 보기</button>
+    </div>
+    <div class="channel-pills">
+      <div class="pill active">GA4</div>
+      <div class="pill active">Meta Ads</div>
+      <div class="pill active">Naver SA</div>
+      <div class="pill">Kakao</div>
+      <div class="pill">Google Ads</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-text">scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val">1,200+</div><div class="stat-label">마케터 사용 중</div></div>
+    <div class="stat"><div class="stat-val">월 4.7시간</div><div class="stat-label">평균 절약</div></div>
+    <div class="stat"><div class="stat-val">89%</div><div class="stat-label">리포트 자동화</div></div>
+    <div class="stat"><div class="stat-val">4.9★</div><div class="stat-label">사용자 평점</div></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div style="background:var(--bg); padding:100px 0;">
+<div class="section-wrap reveal">
+  <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span class="section-eyebrow-text">Pain Point</span><div class="section-eyebrow-dot"></div></div>
+  <div class="section-title">매일 이런 짓 하고 계신가요?</div>
+  <div class="section-sub">마케터들이 데이터 취합에 쓰는 시간. Lian Dash가 단 3분으로 줄여드립니다.</div>
+  <div class="pain-grid" style="justify-content:center;align-items:center;">
+    <div class="pain-card">
+      <div class="pain-time">30분</div>
+      <div class="pain-label">GA4 데이터 확인</div>
+    </div>
+    <div class="pain-arrow">→</div>
+    <div class="pain-card">
+      <div class="pain-time">20분</div>
+      <div class="pain-label">메타 성과 취합</div>
+    </div>
+    <div class="pain-arrow">→</div>
+    <div class="pain-card">
+      <div class="pain-time">15분</div>
+      <div class="pain-label">네이버SA 분석</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:40px;">
+    <div class="pain-total">
+      <div class="pain-total-text">매일 1시간 5분을 데이터 복붙에 소비</div>
+      <div class="pain-total-sub">연간 260시간 · 10일 이상 낭비</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FEATURES -->
+<div style="background:linear-gradient(180deg, var(--bg), rgba(10,10,22,0.95)); padding:100px 0;">
+<div class="section-wrap reveal">
+  <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span class="section-eyebrow-text">Features</span><div class="section-eyebrow-dot"></div></div>
+  <div class="section-title">단순한 대시보드가 아닙니다</div>
+  <div class="section-sub">AI가 데이터를 읽고, 무엇을 해야 할지 말해주는 인텔리전스 레이어.</div>
+  <div class="bento">
+    <div class="bento-card span2 featured">
+      <div class="glow" style="background:var(--purple);top:-40px;left:-40px;"></div>
+      <div class="bento-tag ai">AI Intelligence</div>
+      <div class="bento-icon">🧠</div>
+      <h3>AI 자동 인사이트 — GPT-4o</h3>
+      <p>"이번 주 네이버SA CTR이 12% 하락했습니다. 키워드 입찰가를 점검하세요." 매일 아침 3가지 구체적인 액션 포인트가 자동 생성됩니다. 데이터를 보는 것에서 행동하는 것으로.</p>
+    </div>
+    <div class="bento-card">
+      <div class="glow" style="background:var(--teal);top:-20px;right:-20px;"></div>
+      <div class="bento-tag data">Realtime</div>
+      <div class="bento-icon">⚡</div>
+      <h3>실시간 채널 통합</h3>
+      <p>GA4·메타·네이버SA를 단 하나의 화면에서. 지연 없이.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-tag data">Security</div>
+      <div class="bento-icon">🔒</div>
+      <h3>엔터프라이즈 보안</h3>
+      <p>클라이언트별 완전 격리된 워크스페이스. 데이터 혼합 없음.</p>
+    </div>
+    <div class="bento-card span2">
+      <div class="glow" style="background:var(--magenta);bottom:-40px;right:-40px;"></div>
+      <div class="bento-tag kr">한국 최초</div>
+      <div class="bento-icon">🇰🇷</div>
+      <h3>한국 플랫폼 최초 지원</h3>
+      <p>Databox·Whatagraph가 지원하지 않는 네이버SA·카카오모먼트를 최초로 통합. 국내 마케터를 위해 처음부터 설계된 유일한 솔루션.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div style="background:var(--bg); padding:100px 0;">
+<div class="section-wrap reveal">
+  <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span class="section-eyebrow-text">How It Works</span><div class="section-eyebrow-dot"></div></div>
+  <div class="section-title">3단계로 시작</div>
+  <div class="section-sub">복잡한 설정 없이, 5분 안에 모든 채널이 연결됩니다.</div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>채널 연동</h3>
+      <p>GA4, 메타, 네이버SA 계정을 OAuth로 클릭 한 번에 연결합니다.</p>
+    </div>
+    <div class="step reveal" style="transition-delay:0.15s">
+      <div class="step-num">02</div>
+      <h3>통합 대시보드</h3>
+      <p>분산된 데이터가 하나의 화면에서 실시간으로 집계됩니다.</p>
+    </div>
+    <div class="step reveal" style="transition-delay:0.3s">
+      <div class="step-num">03</div>
+      <h3>AI 인사이트</h3>
+      <p>GPT-4o가 데이터를 분석하고 오늘 해야 할 3가지를 알려줍니다.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PRICING -->
+<div style="background:linear-gradient(180deg, var(--bg), rgba(10,10,22,0.95)); padding:100px 0;">
+<div class="section-wrap reveal">
+  <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span class="section-eyebrow-text">Pricing</span><div class="section-eyebrow-dot"></div></div>
+  <div class="section-title">명확한 가격</div>
+  <div class="section-sub">모든 플랜에 14일 무료 체험. 신용카드 불필요.</div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price-wrap"><div class="plan-price"><span class="currency">$</span>29<span class="period">/월</span></div></div>
+      <div class="plan-desc">개인 마케터 및 프리랜서용</div>
+      <button class="plan-btn outline">무료로 시작하기</button>
+      <ul class="plan-features">
+        <li><span class="check">✓</span>GA4 + 메타 + 네이버SA 통합</li>
+        <li><span class="check">✓</span>월 10회 AI 인사이트</li>
+        <li><span class="check">✓</span>기본 리포팅</li>
+        <li><span class="check">✓</span>실시간 알림</li>
+        <li><span class="check">✓</span>이메일 지원</li>
+      </ul>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">가장 인기</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price-wrap"><div class="plan-price"><span class="currency">$</span>99<span class="period">/월</span></div></div>
+      <div class="plan-desc">팀 및 에이전시용</div>
+      <button class="plan-btn grad">Pro 시작하기</button>
+      <ul class="plan-features">
+        <li><span class="check">✓</span>Starter 모든 기능</li>
+        <li><span class="check">✓</span>무제한 AI 인사이트</li>
+        <li><span class="check">✓</span>커스텀 리포팅</li>
+        <li><span class="check">✓</span>2명 팀원 추가</li>
+        <li><span class="check">✓</span>우선 지원</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Agency</div>
+      <div class="plan-price-wrap"><div class="plan-price"><span class="currency">$</span>299<span class="period">/월</span></div></div>
+      <div class="plan-desc">대형 에이전시용</div>
+      <button class="plan-btn outline">Agency 문의</button>
+      <ul class="plan-features">
+        <li><span class="check">✓</span>Pro 모든 기능</li>
+        <li><span class="check">✓</span>무제한 팀원</li>
+        <li><span class="check">✓</span>무제한 워크스페이스</li>
+        <li><span class="check">✓</span>커스텀 통합</li>
+        <li><span class="check">✓</span>24/7 전용 지원</li>
+        <li><span class="check">✓</span>SLA 보장</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-bg"></div>
+  <h2>모든 채널이<br><span>하나가 되는 순간.</span></h2>
+  <p>지금 바로 무료로 시작하세요.</p>
+  <a href="#" class="btn-cta-main">14일 무료 체험 시작 →</a>
+  <div class="cta-note">신용카드 불필요 · 설치 없음 · 5분 셋업</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="nav-logo" style="margin-bottom:12px;"><div class="logo-glow" style="width:24px;height:24px;font-size:12px;">⚡</div> Lian Dash</div>
+        <p style="font-size:13px;color:var(--dim);line-height:1.7;max-width:220px;">한국 마케터를 위한 AI 마케팅 인텔리전스 플랫폼.</p>
+        <div class="insta-ref" style="margin-top:14px;display:inline-block;">참고: @ifonly.ai @anotherworldcore @tumifnx</div>
+      </div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Docs</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Lian Dash. All rights reserved.</p>
+      <p style="font-size:11px;">디자인 레퍼런스 — ifonly.ai · anotherworldcore · tumifnx</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+// CANVAS — Organic AI-art inspired fluid particles (ifonly.ai + anotherworldcore)
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const N = 120;
+const particles = Array.from({length:N}, (_,i)=>({
+  x: Math.random()*W, y: Math.random()*H,
+  ox: 0, oy: 0,
+  vx: 0, vy: 0,
+  size: Math.random()*2+0.5,
+  hue: [280,200,320,190][i%4],
+  sat: 60+Math.random()*30,
+  lgt: 55+Math.random()*20,
+  speed: 0.003+Math.random()*0.005,
+  offset: Math.random()*Math.PI*2,
+  radius: 80+Math.random()*160,
+  a: 0.3+Math.random()*0.5,
+}));
+
+let t=0;
+// Mouse influence
+let mouse={x:W/2,y:H/2};
+document.addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+
+function noise(x,y,t){ return Math.sin(x*0.008+t)*Math.cos(y*0.008+t*0.7)+Math.sin((x+y)*0.005+t*1.3); }
+
+function draw(){
+  t+=0.005;
+  ctx.fillStyle='rgba(3,3,10,0.18)';
+  ctx.fillRect(0,0,W,H);
+
+  // Atmospheric glow layers (anotherworldcore inspired)
+  const g1=ctx.createRadialGradient(W*0.3,H*0.4,0,W*0.3,H*0.4,W*0.5);
+  g1.addColorStop(0,'rgba(139,92,246,0.04)'); g1.addColorStop(1,'transparent');
+  ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
+
+  const g2=ctx.createRadialGradient(W*0.7,H*0.6,0,W*0.7,H*0.6,W*0.4);
+  g2.addColorStop(0,'rgba(14,165,233,0.03)'); g2.addColorStop(1,'transparent');
+  ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+
+  // Mouse glow
+  const gm=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,200);
+  gm.addColorStop(0,'rgba(217,70,239,0.06)'); gm.addColorStop(1,'transparent');
+  ctx.fillStyle=gm; ctx.fillRect(0,0,W,H);
+
+  particles.forEach(p=>{
+    // Flow field
+    const n = noise(p.x, p.y, t);
+    const angle = n * Math.PI * 2;
+    p.vx += Math.cos(angle)*0.03; p.vy += Math.sin(angle)*0.03;
+
+    // Mouse attraction (subtle)
+    const dx=mouse.x-p.x, dy=mouse.y-p.y, dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<250){ p.vx+=dx/dist*0.08; p.vy+=dy/dist*0.08; }
+
+    p.vx*=0.96; p.vy*=0.96;
+    p.x+=p.vx; p.y+=p.vy;
+
+    // Wrap
+    if(p.x<-10) p.x=W+10; if(p.x>W+10) p.x=-10;
+    if(p.y<-10) p.y=H+10; if(p.y>H+10) p.y=-10;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${p.hue},${p.sat}%,${p.lgt}%,${p.a})`;
+    ctx.fill();
+  });
+
+  // Delicate connections (short range only)
+  for(let i=0;i<particles.length;i+=2){
+    for(let j=i+2;j<particles.length;j+=2){
+      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<90){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle=`rgba(139,92,246,${0.06*(1-d/90)})`;
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// SCROLL REVEAL
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }});
+},{threshold:0.1});
+revealEls.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

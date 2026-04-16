@@ -1,0 +1,92 @@
+{
+  "items": [
+    {
+      "item_id": "blog_20260407_123443",
+      "channel": "blog",
+      "content": {
+        "title": "[Test] 2026 Marketing Trends",
+        "body": "Test blog post content.",
+        "tags": [
+          "test",
+          "marketing"
+        ]
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:34:43.010295",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    },
+    {
+      "item_id": "ig_20260407_123443",
+      "channel": "instagram",
+      "content": {
+        "caption": "#test #marketing\n\n2026 marketing trends!",
+        "image_url": "https://via.placeholder.com/1080x1080?text=Test"
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:34:43.011294",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    },
+    {
+      "item_id": "email_20260407_123443",
+      "channel": "email",
+      "content": {
+        "to": "test@example.com",
+        "subject": "Free 2026 Marketing Guide",
+        "body": "Check our new guide!"
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:34:43.011967",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    },
+    {
+      "item_id": "blog_20260407_123502",
+      "channel": "blog",
+      "content": {
+        "title": "[Test] 2026 Marketing Trends",
+        "body": "Test blog post content.",
+        "tags": [
+          "test",
+          "marketing"
+        ]
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:35:02.938446",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    },
+    {
+      "item_id": "ig_20260407_123502",
+      "channel": "instagram",
+      "content": {
+        "caption": "#test #marketing\n\n2026 marketing trends!",
+        "image_url": "https://via.placeholder.com/1080x1080?text=Test"
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:35:02.938446",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    },
+    {
+      "item_id": "email_20260407_123502",
+      "channel": "email",
+      "content": {
+        "to": "test@example.com",
+        "subject": "Free 2026 Marketing Guide",
+        "body": "Check our new guide!"
+      },
+      "status": "pending",
+      "created_at": "2026-04-07T12:35:02.939446",
+      "scheduled_at": null,
+      "published_at": null,
+      "error": null
+    }
+  ]
+}

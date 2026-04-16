@@ -1,0 +1,32 @@
+# 이펙트 스타터 팩 — Codrops 검증된 URL
+# 사용법: python company/utils/codepen_scraper.py design_system/references/effects/starter_urls.txt
+
+# --- Hover / Reveal ---
+https://tympanus.net/Development/HoverEffectIdeas/
+https://tympanus.net/Development/ImageRevealHover/
+https://tympanus.net/Development/MagneticButtons/
+https://tympanus.net/Development/DistortionHoverEffectTutorial/
+https://tympanus.net/Tutorials/ImageTiltEffect/
+https://tympanus.net/Development/ImageDraggingEffects/
+
+# --- Typography ---
+https://tympanus.net/Development/TextAnimations/
+https://tympanus.net/Development/LetterEffects/
+https://tympanus.net/Tutorials/TypographyAnimation/
+
+# --- Geometry / SVG ---
+https://tympanus.net/Development/ShapeOverlays/
+https://tympanus.net/Development/MorphingBackgroundShapes/
+https://tympanus.net/Development/SVGFilterEffects/
+
+# --- Scroll ---
+https://tympanus.net/Development/SlideshowAnimations/
+https://tympanus.net/Development/PageLoadingAnimations/
+
+# --- Fluid / Cursor ---
+https://tympanus.net/Development/ImageTrailEffects/
+https://tympanus.net/Tutorials/InteractiveCursor/
+
+# --- Cards / UI ---
+https://tympanus.net/Development/CardAnimations/
+https://tympanus.net/Development/ExpandingCards/

@@ -1,0 +1,105 @@
+{
+  "overview": "A modern and visually striking personal portfolio website, characterized by elegant typography, a clean layout, and innovative 3D transitions that create a dynamic and immersive user experience.",
+  "colors": {
+    "background": [
+      "#FFFFFF",
+      "linear-gradient(to right bottom, #A0D8FF, #D0BFFF, #FFDDA0)"
+    ],
+    "primary": [
+      "#1A1A1A"
+    ],
+    "text": [
+      "#333333",
+      "#666666"
+    ],
+    "accent": [
+      "#007BFF",
+      "rgba(255, 255, 255, 0.4)"
+    ]
+  },
+  "typography": {
+    "heading": {
+      "family": "Montserrat",
+      "weight": "900",
+      "size_range": "clamp(3rem, 10vw, 10rem)"
+    },
+    "body": {
+      "family": "Inter",
+      "weight": "400",
+      "size_range": "clamp(1rem, 1.5vw, 1.2rem)"
+    },
+    "accent_text": {
+      "family": "Inter",
+      "weight": "600",
+      "size_range": "clamp(1.1rem, 2vw, 1.5rem)"
+    }
+  },
+  "layout": {
+    "structure": "Hero Section (split layout with image/text overlay) → 3D Page Flip Transition → Portfolio Grid Section (floating frosted cards) → Floating UI Controls",
+    "max_width": "1440px",
+    "grid": "Hero: grid-template-columns: 1fr 1.5fr; Portfolio: grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))",
+    "spacing": "padding: 4rem 8rem; gap: 2rem;"
+  },
+  "animations": [
+    {
+      "element": "Hero text ('DESIGN')",
+      "type": "parallax/depth effect (relative to image)",
+      "timing": "n/a",
+      "trigger": "initial load/mouse move"
+    },
+    {
+      "element": "Entire page",
+      "type": "3D page fold/flip transition",
+      "timing": "1.0s ease-in-out",
+      "trigger": "scroll down / navigation click"
+    },
+    {
+      "element": "Portfolio grid panels",
+      "type": "slide-in and rotate (individual panels)",
+      "timing": "0.5s ease-out (staggered)",
+      "trigger": "section load"
+    },
+    {
+      "element": "Portfolio card content",
+      "type": "fade-in",
+      "timing": "0.3s ease-out",
+      "trigger": "card transformation complete"
+    }
+  ],
+  "interactions": [
+    {
+      "element": "Portfolio card",
+      "event": "hover",
+      "effect": "scale(1.03), subtle box-shadow change, slight 3D tilt (e.g., rotateX(2deg) rotateY(2deg))"
+    },
+    {
+      "element": "Custom cursor",
+      "event": "mousemove",
+      "effect": "Enlarged rounded circle follows mouse, scales up on hover over interactive elements"
+    }
+  ],
+  "background_effects": "Initial hero section has a clean white background. Upon transition, a soft, dynamic multi-color gradient (blending light blue, purple, and orange hues) is revealed as the main background. UI elements like portfolio cards utilize a frosted glass/acrylic effect with `backdrop-filter`.",
+  "special_elements": [
+    "Sophisticated 3D page folding/flipping transition between sections",
+    "Grayscale user image with a cutout effect, partially overlaid by large, bold text ('DESIGN')",
+    "Frosted glass/acrylic UI cards and elements, featuring a `backdrop-filter` effect",
+    "Floating and slightly transparent UI controls/panels on the right side of the screen after the transition",
+    "Custom enlarged rounded cursor for enhanced visual feedback"
+  ],
+  "css_variables": {
+    "--bg-hero": "#FFFFFF",
+    "--bg-gradient-start": "#A0D8FF",
+    "--bg-gradient-middle": "#D0BFFF",
+    "--bg-gradient-end": "#FFDDA0",
+    "--text-primary": "#1A1A1A",
+    "--text-secondary": "#333333",
+    "--accent-blue": "#007BFF",
+    "--card-bg-glass": "rgba(255, 255, 255, 0.4)",
+    "--card-backdrop-blur": "blur(10px)",
+    "--font-heading": "'Montserrat', sans-serif",
+    "--font-body": "'Inter', sans-serif",
+    "--border-radius-lg": "16px",
+    "--spacing-lg": "4rem"
+  },
+  "recreation_notes": "The core challenge lies in accurately replicating the complex 3D page fold transition, which will likely require advanced CSS `transform` properties (`perspective`, `rotateX`, `translateZ`) in conjunction with JavaScript for managing states and triggers, or potentially a 3D library like Three.js. The frosted glass effect depends heavily on `backdrop-filter`, which requires careful consideration for browser compatibility. Achieving the precise visual depth of the hero section's text and image, and the subtle 3D hover effects on portfolio cards, will also demand meticulous CSS styling. The custom cursor will need JavaScript to track mouse movement."
+}

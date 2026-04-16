@@ -1,0 +1,453 @@
+- generic [ref=e11]:
+  - generic [ref=e13]:
+    - link "Instagram" [ref=e16] [cursor=pointer]:
+      - /url: /
+      - img "Instagram" [ref=e19]
+    - generic [ref=e24]:
+      - link "로그인" [ref=e26] [cursor=pointer]:
+        - /url: /accounts/login/?next=%2Fp%2FDVz5qUgkbCv%2F%3Fimg_index%3D2&source=desktop_nav
+      - link "가입하기" [ref=e28] [cursor=pointer]:
+        - /url: /accounts/emailsignup/
+  - main [ref=e29]:
+    - dialog [ref=e34]:
+      - generic [ref=e35]:
+        - button "닫기" [ref=e37] [cursor=pointer]:
+          - img "닫기" [ref=e39]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - link "blunge.ai.kr님의 프로필 사진" [ref=e46] [cursor=pointer]:
+              - img "blunge.ai.kr님의 프로필 사진" [ref=e47]
+            - generic [ref=e49]:
+              - generic [ref=e50]: blunge.ai.kr님의 게시물을 놓치지 마세요
+              - generic [ref=e52]: Instagram에 가입하여 새로운 소식을 모두 확인해보세요.
+              - generic [ref=e54]:
+                - text: 계속하면 Instagram
+                - link "이용 약관" [ref=e55] [cursor=pointer]:
+                  - /url: https://help.instagram.com/581066165581870/?locale=ko_KR
+                - text: 및
+                - link "개인정보처리방침" [ref=e56] [cursor=pointer]:
+                  - /url: https://privacycenter.instagram.com/policy/
+                - text: 에 동의하게 됩니다.
+          - generic [ref=e57]:
+            - link "가입하기" [ref=e60] [cursor=pointer]:
+              - /url: /accounts/emailsignup/
+            - link "로그인" [ref=e63] [cursor=pointer]:
+              - /url: /accounts/login/?source=desktop_dynamic_landing_dialog
+    - generic [ref=e64]:
+      - generic [ref=e66]:
+        - button [ref=e71]:
+          - generic [ref=e78]:
+            - list [ref=e80]:
+              - listitem [ref=e81]
+              - listitem [ref=e82]:
+                - img [ref=e89]
+              - listitem [ref=e91]:
+                - img [ref=e98]
+              - listitem [ref=e100]:
+                - img [ref=e107]
+            - button [ref=e109] [cursor=pointer]
+            - button [ref=e111] [cursor=pointer]
+        - generic [ref=e114]:
+          - generic [ref=e116]:
+            - button "blunge.ai.kr님의 프로필 사진" [disabled] [ref=e118]:
+              - link "blunge.ai.kr님의 프로필 사진" [disabled] [ref=e120] [cursor=pointer]:
+                - img "blunge.ai.kr님의 프로필 사진" [ref=e121]
+            - generic [ref=e124]:
+              - link "blunge.ai.kr" [ref=e128] [cursor=pointer]:
+                - /url: /blunge.ai.kr/
+                - generic [ref=e131]: blunge.ai.kr
+              - generic [ref=e132]:
+                - generic [ref=e134]: •
+                - button "팔로우" [ref=e135] [cursor=pointer]
+            - button "옵션 더 보기" [ref=e138] [cursor=pointer]:
+              - img "옵션 더 보기" [ref=e141]
+          - separator [ref=e145]
+          - generic [ref=e147]:
+            - generic [ref=e149]:
+              - link "blunge.ai.kr님의 프로필 사진" [ref=e151] [cursor=pointer]:
+                - /url: /blunge.ai.kr/
+                - img "blunge.ai.kr님의 프로필 사진" [ref=e152]
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - link "blunge.ai.kr" [ref=e158] [cursor=pointer]:
+                    - /url: /blunge.ai.kr/
+                    - generic [ref=e161]: blunge.ai.kr
+                  - time [ref=e163]: 3주
+                - generic [ref=e164]:
+                  - text: 아직도 광고 소재 하나씩 수작업으로 만들고 계신가요? 🥲
+                  - text: 기획하랴, 카피 쓰랴, 디자인 요청하랴... 하루가 모자란 1인 마케터라면 무조건 주목! 🚨
+                  - text: 세계적인 AI 기업 앤트로픽의 그로스 마케터도 팀원은 혼자였다고 해요. 하지만 그는 AI를 활용해 2시간 걸리던 광고 소재 제작을 단 15분으로 줄였죠.
+                  - text: 👉 그의 AI 활용과 자동화 프로세스를 확인해 보세요! (성과 분석부터 카피, 디자인 자동 생성까지!)
+                  - text: 우리가 당장 앤트로픽 마케터처럼 코딩을 할 순 없지만, Blunge가 있다면 누구나 쉽게 마케팅 이미지를 생성할 수 있어요.
+                  - text: 내가 원하는 광고 제목과 적절한 이미지까지, 마케터의 든든한 AI 파트너가 되어드릴게요.
+                  - text: 참, 곧 편집이 가능한 기능까지 나오니까 기다려주세요!
+                  - text: ✨ 콘텐츠 마케팅에 필요한 이미지, 이제 Blunge로 직접, 쉽게 만들어보세요!
+                  - link "#마케터" [ref=e165] [cursor=pointer]:
+                    - /url: /explore/tags/%EB%A7%88%EC%BC%80%ED%84%B0/
+                  - link "#신입마케터" [ref=e166] [cursor=pointer]:
+                    - /url: /explore/tags/%EC%8B%A0%EC%9E%85%EB%A7%88%EC%BC%80%ED%84%B0/
+                  - link "#blunge" [ref=e167] [cursor=pointer]:
+                    - /url: /explore/tags/blunge/
+            - button "댓글 더 읽어들이기" [ref=e169] [cursor=pointer]:
+              - img "댓글 더 읽어들이기" [ref=e171]
+            - generic [ref=e173]:
+              - generic [ref=e176]:
+                - link "routiny_app님의 프로필 사진" [ref=e179] [cursor=pointer]:
+                  - /url: /routiny_app/
+                  - img "routiny_app님의 프로필 사진" [ref=e180]
+                - generic [ref=e182]:
+                  - generic [ref=e184]:
+                    - generic [ref=e185]:
+                      - link "routiny_app" [ref=e187] [cursor=pointer]:
+                        - /url: /routiny_app/
+                        - generic [ref=e190]: routiny_app
+                      - link "3일" [ref=e192] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/17945288226141489/
+                        - time [ref=e193]: 3일
+                    - generic [ref=e195]: 영상 잘봤어요
+                  - generic [ref=e196]:
+                    - button "좋아요" [ref=e197] [cursor=pointer]:
+                      - generic [ref=e198]: 좋아요
+                    - button "답글 달기" [ref=e199] [cursor=pointer]:
+                      - generic [ref=e201]: 답글 달기
+              - generic [ref=e204]:
+                - link "4984man3님의 프로필 사진" [ref=e207] [cursor=pointer]:
+                  - /url: /4984man3/
+                  - img "4984man3님의 프로필 사진" [ref=e208]
+                - generic [ref=e210]:
+                  - generic [ref=e212]:
+                    - generic [ref=e213]:
+                      - link "4984man3" [ref=e215] [cursor=pointer]:
+                        - /url: /4984man3/
+                        - generic [ref=e218]: 4984man3
+                      - link "2주" [ref=e220] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18044966645725379/
+                        - time [ref=e221]: 2주
+                    - generic [ref=e223]: 3800억원 아님 팩트체크 고고
+                  - generic [ref=e224]:
+                    - button "좋아요 1개" [ref=e225] [cursor=pointer]:
+                      - generic [ref=e227]: 좋아요 1개
+                    - button "답글 달기" [ref=e228] [cursor=pointer]:
+                      - generic [ref=e230]: 답글 달기
+              - generic [ref=e233]:
+                - link "luv.luv.luv.uu님의 프로필 사진" [ref=e236] [cursor=pointer]:
+                  - /url: /luv.luv.luv.uu/
+                  - img "luv.luv.luv.uu님의 프로필 사진" [ref=e237]
+                - generic [ref=e239]:
+                  - generic [ref=e241]:
+                    - generic [ref=e242]:
+                      - link "luv.luv.luv.uu" [ref=e244] [cursor=pointer]:
+                        - /url: /luv.luv.luv.uu/
+                        - generic [ref=e247]: luv.luv.luv.uu
+                      - link "3주" [ref=e249] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18102279670922027/
+                        - time [ref=e250]: 3주
+                    - generic [ref=e252]: 궁금해요
+                  - generic [ref=e253]:
+                    - button "좋아요" [ref=e254] [cursor=pointer]:
+                      - generic [ref=e255]: 좋아요
+                    - button "답글 달기" [ref=e256] [cursor=pointer]:
+                      - generic [ref=e258]: 답글 달기
+              - generic [ref=e261]:
+                - link "leehyemin28님의 프로필 사진" [ref=e264] [cursor=pointer]:
+                  - /url: /leehyemin28/
+                  - img "leehyemin28님의 프로필 사진" [ref=e265]
+                - generic [ref=e267]:
+                  - generic [ref=e269]:
+                    - generic [ref=e270]:
+                      - link "leehyemin28" [ref=e272] [cursor=pointer]:
+                        - /url: /leehyemin28/
+                        - generic [ref=e275]: leehyemin28
+                      - link "3주" [ref=e277] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18381591133091173/
+                        - time [ref=e278]: 3주
+                    - generic [ref=e280]: 언제출시인가요
+                  - generic [ref=e281]:
+                    - button "좋아요" [ref=e282] [cursor=pointer]:
+                      - generic [ref=e283]: 좋아요
+                    - button "답글 달기" [ref=e284] [cursor=pointer]:
+                      - generic [ref=e286]: 답글 달기
+              - generic [ref=e289]:
+                - link "thename40님의 프로필 사진" [ref=e292] [cursor=pointer]:
+                  - /url: /thename40/
+                  - img "thename40님의 프로필 사진" [ref=e293]
+                - generic [ref=e295]:
+                  - generic [ref=e297]:
+                    - generic [ref=e298]:
+                      - link "thename40" [ref=e300] [cursor=pointer]:
+                        - /url: /thename40/
+                        - generic [ref=e303]: thename40
+                      - link "3주" [ref=e305] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18109336447834093/
+                        - time [ref=e306]: 3주
+                    - generic [ref=e308]: 굿
+                  - generic [ref=e309]:
+                    - button "좋아요" [ref=e310] [cursor=pointer]:
+                      - generic [ref=e311]: 좋아요
+                    - button "답글 달기" [ref=e312] [cursor=pointer]:
+                      - generic [ref=e314]: 답글 달기
+              - generic [ref=e317]:
+                - link "blunge.ai.kr님의 프로필 사진" [ref=e320] [cursor=pointer]:
+                  - /url: /blunge.ai.kr/
+                  - img "blunge.ai.kr님의 프로필 사진" [ref=e321]
+                - generic [ref=e323]:
+                  - generic [ref=e325]:
+                    - generic [ref=e326]:
+                      - link "blunge.ai.kr" [ref=e328] [cursor=pointer]:
+                        - /url: /blunge.ai.kr/
+                        - generic [ref=e331]: blunge.ai.kr
+                      - link "3주" [ref=e333] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18443376757129488/
+                        - time [ref=e334]: 3주
+                    - generic [ref=e336]: 오타 3800억원 -> 3800억 달러
+                  - generic [ref=e337]:
+                    - button "좋아요 4개" [ref=e338] [cursor=pointer]:
+                      - generic [ref=e340]: 좋아요 4개
+                    - button "답글 달기" [ref=e341] [cursor=pointer]:
+                      - generic [ref=e343]: 답글 달기
+              - generic [ref=e346]:
+                - link "kayakwon님의 프로필 사진" [ref=e349] [cursor=pointer]:
+                  - /url: /kayakwon/
+                  - img "kayakwon님의 프로필 사진" [ref=e350]
+                - generic [ref=e352]:
+                  - generic [ref=e354]:
+                    - generic [ref=e355]:
+                      - link "kayakwon" [ref=e357] [cursor=pointer]:
+                        - /url: /kayakwon/
+                        - generic [ref=e360]: kayakwon
+                      - link "3주" [ref=e362] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/17944828602129818/
+                        - time [ref=e363]: 3주
+                    - generic [ref=e365]: 3800억원이 아닌데. 3800억달러임.
+                  - generic [ref=e366]:
+                    - button "좋아요 1개" [ref=e367] [cursor=pointer]:
+                      - generic [ref=e369]: 좋아요 1개
+                    - button "답글 달기" [ref=e370] [cursor=pointer]:
+                      - generic [ref=e372]: 답글 달기
+              - generic [ref=e375]:
+                - link "designgyeoul님의 프로필 사진" [ref=e378] [cursor=pointer]:
+                  - /url: /designgyeoul/
+                  - img "designgyeoul님의 프로필 사진" [ref=e379]
+                - generic [ref=e381]:
+                  - generic [ref=e383]:
+                    - generic [ref=e384]:
+                      - link "designgyeoul" [ref=e386] [cursor=pointer]:
+                        - /url: /designgyeoul/
+                        - generic [ref=e389]: designgyeoul
+                      - link "3주" [ref=e391] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18112593439708351/
+                        - time [ref=e392]: 3주
+                    - generic [ref=e394]: 서비스를 만들어 준다는 것인가요? 아님 서비스 출시 예정^^
+                  - generic [ref=e395]:
+                    - button "좋아요" [ref=e396] [cursor=pointer]:
+                      - generic [ref=e397]: 좋아요
+                    - button "답글 달기" [ref=e398] [cursor=pointer]:
+                      - generic [ref=e400]: 답글 달기
+              - generic [ref=e403]:
+                - link "blunge.ai.kr님의 프로필 사진" [ref=e406] [cursor=pointer]:
+                  - /url: /blunge.ai.kr/
+                  - img "blunge.ai.kr님의 프로필 사진" [ref=e407]
+                - generic [ref=e409]:
+                  - generic [ref=e411]:
+                    - generic [ref=e412]:
+                      - link "blunge.ai.kr" [ref=e414] [cursor=pointer]:
+                        - /url: /blunge.ai.kr/
+                        - generic [ref=e417]: blunge.ai.kr
+                      - link "3주" [ref=e419] [cursor=pointer]:
+                        - /url: /p/DVz5qUgkbCv/c/18097194778812350/
+                        - time [ref=e420]: 3주
+                    - generic [ref=e422]: 👏
+                  - generic [ref=e423]:
+                    - button "좋아요" [ref=e424] [cursor=pointer]:
+                      - generic [ref=e425]: 좋아요
+                    - button "답글 달기" [ref=e426] [cursor=pointer]:
+                      - generic [ref=e428]: 답글 달기
+          - generic [ref=e429]:
+            - generic [ref=e430]:
+              - generic [ref=e431]:
+                - button "좋아요" [ref=e434] [cursor=pointer]:
+                  - img "좋아요" [ref=e437]
+                - button "967" [ref=e439] [cursor=pointer]
+                - button "댓글 달기" [ref=e441] [cursor=pointer]:
+                  - img "댓글 달기" [ref=e443]
+                - button "15" [ref=e445] [cursor=pointer]
+                - button "공유하기" [ref=e446] [cursor=pointer]:
+                  - img "공유하기" [ref=e447]
+              - button "저장" [ref=e451] [cursor=pointer]:
+                - img "저장" [ref=e453]
+            - link "3월 12일" [ref=e457] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DVz5qUgkbCv/
+              - time [ref=e459]: 3월 12일
+          - generic [ref=e464]:
+            - text: 좋아요 또는 댓글을 남기려면
+            - link "로그인" [ref=e465] [cursor=pointer]:
+              - /url: /accounts/login/?next=%2Fp%2FDVz5qUgkbCv%2F&source=post_comment_input
+            - text: .
+      - separator [ref=e467]
+      - generic [ref=e468]:
+        - generic [ref=e470]:
+          - link "blunge.ai.kr" [ref=e471] [cursor=pointer]:
+            - /url: /blunge.ai.kr/
+          - text: 님의 게시물 더 보기
+        - generic [ref=e474]:
+          - generic [ref=e475]:
+            - link "슬라이드" [ref=e477] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DRE8JRqE1Qa/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+            - link "클립" [ref=e482] [cursor=pointer]:
+              - /url: /blunge.ai.kr/reel/DKHA5zaTA84/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "클립"
+            - link "슬라이드" [ref=e487] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DWqYPGYESpn/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+          - generic [ref=e491]:
+            - link "슬라이드" [ref=e493] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DWnucSnglNW/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+            - link "슬라이드" [ref=e498] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DWfY0OKk8z6/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+            - link "슬라이드" [ref=e503] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DWNxH2CkVGP/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+          - generic [ref=e507]:
+            - link "슬라이드" [ref=e509] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DWApd2clFBy/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+            - link "슬라이드" [ref=e514] [cursor=pointer]:
+              - /url: /blunge.ai.kr/p/DV7YetJE1Fp/
+              - generic:
+                - generic:
+                  - generic:
+                    - img "슬라이드"
+        - generic [ref=e519]:
+          - link "게시물 더 보기" [ref=e521] [cursor=pointer]:
+            - /url: /blunge.ai.kr/
+            - generic [ref=e522]: 게시물 더 보기
+          - separator [ref=e523]
+  - contentinfo [ref=e524]:
+    - generic [ref=e525]:
+      - generic [ref=e527]:
+        - link "Meta" [ref=e529] [cursor=pointer]:
+          - /url: https://about.meta.com/
+          - generic [ref=e530]: Meta
+        - link "소개" [ref=e532] [cursor=pointer]:
+          - /url: https://about.instagram.com/
+          - generic [ref=e533]: 소개
+        - link "블로그" [ref=e535] [cursor=pointer]:
+          - /url: https://about.instagram.com/blog/
+          - generic [ref=e536]: 블로그
+        - link "채용 정보" [ref=e538] [cursor=pointer]:
+          - /url: https://about.instagram.com/about-us/careers
+          - generic [ref=e539]: 채용 정보
+        - link "도움말" [ref=e541] [cursor=pointer]:
+          - /url: https://help.instagram.com/
+          - generic [ref=e542]: 도움말
+        - link "API" [ref=e544] [cursor=pointer]:
+          - /url: https://developers.facebook.com/docs/instagram
+          - generic [ref=e545]: API
+        - link "개인정보처리방침" [ref=e547] [cursor=pointer]:
+          - /url: /legal/privacy/
+          - generic [ref=e548]: 개인정보처리방침
+        - link "약관" [ref=e550] [cursor=pointer]:
+          - /url: /legal/terms/
+          - generic [ref=e551]: 약관
+        - link "위치" [ref=e553] [cursor=pointer]:
+          - /url: /explore/locations/
+          - generic [ref=e554]: 위치
+        - link "Instagram Lite" [ref=e556] [cursor=pointer]:
+          - /url: /web/lite/
+          - generic [ref=e557]: Instagram Lite
+        - link "Meta AI" [ref=e559] [cursor=pointer]:
+          - /url: https://www.meta.ai/?utm_source=foa_web_footer
+          - generic [ref=e560]: Meta AI
+        - link "Threads" [ref=e562] [cursor=pointer]:
+          - /url: https://www.threads.com/
+          - generic [ref=e563]: Threads
+        - link "연락처 업로드 & 비사용자" [ref=e565] [cursor=pointer]:
+          - /url: https://www.facebook.com/help/instagram/261704639352628
+          - generic [ref=e566]: 연락처 업로드 & 비사용자
+        - link "Meta Verified" [ref=e568] [cursor=pointer]:
+          - /url: /accounts/meta_verified/?entrypoint=web_footer
+          - generic [ref=e569]: Meta Verified
+      - generic [ref=e570]:
+        - generic [ref=e571] [cursor=pointer]:
+          - generic [ref=e572]:
+            - generic [ref=e573]: 한국어
+            - img "아래쪽 V자형 아이콘" [ref=e576]
+          - combobox "표시 언어 변경" [ref=e578]:
+            - option "Afrikaans"
+            - option "العربية"
+            - option "Čeština"
+            - option "Dansk"
+            - option "Deutsch"
+            - option "Ελληνικά"
+            - option "English"
+            - option "English (UK)"
+            - option "Español (España)"
+            - option "Español"
+            - option "فارسی"
+            - option "Suomi"
+            - option "Français"
+            - option "עברית"
+            - option "Bahasa Indonesia"
+            - option "Italiano"
+            - option "日本語"
+            - option "한국어" [selected]
+            - option "Bahasa Melayu"
+            - option "Norsk"
+            - option "Nederlands"
+            - option "Polski"
+            - option "Português (Brasil)"
+            - option "Português (Portugal)"
+            - option "Русский"
+            - option "Svenska"
+            - option "ภาษาไทย"
+            - option "Filipino"
+            - option "Türkçe"
+            - option "中文(简体)"
+            - option "中文(台灣)"
+            - option "বাংলা"
+            - option "ગુજરાતી"
+            - option "हिन्दी"
+            - option "Hrvatski"
+            - option "Magyar"
+            - option "ಕನ್ನಡ"
+            - option "മലയാളം"
+            - option "मराठी"
+            - option "नेपाली"
+            - option "ਪੰਜਾਬੀ"
+            - option "සිංහල"
+            - option "Slovenčina"
+            - option "தமிழ்"
+            - option "తెలుగు"
+            - option "اردو"
+            - option "Tiếng Việt"
+            - option "中文(香港)"
+            - option "Български"
+            - option "Français (Canada)"
+            - option "Română"
+            - option "Српски"
+            - option "Українська"
+        - generic [ref=e580]: © 2026 Instagram from Meta

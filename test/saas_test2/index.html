@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOICEMINE — AI Review Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-deep: #0a0a1a;
+  --bg-card: #111827;
+  --indigo: #6366f1;
+  --indigo-dim: rgba(99, 102, 241, 0.2);
+  --lavender: #a78bfa;
+  --cyan: #22d3ee;
+  --white: #f8fafc;
+  --red: #ef4444;
+  --font: 'Inter', -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: auto;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg-deep);
+  color: var(--white);
+  overflow: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Fullpage Snap --- */
+.fullpage-wrapper {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.sections-container {
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Trail Cursor --- */
+#cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ========================
+   SCENE 1 — HERO
+   ======================== */
+.scene1 {
+  background: var(--bg-deep);
+  background-image: radial-gradient(ellipse at 50% 80%, #1e1b4b 0%, #0a0a1a 70%);
+  flex-direction: column;
+}
+
+.review-strata {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.strata-line {
+  font-size: clamp(10px, 1.2vw, 13px);
+  color: var(--indigo);
+  opacity: 0.35;
+  white-space: nowrap;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transition: color 0.6s ease, opacity 0.6s ease;
+  line-height: 1;
+  padding: 7px 0;
+}
+
+.strata-line.resonant {
+  color: var(--lavender);
+  opacity: 1;
+  text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+}
+
+.wave-mask {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 0%;
+  background: linear-gradient(to bottom, transparent, var(--lavender), var(--cyan), transparent);
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wave-mask-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 0%;
+  background: linear-gradient(to bottom, transparent, rgba(167, 139, 250, 0.08), rgba(34, 211, 238, 0.04), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-svg-wrap {
+  opacity: 0;
+  margin-bottom: 24px;
+}
+
+.logo-svg-wrap svg {
+  width: clamp(280px, 40vw, 520px);
+  height: auto;
+}
+
+.logo-svg-wrap svg text {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 72px;
+  fill: none;
+  stroke: var(--lavender);
+  stroke-width: 1.5;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+}
+
+.hero-sub {
+  font-size: clamp(14px, 1.6vw, 18px);
+  color: rgba(248, 250, 252, 0.7);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  opacity: 0;
+  transform: translateY(20px);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* ========================
+   SCENE 2 — PROBLEM
+   ======================== */
+.scene2 {
+  background: var(--bg-deep);
+  flex-direction: column;
+  gap: 40px;
+}
+
+.problem-big {
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  opacity: 0;
+  transform: translateX(-80px);
+}
+
+.problem-red {
+  font-size: clamp(24px, 3.5vw, 40px);
+  font-weight: 700;
+  color: var(--red);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.problem-red span {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 4px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.problem-answer {
+  font-size: clamp(16px, 2vw, 22px);
+  color: rgba(248, 250, 252, 0.6);
+  font-weight: 400;
+  opacity: 0;
+  max-width: 560px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ========================
+   SCENE 3 — CARDS
+   ======================== */
+.scene3 {
+  background: var(--bg-deep);
+}
+
+.cards-container {
+  display: flex;
+  gap: 32px;
+  align-items: stretch;
+}
+
+.feature-card {
+  width: clamp(280px, 24vw, 360px);
+  height: 440px;
+  background: var(--bg-card);
+  border: 1px solid var(--indigo-dim);
+  border-radius: 16px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--indigo), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(34, 211, 238, 0.08);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--indigo);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.card-desc {
+  font-size: 15px;
+  color: rgba(248, 250, 252, 0.55);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.card-tag {
+  font-size: 12px;
+  color: var(--cyan);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ========================
+   SCENE 4 — NUMBERS
+   ======================== */
+.scene4 {
+  background: var(--bg-deep);
+}
+
+.numbers-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.number-block {
+  text-align: center;
+  padding: 0 clamp(32px, 5vw, 72px);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.number-value {
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.number-value.cyan { color: var(--cyan); }
+.number-value.gradient {
+  background: linear-gradient(135deg, var(--indigo), var(--lavender));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.number-value.white { color: var(--white); }
+
+.number-label {
+  font-size: clamp(13px, 1.2vw, 16px);
+  color: rgba(248, 250, 252, 0.45);
+  font-weight: 400;
+}
+
+.number-divider {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.15), transparent);
+  flex-shrink: 0;
+}
+
+/* ========================
+   SCENE 5 — MARQUEE + QUOTE
+   ======================== */
+.scene5 {
+  background: var(--bg-deep);
+  flex-direction: column;
+  gap: 64px;
+}
+
+.marquee-section {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.marquee-logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.25);
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  flex-shrink: 0;
+  filter: grayscale(1);
+  transition: filter 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+}
+
+.marquee-logo:hover {
+  filter: grayscale(0);
+  color: var(--white);
+  border-color: var(--indigo-dim);
+}
+
+.quote-block {
+  max-width: 640px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.quote-text {
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(248, 250, 252, 0.8);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.quote-text::before { content: '\201C'; color: var(--indigo); font-size: 1.4em; }
+.quote-text::after { content: '\201D'; color: var(--indigo); font-size: 1.4em; }
+
+.quote-source {
+  font-size: 14px;
+  color: rgba(248, 250, 252, 0.4);
+  font-weight: 500;
+}
+
+/* ========================
+   SCENE 6 — CTA
+   ======================== */
+.scene6 {
+  background: var(--bg-deep);
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+}
+
+.cta-bg-echo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0.06;
+}
+
+.cta-bg-echo .strata-line {
+  color: var(--lavender);
+  opacity: 0.5;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.cta-heading {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.cta-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 48px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--indigo), var(--lavender));
+  color: white;
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: none;
+  overflow: hidden;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
+}
+
+.cta-button .shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.cta-sub {
+  font-size: 14px;
+  color: rgba(248, 250, 252, 0.35);
+  opacity: 0;
+}
+
+/* --- Section Dots --- */
+.section-dots {
+  position: fixed;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.section-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  cursor: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.section-dot.active {
+  background: var(--lavender);
+  transform: scale(1.4);
+}
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  #cursor-canvas { display: none; }
+  .section-dots { right: 16px; }
+  .section-dot { width: 6px; height: 6px; }
+
+  .cards-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 24px;
+  }
+
+  .feature-card {
+    width: 100%;
+    height: auto;
+    min-height: 320px;
+  }
+
+  .numbers-row {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .number-divider {
+    width: 80px;
+    height: 1px;
+  }
+
+  .number-block {
+    padding: 0;
+  }
+
+  .marquee-section { gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="cursor-canvas"></canvas>
+
+<nav class="section-dots" id="sectionDots"></nav>
+
+<div class="fullpage-wrapper" id="fullpage">
+  <div class="sections-container" id="sectionsContainer">
+
+    <!-- SCENE 1: HERO -->
+    <section class="scene1" id="scene1">
+      <div class="wave-mask" id="waveMask"></div>
+      <div class="wave-mask-glow" id="waveMaskGlow"></div>
+      <div class="review-strata" id="reviewStrata"></div>
+      <div class="hero-content">
+        <div class="logo-svg-wrap" id="logoWrap">
+          <svg viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg">
+            <text x="50%" y="60" text-anchor="middle" id="logoText">VOICEMINE</text>
+          </svg>
+        </div>
+        <p class="hero-sub" id="heroSub">수천 개 리뷰에서 숨겨진 인사이트를 캐낸다</p>
+      </div>
+    </section>
+
+    <!-- SCENE 2: PROBLEM -->
+    <section class="scene2" id="scene2">
+      <div class="problem-big" id="problemBig">리뷰 10,000개</div>
+      <div class="problem-red" id="problemRed"><span>읽을 시간: 0</span></div>
+      <p class="problem-answer" id="problemAnswer">당신이 안 읽은 리뷰에 답이 있다</p>
+    </section>
+
+    <!-- SCENE 3: CARDS -->
+    <section class="scene3" id="scene3">
+      <div class="cards-container" id="cardsContainer">
+        <div class="feature-card" id="card1">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 class="card-title">자동 수집</h3>
+          <p class="card-desc">네이버, 구글, 앱스토어, 카카오맵까지. 흩어진 리뷰를 한 곳에 모으고 실시간으로 동기화합니다.</p>
+          <div class="card-tag">Collection Engine</div>
+        </div>
+        <div class="feature-card" id="card2">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </div>
+          <h3 class="card-title">AI 분석</h3>
+          <p class="card-desc">감성 분류, 키워드 추출, 트렌드 탐지. 사람이 놓치는 패턴을 AI가 발견합니다.</p>
+          <div class="card-tag">NLP Analysis</div>
+        </div>
+        <div class="feature-card" id="card3">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3 class="card-title">인사이트 리포트</h3>
+          <p class="card-desc">데이터가 아닌 의사결정을 드립니다. 주간 리포트와 실시간 알림으로 즉시 행동하세요.</p>
+          <div class="card-tag">Actionable Insights</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 4: NUMBERS -->
+    <section class="scene4" id="scene4">
+      <div class="numbers-row" id="numbersRow">
+        <div class="number-block" id="numBlock1">
+          <div class="number-value cyan" id="numVal1">0%</div>
+          <div class="number-label">분석 정확도</div>
+        </div>
+        <div class="number-divider"></div>
+        <div class="number-block" id="numBlock2">
+          <div class="number-value gradient" id="numVal2">0분</div>
+          <div class="number-label">1만 건 분석 소요</div>
+        </div>
+        <div class="number-divider"></div>
+        <div class="number-block" id="numBlock3">
+          <div class="number-value white" id="numVal3">0x</div>
+          <div class="number-label">업무 효율 향상</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 5: MARQUEE + QUOTE -->
+    <section class="scene5" id="scene5">
+      <div class="marquee-section" id="marqueeSection">
+        <div class="marquee-track" id="marqueeTrack1"></div>
+        <div class="marquee-track" id="marqueeTrack2"></div>
+      </div>
+      <div class="quote-block" id="quoteBlock">
+        <p class="quote-text">리뷰 분석에 매주 20시간을 쓰던 팀이, VOICEMINE 도입 후 3시간으로 줄었습니다. 놓치던 고객 불만도 실시간으로 잡아냅니다.</p>
+        <div class="quote-source">김민수 PM &mdash; 커머스 스타트업 A사</div>
+      </div>
+    </section>
+
+    <!-- SCENE 6: CTA -->
+    <section class="scene6" id="scene6">
+      <div class="cta-bg-echo" id="ctaBgEcho"></div>
+      <div class="cta-content">
+        <h2 class="cta-heading" id="ctaHeading">리뷰 속 진짜 목소리를<br>캐내세요</h2>
+        <a href="#" class="cta-button" id="ctaButton">
+          <span class="shimmer"></span>
+          무료로 시작하기
+        </a>
+        <p class="cta-sub" id="ctaSub">카드 없이 14일 무료 체험</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================
+  // FULLPAGE SNAP SCROLL
+  // ============================
+  const sections = document.querySelectorAll('section');
+  const totalSections = sections.length;
+  let currentSection = 0;
+  let isScrolling = false;
+  const container = document.getElementById('sectionsContainer');
+  const dotsNav = document.getElementById('sectionDots');
+
+  // Build dots
+  for (let i = 0; i < totalSections; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'section-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goToSection(i));
+    dotsNav.appendChild(dot);
+  }
+  const dots = dotsNav.querySelectorAll('.section-dot');
+
+  function goToSection(index) {
+    if (index < 0 || index >= totalSections || isScrolling) return;
+    isScrolling = true;
+    currentSection = index;
+    container.style.transform = `translateY(-${index * 100}vh)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    triggerSceneAnimation(index);
+    setTimeout(() => { isScrolling = false; }, 1000);
+  }
+
+  // Wheel
+  let wheelAccum = 0;
+  const WHEEL_THRESHOLD = 50;
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (isScrolling) return;
+    wheelAccum += e.deltaY;
+    if (Math.abs(wheelAccum) >= WHEEL_THRESHOLD) {
+      goToSection(currentSection + (wheelAccum > 0 ? 1 : -1));
+      wheelAccum = 0;
+    }
+  }, { passive: false });
+
+  // Touch
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+  window.addEventListener('touchend', (e) => {
+    const diff = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 50) goToSection(currentSection + (diff > 0 ? 1 : -1));
+  });
+
+  // Keyboard
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToSection(currentSection + 1); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); goToSection(currentSection - 1); }
+  });
+
+  // ============================
+  // TRAIL CURSOR
+  // ============================
+  const canvas = document.getElementById('cursor-canvas');
+  const ctx = canvas.getContext('2d');
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  let mouseX = -100, mouseY = -100;
+  const trailPoints = [];
+  const TRAIL_LENGTH = 20;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function drawTrail() {
+    if (isMobile) { requestAnimationFrame(drawTrail); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    trailPoints.push({ x: mouseX, y: mouseY });
+    if (trailPoints.length > TRAIL_LENGTH) trailPoints.shift();
+
+    for (let i = 0; i < trailPoints.length; i++) {
+      const t = i / trailPoints.length;
+      const r = Math.floor(99 + (34 - 99) * t);
+      const g = Math.floor(102 + (211 - 102) * t);
+      const b = Math.floor(241 + (238 - 241) * t);
+      const alpha = t * 0.7;
+      const size = 2 + t * 5;
+      ctx.beginPath();
+      ctx.arc(trailPoints[i].x, trailPoints[i].y, size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawTrail);
+  }
+  drawTrail();
+
+  // ============================
+  // SCENE 1 — HERO ANIMATION
+  // ============================
+  const reviewFragments = [
+    '배송이 빠르고 포장이 깔끔해요',
+    '가격 대비 만족스러워요',
+    '색상이 사진과 달라서 실망',
+    '고객센터 응대가 친절합니다',
+    '재구매 의사 있습니다',
+    '사이즈가 생각보다 작아요',
+    '퀄리티가 기대 이상이에요',
+    '향이 오래 지속돼요',
+    '가성비 최고의 제품입니다',
+    '이 가격에 이 품질이면 충분',
+    '교환 절차가 복잡해요',
+    '디자인이 세련됐어요',
+    '피부가 예민한데 괜찮았어요',
+    '주변에 추천하고 있어요',
+    '두 번째 구매인데 여전히 좋아요',
+    '포인트 적립이 좋아요',
+    'AS가 빠르게 처리됩니다',
+    '한 달째 쓰는데 아직 문제없어요',
+    '결제 과정이 매끄러워요',
+    '앱 사용성이 좋아졌어요',
+    '리뷰 보고 샀는데 만족이에요',
+    '다른 브랜드보다 확실히 나아요',
+    '처음엔 반신반의했는데 좋네요',
+    '선물로 줬더니 반응이 좋아요',
+    '매장 직원이 친절했어요',
+    '온라인 전용 할인이 좋아요',
+    '제품 설명이 정확해요',
+    '포장 디자인도 예뻐요',
+    '빠른 배송 감사합니다',
+    '정기 구독 생각 중이에요'
+  ];
+
+  const strataContainer = document.getElementById('reviewStrata');
+  const resonantIndices = [11, 12, 13, 14, 15, 16, 17, 18]; // center 8 lines
+
+  reviewFragments.forEach((text, i) => {
+    const line = document.createElement('div');
+    line.className = 'strata-line';
+    line.textContent = text;
+    line.dataset.index = i;
+    strataContainer.appendChild(line);
+  });
+
+  const strataLines = strataContainer.querySelectorAll('.strata-line');
+
+  // CTA background echo
+  const ctaEcho = document.getElementById('ctaBgEcho');
+  reviewFragments.forEach(text => {
+    const line = document.createElement('div');
+    line.className = 'strata-line';
+    line.textContent = text;
+    ctaEcho.appendChild(line);
+  });
+
+  // Mouse tilt on strata
+  window.addEventListener('mousemove', (e) => {
+    if (currentSection !== 0) return;
+    const xRatio = (e.clientX / window.innerWidth - 0.5) * 2;
+    const tilt = xRatio * 3;
+    strataLines.forEach(line => {
+      if (line.classList.contains('resonant')) {
+        line.style.transform = `rotate(${tilt * 0.4}deg)`;
+      }
+    });
+  });
+
+  function playScene1() {
+    const tl = gsap.timeline();
+    const waveMask = document.getElementById('waveMask');
+    const waveMaskGlow = document.getElementById('waveMaskGlow');
+    const logoWrap = document.getElementById('logoWrap');
+    const logoText = document.getElementById('logoText');
+    const heroSub = document.getElementById('heroSub');
+
+    // Reset
+    gsap.set(strataLines, { opacity: 0.35, color: 'var(--indigo)' });
+    strataLines.forEach(l => l.classList.remove('resonant'));
+    gsap.set(waveMask, { height: '0%' });
+    gsap.set(waveMaskGlow, { height: '0%' });
+    gsap.set(logoWrap, { opacity: 0 });
+    gsap.set(logoText, { attr: { 'stroke-dashoffset': 600 } });
+    gsap.set(heroSub, { opacity: 0, y: 20 });
+
+    // Strata fade in
+    tl.to(strataLines, {
+      opacity: 0.35,
+      duration: 0.3,
+      stagger: 0.02
+    });
+
+    // Wave scan down
+    tl.to([waveMask, waveMaskGlow], {
+      height: '100%',
+      duration: 1,
+      ease: 'power2.inOut'
+    }, '+=0.2');
+
+    // Resonant lines
+    tl.add(() => {
+      resonantIndices.forEach((idx, i) => {
+        setTimeout(() => {
+          strataLines[idx].classList.add('resonant');
+          gsap.to(strataLines[idx], { opacity: 1, duration: 0.3 });
+        }, i * 60);
+      });
+    }, '-=0.3');
+
+    // Converge resonant lines to center
+    tl.to(resonantIndices.map(i => strataLines[i]), {
+      y: 0,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.03,
+      ease: 'power3.in',
+      delay: 0.5
+    });
+
+    // Fade non-resonant
+    tl.to(strataLines, {
+      opacity: 0.08,
+      duration: 0.4
+    }, '<');
+
+    // Logo draw-on
+    tl.to(logoWrap, { opacity: 1, duration: 0.01 });
+    tl.to(logoText, {
+      attr: { 'stroke-dashoffset': 0 },
+      duration: 0.8,
+      ease: 'power2.out'
+    });
+
+    // Fill logo after draw
+    tl.to(logoText, {
+      fill: 'rgba(167, 139, 250, 0.9)',
+      stroke: 'rgba(167, 139, 250, 0.6)',
+      duration: 0.6,
+      ease: 'power1.out'
+    }, '+=0.1');
+
+    // Subcopy
+    tl.to(heroSub, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '-=0.3');
+  }
+
+  // ============================
+  // SCENE 2 — PROBLEM
+  // ============================
+  function playScene2() {
+    const tl = gsap.timeline();
+    const big = document.getElementById('problemBig');
+    const red = document.getElementById('problemRed');
+    const answer = document.getElementById('problemAnswer');
+
+    gsap.set(big, { opacity: 0, x: -80 });
+    gsap.set(red, { opacity: 0, y: 20 });
+    gsap.set(answer, { opacity: 0 });
+
+    tl.to(big, { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' });
+    tl.to(red, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.3');
+    tl.to(answer, { opacity: 1, duration: 0.6, ease: 'power1.out' }, '+=0.4');
+  }
+
+  // ============================
+  // SCENE 3 — CARDS
+  // ============================
+  function playScene3() {
+    const cards = document.querySelectorAll('.feature-card');
+    gsap.set(cards, { opacity: 0, y: 60 });
+    gsap.to(cards, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'power3.out'
+    });
+  }
+
+  // ============================
+  // SCENE 4 — NUMBER COUNTUP
+  // ============================
+  function playScene4() {
+    const blocks = document.querySelectorAll('.number-block');
+    gsap.set(blocks, { opacity: 0, y: 30 });
+    gsap.to(blocks, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      stagger: 0.15,
+      ease: 'power2.out'
+    });
+
+    // Count up 94%
+    const counter1 = { val: 0 };
+    gsap.to(counter1, {
+      val: 94,
+      duration: 1.5,
+      ease: 'power2.out',
+      delay: 0.3,
+      onUpdate: () => {
+        document.getElementById('numVal1').textContent = Math.round(counter1.val) + '%';
+      }
+    });
+
+    // Count up 3분
+    const counter2 = { val: 0 };
+    gsap.to(counter2, {
+      val: 3,
+      duration: 1.2,
+      ease: 'power2.out',
+      delay: 0.5,
+      onUpdate: () => {
+        document.getElementById('numVal2').textContent = Math.round(counter2.val) + '분';
+      }
+    });
+
+    // Count up 10x
+    const counter3 = { val: 0 };
+    gsap.to(counter3, {
+      val: 10,
+      duration: 1.4,
+      ease: 'power2.out',
+      delay: 0.6,
+      onUpdate: () => {
+        document.getElementById('numVal3').textContent = Math.round(counter3.val) + 'x';
+      }
+    });
+  }
+
+  // ============================
+  // SCENE 5 — MARQUEE + QUOTE
+  // ============================
+  const logos1 = ['삼성전자', 'LG생활건강', '쿠팡', '네이버', '카카오', '무신사', '배달의민족', '당근마켓', '마켓컬리', '토스', '야놀자', '오늘의집'];
+  const logos2 = ['29CM', '번개장터', '에이블리', '지그재그', '브런치', '리디북스', '왓챠', '밀리의서재', '프립', '클래스101', 'ABLY', '크림'];
+
+  function buildMarquee(trackId, items, direction) {
+    const track = document.getElementById(trackId);
+    // Duplicate for seamless loop
+    const all = [...items, ...items, ...items];
+    all.forEach(name => {
+      const el = document.createElement('div');
+      el.className = 'marquee-logo';
+      el.textContent = name;
+      track.appendChild(el);
+    });
+
+    const totalWidth = items.length * 170;
+    const dur = 30;
+    gsap.set(track, { x: direction === 'left' ? 0 : -totalWidth });
+    gsap.to(track, {
+      x: direction === 'left' ? -totalWidth : 0,
+      duration: dur,
+      ease: 'none',
+      repeat: -1,
+      modifiers: {
+        x: gsap.utils.unitize(x => parseFloat(x) % totalWidth === 0 ? 0 : parseFloat(x) % totalWidth)
+      }
+    });
+  }
+
+  buildMarquee('marqueeTrack1', logos1, 'left');
+  buildMarquee('marqueeTrack2', logos2, 'right');
+
+  function playScene5() {
+    const quote = document.getElementById('quoteBlock');
+    gsap.set(quote, { opacity: 0, y: 30 });
+    gsap.to(quote, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.3 });
+  }
+
+  // ============================
+  // SCENE 6 — CTA
+  // ============================
+  function playScene6() {
+    const heading = document.getElementById('ctaHeading');
+    const button = document.getElementById('ctaButton');
+    const sub = document.getElementById('ctaSub');
+
+    gsap.set(heading, { opacity: 0, y: 30 });
+    gsap.set(button, { opacity: 0, y: 20 });
+    gsap.set(sub, { opacity: 0 });
+
+    const tl = gsap.timeline();
+    tl.to(heading, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+    tl.to(button, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2');
+    tl.to(sub, { opacity: 1, duration: 0.4 }, '-=0.1');
+  }
+
+  // ============================
+  // SCENE TRIGGER DISPATCHER
+  // ============================
+  const sceneAnimations = [playScene1, playScene2, playScene3, playScene4, playScene5, playScene6];
+  const scenePlayed = new Array(totalSections).fill(false);
+
+  function triggerSceneAnimation(index) {
+    if (!scenePlayed[index] && sceneAnimations[index]) {
+      scenePlayed[index] = true;
+      setTimeout(() => sceneAnimations[index](), 200);
+    }
+  }
+
+  // Play scene 1 on load
+  setTimeout(() => triggerSceneAnimation(0), 300);
+
+})();
+</script>
+</body>
+</html>

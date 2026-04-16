@@ -1,0 +1,94 @@
+{
+  "templates": [
+    {
+      "id": "insta_carousel",
+      "name": "인스타_캐러셀",
+      "category": "marketing",
+      "path": "marketing/인스타_캐러셀.md",
+      "description": "인스타그램 캐러셀/릴스 AIDA 구조 콘텐츠 생성",
+      "quality_score": 8.5,
+      "tags": ["인스타", "캐러셀", "릴스", "SNS", "B2C"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["인스타"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "blog_seo_naver",
+      "name": "블로그_SEO_네이버",
+      "category": "marketing",
+      "path": "marketing/블로그_SEO_네이버.md",
+      "description": "네이버 블로그 C-Rank + DIA 최적화 콘텐츠",
+      "quality_score": 8.5,
+      "tags": ["블로그", "SEO", "네이버", "콘텐츠마케팅"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["블로그"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "youtube_shorts",
+      "name": "유튜브_숏폼",
+      "category": "marketing",
+      "path": "marketing/유튜브_숏폼.md",
+      "description": "유튜브 쇼츠 바이럴 콘텐츠 스크립트 (15-60초)",
+      "quality_score": 8.5,
+      "tags": ["유튜브", "쇼츠", "숏폼", "비디오마케팅"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["유튜브"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "naver_cafe_trust",
+      "name": "네이버카페_신뢰콘텐츠",
+      "category": "marketing",
+      "path": "marketing/네이버카페_신뢰콘텐츠.md",
+      "description": "네이버 커뮤니티 카페 신뢰도 높은 포스팅",
+      "quality_score": 8.0,
+      "tags": ["네이버", "카페", "커뮤니티", "신뢰콘텐츠"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["네이버카페"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "meta_ads_creative",
+      "name": "메타광고_크리에이티브",
+      "category": "marketing",
+      "path": "marketing/메타광고_크리에이티브.md",
+      "description": "메타(Facebook/Instagram) 광고 성과 최적화 크리에이티브",
+      "quality_score": 8.5,
+      "tags": ["메타", "페이스북", "인스타그램", "광고", "크리에이티브"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["메타광고"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "kakao_dm",
+      "name": "카카오톡_DM",
+      "category": "sales",
+      "path": "sales/카카오톡_DM.md",
+      "description": "카카오톡 DM 및 영업 메시지 (개인 맞춤 아웃리치)",
+      "quality_score": 8.0,
+      "tags": ["카카오톡", "DM", "영업메시지", "아웃리치"],
+      "applicable_to": ["saas", "ecommerce", "agency", "consulting"],
+      "channels": ["카카오"],
+      "created": "2026-04-07"
+    },
+    {
+      "id": "generic_content",
+      "name": "범용_콘텐츠",
+      "category": "general",
+      "path": "general/범용_콘텐츠.md",
+      "description": "마케팅 설정이 없을 때 범용 콘텐츠 생성 (인스타 + 블로그 + DM)",
+      "quality_score": 8.0,
+      "tags": ["범용", "콘텐츠", "자동생성"],
+      "applicable_to": ["saas", "ecommerce", "agency", "brand"],
+      "channels": ["인스타", "블로그", "카카오"],
+      "created": "2026-04-07"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "description": "Operations templates library - goldform prompts for marketing content generation",
+    "last_updated": "2026-04-07",
+    "total_templates": 7
+  }
+}

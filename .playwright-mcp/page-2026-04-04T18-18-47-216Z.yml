@@ -1,0 +1,27 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - heading "의정부 피부관리샵" [level=2] [ref=e14]
+      - paragraph [ref=e5]: 010-9876-5432
+    - button "← 뒤로" [ref=e6] [cursor=pointer]
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e15]: 원장님, 안녕하세요. 저 의정부 피부관리 분석 전문가입니다. "의정부 피부관리" 검색하면 원장님 샵이 지금 5위에 있네요. 근데 1위 [피부천국]은 리뷰 320개, 원장님은 리뷰 45개예요. 이 격차가 매달 얼마나 손실을 만들고 있는지 무료 진단으로 보여드릴 수 있습니다.
+      - generic [ref=e16]: 비싸네요. 좀 더 생각해볼게요.
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]: 버전 A — 논리적
+          - generic [ref=e20]: 원장님, 지금 월에 얼마나 손실 보고 있는지 알아요? 플레이스 관리비 49만원 < 월 손실액 120만원이에요. 비용이 아니라 투자 효과를 먼저 보시면 달라 보일 겁니다.
+          - button "📋 복사" [ref=e21] [cursor=pointer]
+        - generic [ref=e22]:
+          - generic [ref=e23]: 버전 B — 공감형
+          - generic [ref=e24]: 알겠습니다, 원장님. 부담스럽으신 마음 충분히 이해해요. 근데 지금 경쟁사는 매달 리뷰가 쌓이고 있어요. 시간이 지날수록 격차는 더 벌어진답니다.
+          - button "📋 복사" [ref=e25] [cursor=pointer]
+        - generic [ref=e26]:
+          - generic [ref=e27]: 버전 C — 긴급형
+          - generic [ref=e28]: 실은 이거, 지금 빨리 시작할수록 좋아요. 경쟁사들이 다 하고 있거든요. 이번 주 안에 결정하시면 추가 보너스 있으니 통화할 수 있을까요?
+          - button "📋 복사" [ref=e29] [cursor=pointer]
+      - generic [ref=e30]: 그런데 정말 효과가 있나요?
+    - generic [ref=e11]:
+      - textbox "고객 응답을 여기에 복붕하세요..." [active] [ref=e12]
+      - button "⚡ 전송" [ref=e13] [cursor=pointer]

@@ -1,0 +1,15 @@
+{
+  "_comment": "경쟁사 인스타 계정 관리. projects 아래에 프로젝트명으로 추가.",
+  "global": {
+    "_comment": "전 프로젝트 공통 참고 계정 (마케팅 트렌드용)",
+    "accounts": []
+  },
+  "projects": {
+    "_example": {
+      "_comment": "예시 — 실제 프로젝트명으로 추가하세요",
+      "accounts": ["https://www.instagram.com/competitor_account/"],
+      "scan_frequency": "weekly",
+      "focus": ["훅 패턴", "CTA 방식", "해시태그 전략"]
+    }
+  }
+}

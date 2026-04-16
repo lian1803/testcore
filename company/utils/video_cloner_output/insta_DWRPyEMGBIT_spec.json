@@ -1,0 +1,110 @@
+{
+  "overview": "A dark-themed, immersive web experience showcasing the beauty of pollinators with an interactive 3D bee model and smooth scroll animations, emphasizing nature's remarkable creations.",
+  "colors": {
+    "background": [
+      "#000000"
+    ],
+    "primary": [
+      "#A020F0"
+    ],
+    "text": [
+      "#FFFFFF",
+      "#CCCCCC"
+    ],
+    "accent": [
+      "#FFD700",
+      "#00FF00"
+    ]
+  },
+  "typography": {
+    "heading": {
+      "family": "Poppins",
+      "weight": "700",
+      "size_range": "clamp(2.5rem, 6vw, 4.5rem)"
+    },
+    "body": {
+      "family": "Inter",
+      "weight": "400",
+      "size_range": "1rem"
+    },
+    "accent_text": {
+      "family": "Inter",
+      "weight": "600",
+      "style": "uppercase for labels like 'DISCOVERY', 'COLLECTION'"
+    }
+  },
+  "layout": {
+    "structure": "Sticky header (logo, nav, CTA) at the top. Main content divided into logical sections: Hero (large headline, CTA, 3D model), About (informative text, stats, 3D model), Gallery (visual cards, 3D model), and Contact (form, 3D model). Footer at the bottom.",
+    "max_width": "1280px",
+    "grid": "Sections generally use a two-column layout (content vs. 3D model). Gallery section uses a three-column grid for cards (repeat(3, 1fr)).",
+    "spacing": "Sections are separated by large vertical padding (e.g., 8rem to 12rem). Content within sections has consistent horizontal padding (e.g., 40px) and vertical spacing (e.g., 20px-40px between elements)."
+  },
+  "animations": [
+    {
+      "element": "3D Bee Model",
+      "type": "parallax (translateY, rotate), continuous subtle wing flap",
+      "timing": "smooth, scroll-dependent for parallax; 2s ease-in-out infinite alternate for wing flap",
+      "trigger": "scroll, load"
+    },
+    {
+      "element": "Headings & Body Text",
+      "type": "fade-in, slide-up (translateY from 20px)",
+      "timing": "0.8s ease-out",
+      "trigger": "scroll (when element enters viewport)"
+    },
+    {
+      "element": "Buttons",
+      "type": "background color change, slight scale, arrow movement",
+      "timing": "0.3s ease-in-out",
+      "trigger": "hover"
+    },
+    {
+      "element": "Navigation Links",
+      "type": "underline appears (from center), text color change",
+      "timing": "0.2s ease-in-out",
+      "trigger": "hover, active state"
+    },
+    {
+      "element": "Gallery Cards",
+      "type": "slight lift (translateY), subtle shadow",
+      "timing": "0.3s ease-out",
+      "trigger": "hover"
+    }
+  ],
+  "interactions": [
+    {
+      "element": "Navigation links",
+      "event": "click",
+      "effect": "smooth scroll to corresponding section"
+    },
+    {
+      "element": "Buttons",
+      "event": "click",
+      "effect": "navigate to a new page or trigger an action (e.g., 'Explore Now' to About section)"
+    },
+    {
+      "element": "Form input fields",
+      "event": "focus",
+      "effect": "border/background highlight"
+    }
+  ],
+  "background_effects": "Solid black background (#000000) throughout the site. The immersive effect is predominantly created by the dynamic and interactive 3D bee model and its integrated lighting.",
+  "special_elements": [
+    "Highly detailed, interactive, and animated 3D bee model (likely Three.js or a similar WebGL library) that acts as a central visual element.",
+    "Sticky header for persistent navigation and branding.",
+    "Scroll-triggered content reveal animations for an engaging user flow.",
+    "Dynamic content updates for statistics ('80%', '20K+', '5M') in the 'About' section."
+  ],
+  "css_variables": {
+    "--bg-primary": "#000000",
+    "--text-primary": "#FFFFFF",
+    "--text-secondary": "#CCCCCC",
+    "--accent-primary": "#A020F0",
+    "--accent-hover": "#8F00FF",
+    "--font-heading": "'Poppins', sans-serif",
+    "--font-body": "'Inter', sans-serif",
+    "--container-max-width": "1280px",
+    "--section-padding-y": "8rem"
+  },
+  "recreation_notes": "The primary challenge is the implementation and performance optimization of the interactive 3D model, which requires a WebGL framework (e.g., Three.js, React Three Fiber). Scroll-driven animations for the 3D model's position and rotation are key for the 'immersive' feel. Ensure consistent dark theme styling with vibrant purple accents. Pay attention to subtle UI animations and responsive design, especially for the 3D model, to maintain a premium user experience across devices."
+}

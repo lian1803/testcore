@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLEUR — Born from Bloom</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0808;--cream:#F5F0E8;--rose:#D4798A;--blush:#E8B4B8;--petal:#F2D1D5;--deep:#8B3A4A;--dark2:#0d0a0a}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;overflow-x:hidden;cursor:none}
+#cursor{position:fixed;width:6px;height:6px;background:var(--rose);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(212,121,138,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:100;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:gs 8s steps(10) infinite}
+@keyframes gs{0%,100%{transform:translate(0,0)}30%{transform:translate(-1%,2%)}60%{transform:translate(1%,-1%)}}
+#three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+main{position:relative;z-index:2}
+.serif{font-family:'Cormorant Garamond',serif}
+
+/* Loader */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+#loader span{font-family:'Cormorant Garamond',serif;font-size:.8rem;letter-spacing:.4em;text-transform:uppercase;color:var(--rose);opacity:.6}
+#loader .bar{width:120px;height:1px;background:rgba(212,121,138,.15);overflow:hidden;position:relative}
+#loader .bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:0;background:var(--rose);animation:ld 2s ease-out forwards}
+@keyframes ld{to{width:100%}}
+
+/* SEC1 Hero */
+.hero-pin{height:300vh}
+#hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.hero-content{position:relative;z-index:3;opacity:0;transform:scale(.9);will-change:transform,opacity,filter}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:clamp(8rem,25vw,30rem);font-weight:300;letter-spacing:.15em;line-height:.75;text-transform:uppercase;mix-blend-mode:difference;white-space:nowrap}
+.brand-name em{font-style:italic;color:var(--rose)}
+.slogan{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:300;font-style:italic;letter-spacing:.1em;color:var(--blush);margin-top:1.5rem;opacity:.7}
+.divider{width:60px;height:1px;background:var(--rose);margin:2rem auto;opacity:.4}
+.hero-cta{display:flex;gap:1.5rem;justify-content:center;margin-top:2rem}
+.btn-rose{padding:.8rem 2.2rem;background:transparent;border:1px solid var(--rose);color:var(--rose);font-family:'Cormorant Garamond',serif;font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .4s}
+.btn-rose:hover{background:var(--rose);color:var(--bg)}
+.btn-cream{padding:.8rem 2.2rem;border:1px solid rgba(245,240,232,.2);color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .4s;opacity:.6;background:transparent}
+.btn-cream:hover{opacity:1;border-color:var(--cream)}
+
+/* SEC2 Philosophy */
+.philosophy{height:200vh;display:flex;align-items:center;justify-content:center;padding:0 clamp(2rem,10vw,12rem);position:relative}
+.philo-text{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5.5vw,5rem);font-weight:300;line-height:1.3;text-align:center;max-width:900px}
+.philo-text .char{display:inline-block;opacity:0;transform:translateY(40px);color:var(--deep)}
+.philo-line{width:0;height:1px;background:var(--rose);margin:2rem auto 0;opacity:0}
+
+/* SEC3 Value */
+.value{padding:clamp(6rem,12vw,12rem) clamp(2rem,8vw,9rem);display:grid;grid-template-columns:40fr 60fr;gap:4rem;align-items:start}
+.value-left{position:sticky;top:30vh}
+.value-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;opacity:0;transform:translateX(-30px)}
+.value-sub{font-size:.8rem;color:var(--rose);letter-spacing:.15em;text-transform:uppercase;margin-top:1rem;opacity:0}
+.value-cards{display:flex;flex-direction:column;gap:2rem}
+.v-card{background:rgba(212,121,138,.06);border:1px solid rgba(212,121,138,.12);border-radius:16px;padding:2.5rem;backdrop-filter:blur(20px);opacity:0;transform:translateY(60px);transition:border-color .3s,transform .3s}
+.v-card:hover{border-color:rgba(212,121,138,.4);transform:translateY(0) scale(1.02)}
+.v-card-icon{font-size:1.5rem;margin-bottom:1rem}
+.v-card h3{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2vw,1.6rem);font-weight:400;margin-bottom:.6rem}
+.v-card p{font-size:.85rem;font-weight:300;color:rgba(245,240,232,.5);line-height:1.8}
+
+/* SEC4 Products — horizontal scroll */
+.products-pin{height:400vh}
+.products{height:100vh;display:flex;align-items:center;overflow:hidden}
+.products-track{display:flex;width:400vw;height:100%}
+.prod-slide{width:100vw;height:100%;display:flex;align-items:center;justify-content:center;gap:6vw;padding:0 8vw}
+.prod-circle{width:clamp(200px,35vh,400px);height:clamp(200px,35vh,400px);border-radius:50%;flex-shrink:0;opacity:0;transform:scale(.7);overflow:hidden;background-size:cover;background-position:center}
+.prod-text{max-width:400px;opacity:0;transform:translateX(40px)}
+.prod-text h3{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;margin-bottom:1rem}
+.prod-text p{font-size:.85rem;font-weight:300;color:var(--blush);line-height:1.8;margin-bottom:1.5rem}
+.prod-text .price{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,1.8vw,1.5rem);color:var(--rose)}
+
+/* SEC5 Numbers */
+.numbers{padding:clamp(6rem,10vw,10rem) clamp(2rem,8vw,9rem);display:flex;justify-content:center;gap:clamp(2rem,6vw,8rem);border-top:1px solid rgba(245,240,232,.04)}
+.num{text-align:center;opacity:0;transform:translateY(20px)}
+.num-val{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,7rem);font-weight:300;color:var(--rose);line-height:1}
+.num-suffix{font-size:.5em;opacity:0}
+.num-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,232,.4);margin-top:.5rem}
+.num-sep{width:1px;height:80px;background:rgba(212,121,138,.15);align-self:center;opacity:0}
+
+/* SEC6 Testimonials */
+.testimonials{padding:clamp(6rem,10vw,10rem) 0;text-align:center;position:relative;overflow:hidden}
+.test-quote-mark{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,8vw,8rem);color:rgba(139,58,74,.15);line-height:1;margin-bottom:-2rem}
+.test-slider{max-width:60vw;margin:0 auto;position:relative;min-height:200px}
+.test-slide{position:absolute;inset:0;opacity:0;transform:translateX(30px);transition:opacity .6s,transform .6s}
+.test-slide.active{opacity:1;transform:translateX(0)}
+.test-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.2rem,2.2vw,1.8rem);font-weight:300;line-height:1.7;color:var(--cream)}
+.test-name{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);margin-top:1.5rem}
+.test-nav{display:flex;justify-content:center;gap:1rem;margin-top:2rem}
+.test-dot{width:6px;height:6px;border-radius:50%;background:rgba(212,121,138,.2);cursor:none;border:none;transition:background .3s}
+.test-dot.active{background:var(--rose)}
+
+/* SEC7 CTA + Footer */
+.cta-section{min-height:100vh;display:flex;flex-direction:column}
+.cta-top{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem;background:var(--cream);color:var(--bg);padding:4rem}
+.cta-top h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;text-align:center;opacity:0;transform:translateY(30px)}
+.cta-btn{padding:1.1rem 3.5rem;background:var(--deep);color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;cursor:none;border:none;transition:background .3s,transform .3s;opacity:0;transform:translateY(20px)}
+.cta-btn:hover{background:var(--rose);transform:scale(1.05)}
+.cta-footer{padding:3rem clamp(2rem,8vw,9rem);background:var(--bg);border-top:1px solid rgba(245,240,232,.06);display:flex;justify-content:space-between;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.2)}
+
+@media(max-width:768px){.value{grid-template-columns:1fr}.value-left{position:static}.numbers{flex-direction:column;align-items:center;gap:2rem}.num-sep{width:60px;height:1px}.prod-slide{flex-direction:column;gap:2rem;padding:2rem}}
+</style>
+</head>
+<body>
+<div id="loader"><span>Blooming</span><div class="bar"></div></div>
+<div id="three-canvas"></div>
+<div class="grain"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<main>
+  <!-- SEC1: Hero (pinned) -->
+  <div class="hero-pin">
+    <section id="hero">
+      <div class="hero-content">
+        <h1 class="brand-name">FL<em>EUR</em></h1>
+        <p class="slogan">Born from Bloom</p>
+        <div class="divider"></div>
+        <div class="hero-cta">
+          <a href="#value" class="btn-rose">Discover</a>
+          <a href="#products" class="btn-cream">Collection</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- SEC2: Philosophy -->
+  <section class="philosophy">
+    <div>
+      <p class="philo-text">자연에서 태어난 아름다움이 당신의 피부 위에 피어납니다</p>
+      <div class="philo-line"></div>
+    </div>
+  </section>
+
+  <!-- SEC3: Value Proposition -->
+  <section class="value" id="value">
+    <div class="value-left">
+      <h2 class="value-title">Why<br>FLEUR</h2>
+      <p class="value-sub">The Essence of Nature</p>
+    </div>
+    <div class="value-cards">
+      <div class="v-card"><div class="v-card-icon">&#x2740;</div><h3>Grasse Heritage</h3><p>프랑스 그라스 지역 150년 전통의 장미 농장에서 직접 공수한 다마스크 로즈 에센스. 새벽 이슬이 맺힌 순간에만 수확합니다.</p></div>
+      <div class="v-card"><div class="v-card-icon">&#x2741;</div><h3>Jeju Camellia</h3><p>제주 한라산 자락의 야생 동백꽃에서 저온 추출한 카멜리아 오일. 48시간 콜드 인퓨전으로 영양을 온전히 담습니다.</p></div>
+      <div class="v-card"><div class="v-card-icon">&#x2742;</div><h3>Zero Compromise</h3><p>97% 천연 유래 성분. 파라벤, 실리콘, 인공향료 무첨가. 피부가 먹는 음식처럼, 성분 하나하나를 선별합니다.</p></div>
+    </div>
+  </section>
+
+  <!-- SEC4: Products (horizontal scroll) -->
+  <div class="products-pin" id="products">
+    <section class="products">
+      <div class="products-track">
+        <div class="prod-slide"><div class="prod-circle" style="background-image:url('img/serum.png')"></div><div class="prod-text"><h3>Rose Petal Serum</h3><p>다마스크 로즈 1,000송이에서 추출한 1ml의 정수. 피부 깊이 스며들어 24시간 촉촉함을 선사합니다.</p><div class="price">₩ 89,000</div></div></div>
+        <div class="prod-slide"><div class="prod-circle" style="background-image:url('img/cream.png')"></div><div class="prod-text"><h3>Camellia Cream</h3><p>제주 동백 오일 베이스의 영양 크림. 건조한 겨울에도 벨벳처럼 부드러운 피부결을 유지합니다.</p><div class="price">₩ 72,000</div></div></div>
+        <div class="prod-slide"><div class="prod-circle" style="background-image:url('img/mist.png')"></div><div class="prod-text"><h3>Bloom Mist</h3><p>장미수와 히알루론산의 미스트. 메이크업 위에 뿌려도 무너지지 않는 촉촉한 광채를 더합니다.</p><div class="price">₩ 45,000</div></div></div>
+        <div class="prod-slide"><div class="prod-circle" style="background-image:url('img/lipbalm.png')"></div><div class="prod-text"><h3>Petal Lip Balm</h3><p>식물성 왁스와 꽃 추출물로 만든 립밤. 은은한 로즈 틴트가 자연스러운 혈색을 더합니다.</p><div class="price">₩ 28,000</div></div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- SEC5: Numbers -->
+  <section class="numbers">
+    <div class="num"><div class="num-val" data-count="97">0<span class="num-suffix">%</span></div><div class="num-label">Natural Ingredients</div></div>
+    <div class="num-sep"></div>
+    <div class="num"><div class="num-val" data-count="12">0</div><div class="num-label">Botanical Extracts</div></div>
+    <div class="num-sep"></div>
+    <div class="num"><div class="num-val" data-count="48">0<span class="num-suffix">h</span></div><div class="num-label">Cold Infusion</div></div>
+  </section>
+
+  <!-- SEC6: Testimonials -->
+  <section class="testimonials">
+    <div class="test-quote-mark">"</div>
+    <div class="test-slider">
+      <div class="test-slide active"><p class="test-text">세럼을 바른 다음 날 아침, 거울을 보고 깜짝 놀랐어요. 피부가 안에서부터 빛나는 느낌이에요.</p><p class="test-name">김서연 · 32세</p></div>
+      <div class="test-slide"><p class="test-text">향이 정말 자연스러워요. 인공적이지 않고, 진짜 꽃밭에 있는 것 같은 느낌. 매일 쓰고 싶어요.</p><p class="test-name">이하은 · 28세</p></div>
+      <div class="test-slide"><p class="test-text">민감한 피부인데 트러블 없이 촉촉해졌어요. 성분 하나하나 믿을 수 있어서 좋습니다.</p><p class="test-name">박지윤 · 35세</p></div>
+    </div>
+    <div class="test-nav"></div>
+  </section>
+
+  <!-- SEC7: CTA + Footer -->
+  <section class="cta-section">
+    <div class="cta-top">
+      <h2>Discover Your Bloom</h2>
+      <a href="#" class="cta-btn">Discover</a>
+    </div>
+    <footer class="cta-footer"><span>FLEUR 2026</span><span>Seoul · Grasse · Jeju</span></footer>
+  </section>
+</main>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const container = document.getElementById('three-canvas');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0808);
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 100);
+camera.position.set(0, 0.5, 6);
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+container.appendChild(renderer.domElement);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth*.5,innerHeight*.5), 0.2, 0.8, 0.9);
+composer.addPass(bloom);
+
+// Mouse distortion ShaderPass
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+const distortShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+    uStrength: { value: 0.03 },
+    uRadius: { value: 0.15 },
+    uResolution: { value: new THREE.Vector2(innerWidth, innerHeight) },
+  },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform vec2 uMouse;
+    uniform float uStrength;
+    uniform float uRadius;
+    uniform vec2 uResolution;
+    varying vec2 vUv;
+    void main(){
+      vec2 uv = vUv;
+      vec2 mouse = uMouse;
+      vec2 diff = uv - mouse;
+      diff.x *= uResolution.x / uResolution.y;
+      float dist = length(diff);
+      float power = 1.0 - smoothstep(0.0, uRadius, dist);
+      vec2 offset = diff * power * uStrength;
+      uv += offset;
+      gl_FragColor = texture2D(tDiffuse, uv);
+    }`
+};
+const distortPass = new ShaderPass(distortShader);
+composer.addPass(distortPass);
+
+// ─── Flower ───
+const PETALS = 28;
+const flowerGroup = new THREE.Group();
+scene.add(flowerGroup);
+
+function makePetal(){
+  const s = new THREE.Shape();
+  s.moveTo(0,0);
+  s.bezierCurveTo(.35,.2,.45,.8,.15,1.4);
+  s.bezierCurveTo(.05,1.6,-.05,1.6,-.15,1.4);
+  s.bezierCurveTo(-.45,.8,-.35,.2,0,0);
+  return new THREE.ShapeGeometry(s,12);
+}
+const pGeo = makePetal();
+const cols = [new THREE.Color(0x8B3A4A),new THREE.Color(0xD4798A),new THREE.Color(0xE8B4B8),new THREE.Color(0xF2D1D5)];
+
+const petals = [];
+for(let i=0;i<PETALS;i++){
+  const layer=Math.floor(i/7), idx=i%7;
+  const angle=(idx/7)*Math.PI*2+layer*.45;
+  const c=cols[Math.min(layer,3)].clone();
+  c.lerp(cols[Math.min(layer+1,3)],idx/7*.5);
+  const mat=new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide,transparent:true,opacity:.92-layer*.06});
+  const mesh=new THREE.Mesh(pGeo,mat);
+  mesh.scale.setScalar(.7+layer*.2);
+  mesh.userData={angle,layer,wobble:Math.random()*Math.PI*2};
+  flowerGroup.add(mesh);
+  petals.push(mesh);
+}
+const glowMat=new THREE.MeshBasicMaterial({color:0xF2D1D5,transparent:true,opacity:0});
+const glow=new THREE.Mesh(new THREE.SphereGeometry(.25,16,16),glowMat);
+flowerGroup.add(glow);
+
+// Pollen
+const PC=80;
+const polGeo=new THREE.BufferGeometry();
+const pp=new Float32Array(PC*3),psc=new Float32Array(PC),pof=new Float32Array(PC);
+for(let i=0;i<PC;i++){pp[i*3]=(Math.random()-.5)*.6;pp[i*3+1]=(Math.random()-.5)*.6;pp[i*3+2]=(Math.random()-.5)*.6;psc[i]=.3+Math.random()*.7;pof[i]=Math.random()*Math.PI*2}
+polGeo.setAttribute('position',new THREE.BufferAttribute(pp,3));
+polGeo.setAttribute('aS',new THREE.BufferAttribute(psc,1));
+polGeo.setAttribute('aO',new THREE.BufferAttribute(pof,1));
+const polMat=new THREE.ShaderMaterial({
+  vertexShader:`uniform float t;attribute float aS;attribute float aO;varying float vA;void main(){vec3 p=position;float age=max(0.,t-2.);p+=normalize(p+.001)*age*.8;p.x+=sin(t*.3+aO*3.)*.3;p.y+=cos(t*.2+aO)*.3;vec4 mv=modelViewMatrix*vec4(p,1);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(aS*(20./-mv.z),.5,3.);vA=.4+.3*sin(t+aO*5.);float fade=smoothstep(3.,0.,length(p));vA*=fade;}`,
+  fragmentShader:`varying float vA;void main(){float d=length(gl_PointCoord-.5)*2.;gl_FragColor=vec4(.95,.82,.85,(1.-smoothstep(0.,1.,d))*vA*.6);}`,
+  uniforms:{t:{value:0}},transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
+});
+const pollen=new THREE.Points(polGeo,polMat);
+pollen.visible=false;
+flowerGroup.add(pollen);
+
+// State
+let mouseX=.5,mouseY=.5,bloomPhase=0,scrollP=0,canvasOpacity=1;
+const clock=new THREE.Clock();
+document.addEventListener('mousemove',e=>{mouseX=e.clientX/innerWidth;mouseY=e.clientY/innerHeight});
+window.addEventListener('scroll',()=>{scrollP=scrollY/(document.body.scrollHeight-innerHeight)});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight)});
+
+function startBloom(){
+  gsap.to({v:0},{v:1,duration:3,ease:'power2.inOut',onUpdate:function(){bloomPhase=this.targets()[0].v}});
+  gsap.delayedCall(2.1,()=>{pollen.visible=true});
+  gsap.to(glowMat,{opacity:.5,duration:2,delay:.5});
+  gsap.to('.hero-content',{opacity:1,scale:1,duration:1,delay:2,ease:'power3.out'});
+}
+gsap.delayedCall(2.2,()=>{gsap.to('#loader',{opacity:0,duration:.5,onComplete:()=>{document.getElementById('loader').style.display='none';startBloom()}})});
+
+function animate(){
+  requestAnimationFrame(animate);
+  const t=clock.getElapsedTime();
+
+  petals.forEach(p=>{
+    const d=p.userData;
+    const closedTilt=Math.PI*.08;
+    const openTilt=Math.PI*.32+d.layer*.12;
+    const tilt=THREE.MathUtils.lerp(closedTilt,openTilt,bloomPhase);
+    const spread=bloomPhase*.35*(d.layer+1);
+    p.rotation.set(tilt+Math.sin(t*.5+d.wobble)*.04*bloomPhase,Math.sin(t*.3+d.angle)*.06*bloomPhase,d.angle+t*.015);
+    const r=spread*.4;
+    p.position.set(Math.cos(d.angle)*r,Math.sin(t*.4+d.angle)*.06*bloomPhase,Math.sin(d.angle)*r);
+  });
+
+  flowerGroup.rotation.y=t*.06+(mouseX-.5)*.4;
+  flowerGroup.rotation.x=(mouseY-.5)*.2;
+
+  // Hero scroll: flower rises and fades
+  const heroScroll=Math.min(1,scrollP*6); // hero occupies ~first 16% of total scroll
+  flowerGroup.position.y=heroScroll*2;
+  flowerGroup.scale.setScalar(Math.max(.01,1-heroScroll*.5));
+  canvasOpacity=Math.max(0,1-heroScroll*1.5);
+  renderer.domElement.style.opacity=canvasOpacity;
+
+  glow.scale.setScalar(.25+Math.sin(t*2)*.04*bloomPhase);
+  polMat.uniforms.t.value=t;
+
+  // Bloom post-process
+  bloom.strength=.2+bloomPhase*1.0-heroScroll*.8;
+  bloom.threshold=.6-bloomPhase*.2;
+
+  camera.position.x+=((mouseX-.5)*.6-camera.position.x)*.03;
+  camera.position.y+=(.5+(mouseY-.5)*-.3-camera.position.y)*.03;
+  camera.lookAt(0,0,0);
+
+  // Mouse distortion follow
+  distortPass.uniforms.uMouse.value.set(mouseX, 1-mouseY);
+
+  if(canvasOpacity>0.01) composer.render();
+}
+animate();
+</script>
+
+<script>
+// Cursor
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function c(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(c)})();
+document.querySelectorAll('a,button,.cta-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='14px';cur.style.height='14px';ring.style.width='50px';ring.style.height='50px';ring.style.borderColor='rgba(212,121,138,.8)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='6px';cur.style.height='6px';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(212,121,138,.4)'});
+});
+
+// GSAP
+gsap.registerPlugin(ScrollTrigger);
+
+// SEC1 Hero pin + blur/scale exit + letter-spacing explode
+ScrollTrigger.create({
+  trigger:'.hero-pin', start:'top top', end:'bottom top', pin:'#hero', pinSpacing:false,
+  onUpdate:self=>{
+    const p=self.progress;
+    const el=document.querySelector('.hero-content');
+    const bn=document.querySelector('.brand-name');
+    if(el){el.style.filter=`blur(${p*12}px)`;el.style.transform=`scale(${1-p*.15})`}
+    if(bn){bn.style.letterSpacing=`${.15+p*50}vw`}
+  }
+});
+
+// SEC2 Philosophy char-by-char
+const philo=document.querySelector('.philo-text');
+const text=philo.textContent;
+philo.innerHTML=text.split('').map(ch=>ch===' '?'&nbsp;':`<span class="char">${ch}</span>`).join('');
+gsap.to('.philo-text .char',{opacity:1,y:0,color:'var(--cream)',stagger:.02,ease:'power2.out',scrollTrigger:{trigger:'.philosophy',start:'top 60%',end:'top 10%',scrub:1}});
+gsap.to('.philo-line',{width:60,opacity:.6,duration:.6,scrollTrigger:{trigger:'.philosophy',start:'40% center'}});
+
+// SEC3 Value
+gsap.to('.value-title',{opacity:1,x:0,duration:.8,ease:'power2.out',scrollTrigger:{trigger:'.value',start:'top 70%'}});
+gsap.to('.value-sub',{opacity:1,duration:.6,delay:.2,scrollTrigger:{trigger:'.value',start:'top 70%'}});
+document.querySelectorAll('.v-card').forEach((c,i)=>{
+  gsap.to(c,{opacity:1,y:0,duration:.7,delay:i*.15,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 85%'}});
+});
+
+// SEC4 Horizontal scroll
+const track=document.querySelector('.products-track');
+gsap.to(track,{x:()=>-(track.scrollWidth-innerWidth),ease:'none',scrollTrigger:{trigger:'.products-pin',start:'top top',end:()=>'+='+(track.scrollWidth-innerWidth),pin:'.products',scrub:1}});
+document.querySelectorAll('.prod-slide').forEach(s=>{
+  ScrollTrigger.create({trigger:s,start:'left 80%',end:'left 20%',containerAnimation:gsap.to(track,{x:()=>-(track.scrollWidth-innerWidth)}),
+    onEnter:()=>{gsap.to(s.querySelector('.prod-circle'),{opacity:1,scale:1,duration:.6,ease:'power2.out'});gsap.to(s.querySelector('.prod-text'),{opacity:1,x:0,duration:.5,delay:.1})}
+  });
+});
+
+// SEC5 Numbers
+document.querySelectorAll('.num').forEach((n,i)=>{gsap.to(n,{opacity:1,y:0,duration:.7,delay:i*.2,scrollTrigger:{trigger:'.numbers',start:'top 75%'}})});
+document.querySelectorAll('.num-sep').forEach(s=>{gsap.to(s,{opacity:1,duration:.6,scrollTrigger:{trigger:'.numbers',start:'top 75%'}})});
+document.querySelectorAll('[data-count]').forEach(el=>{
+  const t=parseInt(el.dataset.count);
+  ScrollTrigger.create({trigger:el,start:'top 80%',onEnter:()=>{
+    gsap.to({v:0},{v:t,duration:2.2,ease:'power1.out',onUpdate:function(){el.childNodes[0].textContent=Math.round(this.targets()[0].v)}});
+    gsap.to(el.querySelector('.num-suffix'),{opacity:1,duration:.3,delay:2});
+  },once:true});
+});
+
+// SEC6 Testimonials slider
+const slides=document.querySelectorAll('.test-slide');
+const nav=document.querySelector('.test-nav');
+let current=0;
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='test-dot'+(i===0?' active':'');d.addEventListener('click',()=>goSlide(i));nav.appendChild(d)});
+function goSlide(n){slides[current].classList.remove('active');document.querySelectorAll('.test-dot')[current].classList.remove('active');current=n;slides[current].classList.add('active');document.querySelectorAll('.test-dot')[current].classList.add('active')}
+setInterval(()=>goSlide((current+1)%slides.length),5000);
+
+// SEC7 CTA
+gsap.to('.cta-top h2',{opacity:1,y:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:'.cta-top',start:'top 75%'}});
+gsap.to('.cta-btn',{opacity:1,y:0,duration:.6,delay:.3,scrollTrigger:{trigger:'.cta-top',start:'top 75%'}});
+</script>
+</body>
+</html>

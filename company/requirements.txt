@@ -1,0 +1,6 @@
+anthropic>=0.40.0
+openai>=1.0.0
+google-genai>=0.8.0
+python-dotenv>=1.0.0
+requests>=2.30.0
+# web_scraper.py는 requests만 사용 (이미 설치됨)

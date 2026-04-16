@@ -1,0 +1,885 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Components Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0A0A0A;
+    --bg-secondary: #FFFFFF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #333333;
+    --accent-color-1: #DFFF00;
+    --accent-color-2: #9B59B6;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: auto; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  #cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-color-1);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, background 0.3s ease;
+  }
+
+  #cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 2px solid rgba(223, 255, 0, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+  }
+
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring {
+    width: 56px;
+    height: 56px;
+    border-color: rgba(255, 0, 255, 0.8);
+  }
+
+  /* SECTION BASE */
+  .section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    opacity: 0.6;
+    text-align: center;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 100px;
+    cursor: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent-color-1);
+    color: #0A0A0A;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(223, 255, 0, 0.4);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.03);
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,10,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+
+  .nav-links a:hover { color: var(--accent-color-1); }
+
+  /* ===================== SECTION 1: 3D Car / Hero ===================== */
+  #hero {
+    background: var(--bg-primary);
+    min-height: 100vh;
+  }
+
+  #hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(223,255,0,0.15);
+    border: 1px solid var(--accent-color-1);
+    color: var(--accent-color-1);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title span {
+    background: linear-gradient(90deg, var(--accent-color-1), #FF00FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===================== SECTION 2: Circle Animator ===================== */
+  #circle-animator {
+    background: #0D0D0D;
+  }
+
+  .circle-wrapper {
+    position: relative;
+    width: 420px;
+    height: 420px;
+    max-width: 90vw;
+    max-height: 90vw;
+  }
+
+  .circle-track {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: circleRotate 15s linear infinite;
+  }
+
+  .circle-track-reverse {
+    animation-direction: reverse;
+    animation-duration: 20s;
+  }
+
+  @keyframes circleRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .circle-item {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.12);
+    transform-origin: center;
+    counter-reset: none;
+  }
+
+  .circle-item img, .circle-item .ci-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ci-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .circle-center-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .circle-center-label h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+  }
+
+  .circle-center-label p {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    font-weight: 300;
+  }
+
+  /* ===================== SECTION 3: Shader Lines ===================== */
+  #shader-lines {
+    background: #050505;
+  }
+
+  #shader-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .shader-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  /* ===================== SECTION 4: Footer Gradient ===================== */
+  #footer-gradient {
+    background: #111;
+    padding: 120px 40px;
+    min-height: auto;
+  }
+
+  .gradient-bands {
+    width: 100%;
+    max-width: 900px;
+    height: 200px;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .gradient-band {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+      #FF00FF 0%,
+      #9B59B6 15%,
+      #0000FF 30%,
+      #00BFFF 45%,
+      #DFFF00 60%,
+      #FFD700 75%,
+      #FF69B4 90%,
+      #FF00FF 100%
+    );
+    background-size: 200% 100%;
+    animation: gradientShift 6s ease-in-out infinite alternate;
+    border-radius: 24px;
+  }
+
+  .gradient-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(30px);
+    opacity: 0.4;
+    transform: scaleY(1.2);
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 50% 0%; }
+  }
+
+  .wave-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        transparent,
+        transparent 40px,
+        rgba(0,0,0,0.08) 40px,
+        rgba(0,0,0,0.08) 42px
+      );
+    animation: wavePulse 4s ease-in-out infinite;
+  }
+
+  @keyframes wavePulse {
+    0%, 100% { opacity: 0.5; transform: scaleX(1); }
+    50% { opacity: 1; transform: scaleX(1.02); }
+  }
+
+  /* ===================== SECTION 5: 3D Circular Carousel ===================== */
+  #circle-carousel {
+    background: #0A0A0F;
+    perspective: 1200px;
+  }
+
+  .carousel-3d {
+    position: relative;
+    width: 200px;
+    height: 280px;
+    transform-style: preserve-3d;
+    animation: carouselSpin 20s linear infinite;
+    margin: 60px auto 40px;
+  }
+
+  @keyframes carouselSpin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
+
+  .carousel-card {
+    position: absolute;
+    width: 160px;
+    height: 220px;
+    left: 50%;
+    top: 50%;
+    margin-left: -80px;
+    margin-top: -110px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    backface-visibility: visible;
+  }
+
+  .carousel-card-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 16px;
+    position: relative;
+  }
+
+  .carousel-card-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%);
+  }
+
+  .carousel-card-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .carousel-card-text h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .carousel-card-text span {
+    font-size: 0.72rem;
+    opacity: 0.6;
+  }
+
+  /* ===================== SECTION 6: Wave Prism ===================== */
+  #wave-prism {
+    background: #000;
+    overflow: hidden;
+  }
+
+  #prism-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .prism-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  /* ===================== SECTION 7: 3D Book ===================== */
+  #book-section {
+    background: linear-gradient(135deg, #0A0A0A 0%, #1a0a2e 100%);
+  }
+
+  .book-scene {
+    perspective: 1000px;
+    width: 200px;
+    height: 280px;
+    margin: 60px auto 40px;
+  }
+
+  .book-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: bookSpin 5s linear infinite;
+  }
+
+  @keyframes bookSpin {
+    from { transform: rotateY(0deg) rotateX(10deg); }
+    to { transform: rotateY(360deg) rotateX(10deg); }
+  }
+
+  .book-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px 14px 14px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: visible;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+  }
+
+  .book-cover {
+    background: linear-gradient(135deg, #9B59B6 0%, #3d1a5e 100%);
+    transform: translateZ(20px);
+    flex-direction: column;
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .book-cover h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .book-cover p {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  .book-back {
+    background: #2d1045;
+    transform: translateZ(-20px) rotateY(180deg);
+    border-radius: 14px 4px 4px 14px;
+  }
+
+  .book-spine {
+    position: absolute;
+    left: -20px;
+    top: 0;
+    width: 40px;
+    height: 100%;
+    background: linear-gradient(90deg, #5a2d8a, #7b3fbd);
+    transform: rotateY(-90deg) translateZ(0px);
+    transform-origin: right center;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .book-spine span {
+    font-size: 0.65rem;
+    writing-mode: vertical-rl;
+    opacity: 0.8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ===================== SECTION 8: Final CTA ===================== */
+  #cta-section {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+  }
+
+  #cta-section .section-title {
+    color: var(--text-secondary);
+  }
+
+  #cta-section .section-desc {
+    color: #666;
+  }
+
+  #cta-section .btn-primary {
+    background: #0A0A0A;
+    color: #fff;
+  }
+
+  #cta-section .btn-primary:hover {
+    background: #0000FF;
+    box-shadow: 0 0 30px rgba(0,0,255,0.3);
+  }
+
+  #cta-section .btn-outline {
+    color: #333;
+    border-color: rgba(0,0,0,0.2);
+  }
+
+  #cta-section .btn-outline:hover {
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+    animation: scrollBounce 2s ease-in-out infinite;
+    z-index: 3;
+  }
+
+  .scroll-indicator span {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent-color-1), transparent);
+    position: relative;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 60px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  footer .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+
+  footer p {
+    font-size: 0.8rem;
+    opacity: 0.4;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent-color-1);
+  }
+
+  /* UTILITY */
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .tag-dark {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .tag-accent {
+    background: rgba(223,255,0,0.12);
+    color: var(--accent-color-1);
+    border: 1px solid rgba(223,255,0,0.3);
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 48px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-item .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--accent-color-1);
+    display: block;
+  }
+
+  .stat-item .stat-label {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    font-weight: 300;
+  }
+
+  /* GLOW RING */
+  .glow-ring {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  /* NOTIFICATION */
+  .copy-notify {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--accent-color-1);
+    color: #0A0A0A;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 12px 24px;
+    border-radius: 100px;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+
+  .copy-notify.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .section { padding: 80px 24px; }
+    .circle-wrapper { width: 300px; height: 300px; }
+    footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSORS -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- NOTIFICATION -->
+<div class="copy-notify" id="copy-notify">✓ Component copied!</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Motioncraft</a>
+  <ul class="nav-links">
+    <li><a href="#circle-animator">Circle</a></li>
+    <li><a href="#shader-lines">Shader</a></li>
+    <li><a href="#circle-carousel">Carousel</a></li>
+    <li><a href="#wave-prism">Prism</a></li>
+    <li><a href="#book-section">Book</a></li>
+  </ul>
+  <button class="btn btn-primary" onclick="showNotify()">Remix Project</button>
+</nav>
+
+<!-- SECTION 1: HERO / 3D WebGL -->
+<section id="hero" class="section">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Interactive Components</div>
+    <h1 class="hero-title">Motion is<br><span>Everything</span></h1>
+    <p class="section-desc" style="color:rgba(255,255,255,0.55)">A curated showcase of high-fidelity animated components built with WebGL, CSS animations, and advanced visual effects.</p>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="showNotify()">Copy Component</button>
+      <button class="btn btn-outline">View Source</button>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- SECTION 2: Circle Animator -->
+<section id="circle-animator" class="section">
+  <div class="glow-ring" style="width:500px;height:500px;background:radial-gradient(circle,rgba(155,89,182,0.15),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse-glow 4s ease-in-out infinite;"></div>
+  <span class="tag tag-dark">Component #02</span>
+  <h2 class="section-title">Circle Animator</h2>
+  <p class="section-desc">A mesmerizing circular grid of rotating image tiles, endlessly orbiting a central focal point.</p>
+
+  <div class="circle-wrapper">
+    <!-- Outer ring -->
+    <div class="circle-track" id="outer-track"></div>
+    <!-- Inner ring -->
+    <div class="circle-track circle-track-reverse" id="inner-track"></div>
+    <!-- Center -->
+    <div class="circle-center-label">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#9B59B6,#DFFF00);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:12px;box-shadow:0 0 40px rgba(155,89,182,0.6);">✦</div>
+      <h3>Orbit</h3>
+      <p>Always in motion</p>
+    </div>
+  </div>
+
+  <div class="btn-group" style="margin-top:32px">
+    <button class="btn btn-primary" onclick="showNotify()">Copy Component</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-item"><span class="stat-num">15s</span><span class="stat-label">Loop Duration</span></div>
+    <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">Orbit Items</span></div>
+    <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">Infinite Loop</span></div>
+  </div>
+</section>
+
+<!-- SECTION 3: Shader Lines -->
+<section id="shader-lines" class="section">
+  <canvas id="shader-canvas"></canvas>
+  <div class="shader-content">
+    <span class="tag tag-accent">Component #03</span>
+    <h2 class="section-title" style="color:#fff">Shader Lines</h2>
+    <p class="section-desc">Vertical pulsating light columns with particle drift and dynamic glow, rendered in real-time WebGL.</p>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="showNotify()">Copy Component</button>
+      <button class="btn btn-outline">View Shader Code</button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: Footer Gradient -->
+<section id="footer-gradient" class="section" style="background:#0e0e0e;min-height:auto;padding:120px 40px;">
+  <span class="tag tag-dark">Component #04</span>
+  <h2 class="section-title">Footer Gradient</h2>
+  <p class="section-desc">Animated multi-color gradient bands with subtle wave motion and pulsing glow effects.</p>
+
+  <div class="gradient-bands">
+    <div class="gradient-band">
+      <div class="wave-overlay"></div>
+    </div>
+    <!-- extra layered bands -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.5) 100%);border-radius:24px;pointer-events:none;z-index:2;"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;">
+      <span style="font-family:'Playfair Display',serif;font-size:2rem;color:#fff;text-shadow:0 0 30px rgba(0,0,0,0.8);">Made with Motion</span>
+    </div>
+  </div>
+
+  <div class="btn-group

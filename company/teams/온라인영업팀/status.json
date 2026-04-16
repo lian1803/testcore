@@ -1,0 +1,15 @@
+{
+  "team": "온라인영업팀",
+  "last_updated": "2026-04-04T00:00:00",
+  "kpi": {
+    "이메일응답률": null,
+    "제안서_열람율": null,
+    "미팅_성사율": null,
+    "월_파이프라인_건수": 0
+  },
+  "current_version": "v1",
+  "data_count": 0,
+  "results_log": [],
+  "last_improvement_reason": "초기 세팅",
+  "next_action": "데이터 수집 대기 (5건 이상 시 자동 분석)"
+}

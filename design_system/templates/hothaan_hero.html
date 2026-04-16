@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>구독서비스 | 핫한디자인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root {
+  --pt01: #4C00FF;
+  --pt02: #0ABCFF;
+  --pt03: #55ADFF;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { font-family: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif; overflow-x: hidden; }
+
+/* ────── HEADER ────── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; align-items: center;
+  padding: 0 clamp(20px, 4vw, 60px);
+  height: 76px;
+  background: transparent;
+  z-index: 9999;
+  transition: background .3s, box-shadow .3s;
+}
+.header.on { background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+
+.logo-wrap { display: flex; align-items: center; gap: 8px; margin-right: auto; }
+.logo-icon { height: 38px; }
+.logo-text-w { height: 19px; display: block; }
+.logo-text-b { height: 19px; display: none; }
+.header.on .logo-text-w { display: none; }
+.header.on .logo-text-b { display: block; }
+
+.nav { display: flex; align-items: center; gap: clamp(14px, 2.2vw, 38px); margin-right: clamp(16px, 2vw, 30px); }
+.nav a { font-size: 14px; font-weight: 500; color: #fff; text-decoration: none; white-space: nowrap; transition: opacity .2s; }
+.nav a:hover { opacity: .7; }
+.header.on .nav a { color: #000; }
+
+.head-right { display: flex; align-items: center; gap: 14px; }
+.btn-inquiry {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 16px; height: 38px;
+  background: var(--pt01); color: #fff;
+  border-radius: 6px; font-size: 13px; font-weight: 600;
+  text-decoration: none; white-space: nowrap;
+  transition: background .2s;
+}
+.btn-inquiry::before { content: '💬'; font-size: 12px; }
+.btn-inquiry:hover { background: #3a00cc; }
+.menu-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; }
+.menu-btn .bar { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: background .3s; }
+.header.on .menu-btn .bar { background: #000; }
+
+/* ────── SECTION 01 ────── */
+.section01 {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100dvh;
+  padding: 200px 0 clamp(60px, 5.7vw, 110px);
+  overflow: hidden;
+}
+
+/* CSS gradient base */
+.sec01-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(155deg,
+    #F0EBFF 0%,
+    #EDE7FF 25%,
+    #E8E2FF 50%,
+    #DDDAFF 75%,
+    #D8D4F8 100%);
+  z-index: 0;
+}
+
+/* Three.js blob canvas */
+#blob-canvas {
+  position: absolute;
+  right: -8vw; top: -15%;
+  width: 64vw; height: 130%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.vis {
+  position: relative; z-index: 2;
+  text-align: center; width: 100%;
+}
+
+/* ── Floating cards ── */
+.floating_text {
+  display: flex; justify-content: center;
+  position: absolute;
+  padding: 18px 22px;
+  min-width: clamp(220px, 17vw, 310px);
+  background: rgba(0,0,0,.42);
+  border-radius: 10px;
+  color: #fff;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0; transform: translateY(80px);
+  transition: opacity .6s, transform .6s;
+}
+.floating_text.left  { right: calc(50% + clamp(200px,22vw,430px)); top: 38%; animation: none; transition-delay: 1.6s; }
+.floating_text.right { left: calc(50% + clamp(200px,23vw,450px)); top: 25%; animation: none; transition-delay: 1.8s; }
+.open .floating_text.left,
+.open .floating_text.right { opacity: 1; transform: translateY(0); animation: dungdung 2.1s 2.4s ease-in-out infinite; }
+.floating_text.right { animation-duration: 2.3s; }
+
+.floating_text .txt { position: relative; padding-left: 28px; line-height: 1.55; }
+.floating_text .txt strong { display: block; font-size: clamp(13px, 1.1vw, 18px); font-weight: 600; }
+.floating_text .txt strong::before {
+  content: ''; position: absolute; left: 0; top: 6px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--pt03);
+}
+.floating_text .txt p { font-size: clamp(12px, 1vw, 16px); font-weight: 400; opacity: .82; margin-top: 2px; }
+
+@keyframes dungdung {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-8px) scale(1.005); }
+}
+
+
+/* ── Headset hero ── */
+.headset-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(300px, 36vw, 560px);
+  margin-bottom: clamp(20px, 3vw, 50px);
+  overflow: visible;
+}
+
+.headset-walker {
+  position: absolute;
+  top: 0; left: 50%;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+}
+
+.headset-stepper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+}
+
+/* ── CSS 다리 ── */
+.legs {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: clamp(100px, 11vw, 180px);
+  pointer-events: none;
+}
+
+.leg-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.leg-upper {
+  width: clamp(16px, 1.5vw, 22px);
+  height: clamp(44px, 5vw, 72px);
+  background: linear-gradient(to bottom, #CFC1AD 0%, #BDB09A 100%);
+  border-radius: 10px 10px 5px 5px;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,.12), 2px 2px 8px rgba(0,0,0,.1);
+}
+
+.foot {
+  width: clamp(28px, 3vw, 44px);
+  height: clamp(11px, 1.1vw, 16px);
+  background: linear-gradient(to right, #BDB09A, #C8BAA4);
+  border-radius: 6px 8px 6px 4px;
+  margin-top: 2px;
+  box-shadow: 2px 3px 8px rgba(0,0,0,.15);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ground shadow */
+.headset-ground-shadow {
+  width: clamp(120px, 14vw, 220px);
+  height: clamp(12px, 1.4vw, 22px);
+  background: radial-gradient(ellipse at center, rgba(109,40,217,.22) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(6px);
+  margin-top: 4px;
+}
+
+.headset-img {
+  width: clamp(300px, 36vw, 580px);
+  height: auto;
+  position: relative;
+  z-index: 1;
+  border-radius: 50%;
+  /* 이미지 에지를 배경으로 자연스럽게 페이드 */
+  mask-image: radial-gradient(ellipse 72% 72% at 48% 50%, black 38%, rgba(0,0,0,.85) 55%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 48% 50%, black 38%, rgba(0,0,0,.85) 55%, transparent 80%);
+  filter: drop-shadow(0 28px 55px rgba(109, 40, 217, 0.28));
+  /* 애니메이션은 JS가 처리 */
+}
+
+.headset-reflection {
+  width: clamp(200px, 22vw, 380px);
+  height: clamp(30px, 4vw, 60px);
+  background: radial-gradient(ellipse at center,
+    rgba(109, 40, 217, 0.28) 0%,
+    transparent 70%);
+  border-radius: 50%;
+  filter: blur(12px);
+  margin-top: -20px;
+  animation: reflectionPulse 5.5s ease-in-out infinite;
+}
+
+@keyframes reflectionPulse {
+  0%, 100% { opacity: .7; transform: scaleX(1); }
+  50%       { opacity: .45; transform: scaleX(.85); }
+}
+
+/* floating particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleDrift var(--dur) ease-in-out infinite var(--delay);
+}
+@keyframes particleDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: var(--op); }
+  33%       { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: calc(var(--op) * 1.4); }
+  66%       { transform: translate(calc(var(--dx) * -0.5), var(--dy)) scale(.85); opacity: calc(var(--op) * .7); }
+}
+
+/* ── Bottom 3D cards ── */
+.item_list {
+  display: flex; justify-content: center; align-items: flex-end;
+}
+.item_list .item {
+  position: relative;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 30px;
+  width: clamp(160px, 18.5vw, 340px);
+  height: clamp(160px, 18.5vw, 340px);
+  border-radius: 24px;
+  border: 2.5px solid rgba(255,255,255,.85);
+  background: rgba(255,255,255,.22);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  margin: 0 -12px;
+  opacity: 0;
+  transition: opacity .6s, transform .6s;
+}
+.item_list .item picture {
+  position: absolute; left: 50%; top: 0;
+  transform: translateX(-50%);
+}
+.item_list .item picture img {
+  width: clamp(110px, 11vw, 240px);
+  height: auto;
+}
+.item_list .item:nth-of-type(1) { transform: rotate(-7.19deg) scale(0); transition-delay: 1s; }
+.item_list .item:nth-of-type(2) { z-index: 2; transform: scale(0); transition-delay: 1.15s; }
+.item_list .item:nth-of-type(3) { transform: rotate(7.19deg) scale(0); transition-delay: 1.3s; }
+.item_list .item p { font-size: clamp(12px, 1.1vw, 20px); font-weight: 600; color: #222; }
+
+.open .item_list .item:nth-of-type(1) { transform: rotate(-7.19deg) scale(1); opacity: 1; }
+.open .item_list .item:nth-of-type(2) { transform: scale(1); opacity: 1; }
+.open .item_list .item:nth-of-type(3) { transform: rotate(7.19deg) scale(1); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="hd">
+  <div class="logo-wrap">
+    <img src="assets/logo_char3.png" alt="" class="logo-icon">
+    <img src="assets/logo_txt_white_01.png" alt="HOT:HAAN" class="logo-text-w">
+    <img src="assets/logo_txt_black_01.png" alt="HOT:HAAN" class="logo-text-b">
+  </div>
+  <nav class="nav">
+    <a href="#">웹서비스 제작</a>
+    <a href="#">올인원패키지</a>
+    <a href="#">구독서비스</a>
+    <a href="#">브랜딩 디자인</a>
+    <a href="#">WORK</a>
+    <a href="#">회사 소개</a>
+    <a href="#">CONTACT</a>
+  </nav>
+  <div class="head-right">
+    <a href="#" class="btn-inquiry">실시간 문의하기</a>
+    <div class="menu-btn">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="section01 open" id="sec01">
+  <div class="sec01-bg"></div>
+  <canvas id="blob-canvas"></canvas>
+
+  <article class="vis">
+    <div class="floating_text left">
+      <div class="txt">
+        <strong>합리적인 비용으로</strong>
+        <p>작업할 방법은 없을까?</p>
+      </div>
+    </div>
+    <div class="floating_text right">
+      <div class="txt">
+        <strong>프리랜서 디자이너에게</strong>
+        <p>일 맡기기 힘드시다고요?</p>
+      </div>
+    </div>
+
+    <div class="headset-wrap" id="headset-wrap">
+      <div class="headset-walker" id="headset-walker">
+        <div class="headset-stepper" id="headset-stepper">
+          <img src="assets/headset.png" alt="Headset" class="headset-img" id="headset-img">
+          <!-- CSS 다리 -->
+          <div class="legs">
+            <div class="leg-unit" id="leg-l">
+              <div class="leg-upper"></div>
+              <div class="foot" id="foot-l"></div>
+            </div>
+            <div class="leg-unit" id="leg-r">
+              <div class="leg-upper"></div>
+              <div class="foot" id="foot-r"></div>
+            </div>
+          </div>
+        </div>
+        <div class="headset-ground-shadow" id="ground-shadow"></div>
+      </div>
+    </div>
+
+    <div class="item_list">
+      <div class="item">
+        <picture><img src="assets/sec01_img01.png" alt="Design"></picture>
+        <p>Design</p>
+      </div>
+      <div class="item">
+        <picture><img src="assets/sec01_img02.png" alt="Publish"></picture>
+        <p>Publish</p>
+      </div>
+      <div class="item">
+        <picture><img src="assets/sec01_img03.png" alt="Contents"></picture>
+        <p>Contents</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+// ── Three.js 3D Blob Background ──
+(function() {
+  const canvas = document.getElementById('blob-canvas');
+  function resize() {
+    canvas.width  = canvas.clientWidth  * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  }
+  resize();
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(52, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+  camera.position.set(-0.3, 0.1, 3.6);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const L1 = new THREE.DirectionalLight(0xffffff, 1.1);
+  L1.position.set(-3, 4, 5);
+  scene.add(L1);
+  const L2 = new THREE.PointLight(0xB0A0FF, 1.4, 20);
+  L2.position.set(3, -2, 3);
+  scene.add(L2);
+  const L3 = new THREE.PointLight(0x88CCFF, 0.8, 20);
+  L3.position.set(-2, 2, 2);
+  scene.add(L3);
+
+  // Blob via ShaderMaterial with noise displacement
+  const VS = `
+    uniform float uT;
+    varying vec3 vNormal;
+    varying vec3 vPos;
+
+    // 3D simplex noise (used for vertex displacement)
+    vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+    vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+    vec4 permute(vec4 x){return mod289(((x*34.)+1.)*x);}
+    vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+    float snoise(vec3 v){
+      const vec2 C=vec2(1./6.,1./3.);
+      const vec4 D=vec4(0.,.5,1.,2.);
+      vec3 i=floor(v+dot(v,C.yyy));
+      vec3 x0=v-i+dot(i,C.xxx);
+      vec3 g=step(x0.yzx,x0.xyz);
+      vec3 l=1.-g;
+      vec3 i1=min(g.xyz,l.zxy);
+      vec3 i2=max(g.xyz,l.zxy);
+      vec3 x1=x0-i1+C.xxx;
+      vec3 x2=x0-i2+C.yyy;
+      vec3 x3=x0-D.yyy;
+      i=mod289(i);
+      vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+      float n_=.142857142857;
+      vec3 ns=n_*D.wyz-D.xzx;
+      vec4 j=p-49.*floor(p*ns.z*ns.z);
+      vec4 x_=floor(j*ns.z);
+      vec4 y_=floor(j-7.*x_);
+      vec4 x=x_*ns.x+ns.yyyy;
+      vec4 y=y_*ns.x+ns.yyyy;
+      vec4 h=1.-abs(x)-abs(y);
+      vec4 b0=vec4(x.xy,y.xy);
+      vec4 b1=vec4(x.zw,y.zw);
+      vec4 s0=floor(b0)*2.+1.;
+      vec4 s1=floor(b1)*2.+1.;
+      vec4 sh=-step(h,vec4(0.));
+      vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+      vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+      vec3 p0=vec3(a0.xy,h.x);
+      vec3 p1=vec3(a0.zw,h.y);
+      vec3 p2=vec3(a1.xy,h.z);
+      vec3 p3=vec3(a1.zw,h.w);
+      vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+      p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+      vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
+      m=m*m;
+      return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+    }
+
+    void main(){
+      vNormal = normalize(normalMatrix * normal);
+      vec3 p = position;
+      float n = snoise(p * 0.9 + uT * 0.18) * 0.22
+              + snoise(p * 1.8 + uT * 0.12) * 0.10
+              + snoise(p * 3.5 - uT * 0.08) * 0.05;
+      p += normal * n;
+      vPos = p;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    }
+  `;
+
+  const FS = `
+    uniform vec3 uColorA;
+    uniform vec3 uColorB;
+    uniform vec3 uColorC;
+    varying vec3 vNormal;
+    varying vec3 vPos;
+
+    void main(){
+      vec3 lightDir = normalize(vec3(-1., 1.5, 2.));
+      float diff = max(dot(vNormal, lightDir), 0.0);
+      float rim = pow(1.0 - max(dot(vNormal, vec3(0.,0.,1.)), 0.0), 2.8);
+
+      // height-based gradient
+      float t = clamp(vPos.y * 0.5 + 0.5, 0., 1.);
+      vec3 baseColor = mix(uColorB, uColorA, t);
+      baseColor = mix(baseColor, uColorC, rim * 0.55);
+
+      // lighting
+      vec3 col = baseColor * (0.4 + diff * 0.65);
+      col += uColorC * rim * 0.35;
+      col += vec3(0.85, 0.8, 1.0) * pow(diff, 12.) * 0.6; // specular
+
+      gl_FragColor = vec4(col, 0.92);
+    }
+  `;
+
+  const geo = new THREE.SphereGeometry(1.45, 128, 128);
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      uT:      { value: 0 },
+      uColorA: { value: new THREE.Color('#A78BFA') }, // light lavender edge
+      uColorB: { value: new THREE.Color('#6D28D9') }, // deep purple
+      uColorC: { value: new THREE.Color('#C4B5FD') }, // rim highlight
+    },
+    vertexShader: VS,
+    fragmentShader: FS,
+    transparent: true,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(0.5, 0, 0);
+  scene.add(mesh);
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.008;
+    mat.uniforms.uT.value = t;
+    mesh.rotation.y = t * 0.07;
+    mesh.rotation.x = Math.sin(t * 0.04) * 0.06;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    resize();
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  });
+})();
+
+// ── Walking headset ──
+(function() {
+  const walker  = document.getElementById('headset-walker');
+  const stepper = document.getElementById('headset-stepper');
+  const section = document.getElementById('sec01');
+  const legL    = document.getElementById('leg-l');
+  const legR    = document.getElementById('leg-r');
+  const footL   = document.getElementById('foot-l');
+  const footR   = document.getElementById('foot-r');
+  const shadow  = document.getElementById('ground-shadow');
+
+  let x   = 0;
+  let dir = 1;
+  let scl = 1;
+  let t   = 0;
+  const SPEED     = 1.8;
+  const STEP_FREQ = 0.13;
+  const LEG_SWING = 28;   // 다리 최대 각도 (도)
+
+  function maxX() { return section.clientWidth * 0.3; }
+
+  function tick() {
+    t += STEP_FREQ;
+    x += SPEED * dir;
+
+    const mx = maxX();
+    if (x >= mx)  { x = mx;  dir = -1; scl = -1; }
+    if (x <= -mx) { x = -mx; dir =  1; scl =  1; }
+
+    // 수평 이동 + 방향 반전
+    walker.style.transform = `translateX(calc(-50% + ${x}px)) scaleX(${scl})`;
+
+    // 몸통 bob (발이 땅 닿을 때 살짝 내려감)
+    const bob  = Math.abs(Math.sin(t)) * -9;
+    const tilt = Math.sin(t) * 2.2;
+    stepper.style.transform = `translateY(${bob}px) rotate(${tilt}deg)`;
+
+    // 다리 뚜벅뚜벅 (서로 반대 위상)
+    const legAngle = Math.sin(t) * LEG_SWING;
+    legL.style.transform = `rotate(${legAngle}deg)`;
+    legR.style.transform = `rotate(${-legAngle}deg)`;
+
+    // 발끝 자연스럽게 (앞으로 나갈 때 살짝 들림)
+    footL.style.transform = `rotate(${Math.min(legAngle * 0.4, 12)}deg)`;
+    footR.style.transform = `rotate(${Math.min(-legAngle * 0.4, 12)}deg)`;
+
+    // 그림자: 발 넓어질때 진해짐
+    const shadowOpacity = 0.15 + Math.abs(Math.sin(t)) * 0.1;
+    shadow.style.opacity = shadowOpacity;
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// ── Header on scroll ──
+window.addEventListener('scroll', () => {
+  document.getElementById('hd').classList.toggle('on', window.scrollY > 10);
+});
+
+// ── Trigger .open on load ──
+document.addEventListener('DOMContentLoaded', () => {
+  // Already has .open class, CSS transitions will fire naturally
+  // Reset and retrigger for clean animation
+  const sec = document.getElementById('sec01');
+  sec.classList.remove('open');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { sec.classList.add('open'); });
+  });
+});
+</script>
+</body>
+</html>

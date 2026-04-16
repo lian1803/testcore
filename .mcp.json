@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "mcp-kling": {
+      "command": "npx",
+      "args": ["-y", "mcp-kling@latest"],
+      "env": {
+        "KLING_ACCESS_KEY": "${KLING_ACCESS_KEY}",
+        "KLING_SECRET_KEY": "${KLING_SECRET_KEY}"
+      }
+    },
+    "fal-ai": {
+      "command": "C:/Users/lian1/Documents/Work/core/company/venv/Scripts/uvx.exe",
+      "args": ["--from", "fal-mcp-server", "fal-mcp"],
+      "env": {
+        "FAL_KEY": "${FAL_KEY}",
+        "FAL_DEFAULT_MODEL": "fal-ai/kling-video/v2.6/pro/text-to-video"
+      }
+    }
+  }
+}

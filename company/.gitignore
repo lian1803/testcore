@@ -1,0 +1,48 @@
+# 환경변수 (절대 올리면 안 됨)
+.env
+.env.local
+.env.*.local
+*.env
+api.txt
+새폴더/
+
+# Node.js
+node_modules/
+.next/
+dist/
+build/
+.pnpm-store/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+.venv*/
+*venv*/
+env/
+*.db
+ppt_output/
+*.sqlite3
+참고용/
+
+# 에디터
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 프로젝트 산출물 (결과물 폴더 — GitHub에 올리지 않음)
+projects/
+
+# 기타
+*.log
+*.tmp
+*.pptx
+*.xlsx
+*.png
+*.jpg
+*.jpeg
+.playwright-mcp/
+.git/

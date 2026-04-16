@@ -1,0 +1,63 @@
+{
+  "projects": {
+    "Lian Dash": {
+      "type": "saas",
+      "url": "https://lian-dash.vercel.app",
+      "target_persona": "스타트업 창업자 및 마케팅 담당자 (월 50만원 이상 마케팅 예산)",
+      "key_message": "GA4 + 메타 광고 + 블로그 성과를 한 대시보드에서 추적하고 자동 리포팅 받기",
+      "tasks": [
+        {
+          "name": "인스타 콘텐츠",
+          "template": "marketing/인스타_캐러셀.md",
+          "frequency": "주3회",
+          "config": {
+            "tone": "전문적이면서도 친근한",
+            "format": "캐러셀",
+            "hashtags_base": ["마케팅자동화", "GA4", "데이터분석", "스타트업", "마케팅팁"]
+          }
+        },
+        {
+          "name": "블로그 SEO",
+          "template": "marketing/블로그_SEO_네이버.md",
+          "frequency": "주2회",
+          "config": {
+            "keywords": ["GA4 대시보드", "메타 광고 분석", "마케팅 자동화", "마케팅 데이터"]
+          }
+        },
+        {
+          "name": "유튜브 쇼츠",
+          "template": "marketing/유튜브_숏폼.md",
+          "frequency": "주1회",
+          "config": {
+            "tone": "빠르고 자극적인",
+            "format": "시각적 + 텍스트 오버레이"
+          }
+        },
+        {
+          "name": "메타광고 크리에이티브",
+          "template": "marketing/메타광고_크리에이티브.md",
+          "frequency": "주1회",
+          "config": {
+            "tone": "직설적이고 혜택 중심",
+            "target_persona": "스타트업 마케팅 매니저"
+          }
+        },
+        {
+          "name": "카카오톡 아웃리치",
+          "template": "sales/카카오톡_DM.md",
+          "frequency": "주2회",
+          "config": {
+            "tone": "전문적 + 친근",
+            "target_persona": "스타트업 창업자"
+          }
+        }
+      ],
+      "status": "active"
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "description": "Operations configuration (new structure with tasks and templates)",
+    "last_updated": "2026-04-07"
+  }
+}

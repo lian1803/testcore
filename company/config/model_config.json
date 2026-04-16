@@ -1,0 +1,23 @@
+{
+  "roles": {
+    "judge": "claude-sonnet-4-6",
+    "strategist": "claude-sonnet-4-6",
+    "content": "claude-haiku-4-5-20251001",
+    "data": "claude-haiku-4-5-20251001",
+    "research": "sonar-pro",
+    "factcheck": "gemini-2.5-flash",
+    "budget_strategy": "gpt-4o",
+    "prd": "claude-haiku-4-5-20251001",
+    "curriculum": "claude-sonnet-4-6"
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_hours": 24,
+    "cache_dir": "./cache"
+  },
+  "tracking": {
+    "enabled": true,
+    "log_file": "./logs/api_costs.jsonl"
+  },
+  "overrides": {}
+}
