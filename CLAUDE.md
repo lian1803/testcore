@@ -5,7 +5,12 @@
 ## 세션 시작 시 반드시 읽을 파일 (순서대로)
 1. 이 파일 (CLAUDE.md) — 절대 규칙
 2. OPERATIONS.md — 뭘 시키면 어떻게 하는지
-3. 메모리 — Claude Code 자동 로드 (~/.claude/projects/.../memory/)
+3. **`.claude/CAPABILITIES.md` — 시스템에 있는 모든 능력 (태스크 라우팅용)**
+4. 메모리 — Claude Code 자동 로드 (~/.claude/projects/.../memory/)
+
+## 태스크 받으면 먼저 할 것
+리안이 "~해줘" 하면 **CAPABILITIES.md 트리거 매핑 체크 → 있으면 바로 실행, 없으면 제안**.
+상세 규칙: `.claude/rules/auto-discover.md`
 
 ## 파일 찾을 때
 - 에이전트 프롬프트: .claude/agents/
