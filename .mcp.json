@@ -15,6 +15,15 @@
         "FAL_KEY": "${FAL_KEY}",
         "FAL_DEFAULT_MODEL": "fal-ai/kling-video/v2.6/pro/text-to-video"
       }
+    },
+    "notebooklm": {
+      "_comment": "활성화하려면 NOTEBOOKLM_EMAIL/PASSWORD .env에 추가하고 이 주석 제거. Google 계정 OAuth 필요할 수 있음.",
+      "command": "npx",
+      "args": ["-y", "notebooklm-mcp@latest"],
+      "env": {
+        "NOTEBOOKLM_EMAIL": "${NOTEBOOKLM_EMAIL}",
+        "NOTEBOOKLM_PASSWORD": "${NOTEBOOKLM_PASSWORD}"
+      }
     }
   }
 }
