@@ -167,6 +167,7 @@
 ### GitHub 클론 레포 (`design_system/`, `team/`)
 - `design_system/design-systems/` — 기업 DESIGN.md 58개 (VoltAgent)
 - `design_system/references/` — Apple 3D, Awwwards Truus/Capsule, Codrops (5개)
+- `design_system/references/anthropic-skills/` — **Anthropic 공식 Skills 17개** (pdf, docx, xlsx, pptx, brand-guidelines, skill-creator, canvas-design, frontend-design, theme-factory, mcp-builder, webapp-testing, web-artifacts-builder, algorithmic-art, claude-api, doc-coauthoring, internal-comms, slack-gif-creator)
 - `team/LLM-비용-서킷브레이커팀/llm-guard-app` — SaaS 프로젝트
 
 ### 자동화 스크립트 (`company/`)
