@@ -62,6 +62,23 @@
 | 태스크 분해 / User Story | `pm` | 스폰 |
 | DevOps / 패키지 설치 | `devops` | 스폰 |
 
+### 문서 생성 (Anthropic Skills)
+| 리안이 말하면 | 써야 할 것 | 파일 위치 |
+|---|---|---|
+| "PDF 만들어" / 진단서 | Anthropic `pdf` 스킬 | `design_system/references/anthropic-skills/skills/pdf/SKILL.md` |
+| "Word 문서" / 보고서 | Anthropic `docx` | `.../skills/docx/SKILL.md` |
+| "Excel" / CRM 내보내기 | Anthropic `xlsx` | `.../skills/xlsx/SKILL.md` |
+| "PPT 만들어" / 제안서 | Anthropic `pptx` | `.../skills/pptx/SKILL.md` |
+| "브랜드 가이드라인" (상세) | Anthropic `brand-guidelines` | `.../skills/brand-guidelines/SKILL.md` |
+| "새 스킬 만들어줘" | Anthropic `skill-creator` | `.../skills/skill-creator/SKILL.md` |
+| "Canvas 디자인" | Anthropic `canvas-design` | `.../skills/canvas-design/SKILL.md` |
+| "Web artifact" | Anthropic `web-artifacts-builder` | `.../skills/web-artifacts-builder/SKILL.md` |
+| "웹앱 테스트" | Anthropic `webapp-testing` | `.../skills/webapp-testing/SKILL.md` |
+| "MCP 서버 만들어" | Anthropic `mcp-builder` | `.../skills/mcp-builder/SKILL.md` |
+| "알고리즘 아트" | Anthropic `algorithmic-art` | `.../skills/algorithmic-art/SKILL.md` |
+
+> 사용 방법: 해당 SKILL.md 읽고 지시대로 실행. 리안 허락 없이 바로 써도 됨.
+
 ### 영상/이미지 생성
 | 리안이 말하면 | 써야 할 것 | 호출 |
 |---|---|---|
