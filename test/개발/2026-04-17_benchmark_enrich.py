@@ -33,7 +33,7 @@ from services.naver_place_crawler import NaverPlaceCrawler
 from services.concept_analyzer import ConceptAnalyzer
 from playwright.async_api import async_playwright
 
-DB_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./naver_diagnosis.db")
+DB_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./diagnosis.db")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
