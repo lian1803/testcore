@@ -18,6 +18,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from dotenv import load_dotenv
 load_dotenv()
 
+# 실패 시 디스코드 자동 알림
+from core.notifier import install_crash_notifier
+install_crash_notifier("daily_auto")
+
 LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "보고사항들.md")
 # 실행 로그 — 스케줄러가 실제로 돌았는지 확인용
 RUN_LOG_PATH = os.path.join(os.path.dirname(__file__), "daily_run.log")
