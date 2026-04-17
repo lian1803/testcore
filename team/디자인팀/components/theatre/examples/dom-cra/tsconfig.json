@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "lib": ["ESNext", "DOM"],
+    "rootDir": "src",
+    "types": ["jest", "node"],
+    "emitDeclarationOnly": true,
+    "composite": true,
+    "checkJs": true
+  },
+  "references": [
+    {"path": "../../packages/core"},
+    {"path": "../../packages/studio"}
+  ],
+  "include": ["./src/**/*"]
+}

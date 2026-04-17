@@ -1,0 +1,41 @@
+{
+  "name": "@magicuidesign/mcp",
+  "version": "2.0.0",
+  "description": "Official MCP server for Magic UI.",
+  "homepage": "https://magicui.design",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magicuidesign/mcp.git"
+  },
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch src --ext ts,json --exec \"npm run build\"",
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run"
+  },
+  "type": "module",
+  "main": "./dist/server.js",
+  "module": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "bin": {
+    "mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.5",
+    "@types/node": "^22.14.1",
+    "nodemon": "^3.1.0",
+    "release-it": "^19.2.4",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.3"
+  },
+  "author": "Beau Hayes-Pollard <bbh44@cornell.edu>",
+  "license": "ISC"
+}

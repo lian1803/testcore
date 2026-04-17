@@ -1,0 +1,19 @@
+name = "llm-guard-app"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-16"
+compatibility_flags = ["nodejs_compat"]
+
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+# D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "llm-guard-db"
+database_id = "5f4dd95f-4991-4b53-8d3a-05726c01e505"
+
+# KV Namespace Binding
+[[kv_namespaces]]
+binding = "KV"
+id = "29e4da4f4e9146c38787398ac699d221"
+
+vars = { ENVIRONMENT = "production" }

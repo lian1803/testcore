@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Core: Stable</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="cam-container">
+        <video id="video" playsinline></video>
+        <canvas id="output-canvas"></canvas>
+    </div>
+    <div id="canvas-container"></div>
+    <div id="ui">
+        <h1>Particle Core</h1>
+        <div class="btn-grid">
+            <button class="action-btn active" id="b0" data-shape="0">Sphere</button>
+            <button class="action-btn" id="b1" data-shape="1">Heart</button>
+            <button class="action-btn" id="b2" data-shape="2">Saturn</button>
+            <button class="action-btn" id="b3" data-shape="3">Flower</button>
+        </div>
+        <div class="info">
+            <div class="key-row"><span class="key">✋ Open Hand</span> <span>Sphere</span></div>
+            <div class="key-row"><span class="key">✊ Fist</span> <span>Saturn</span></div>
+            <div class="key-row"><span class="key">✌️ Peace Sign</span> <span>Flower</span></div>
+            <div class="key-row"><span class="key">🤟 Love Sign</span> <span>Heart</span></div>
+            <hr>
+            <div class="key-row" style="color:#00ff88"><span class="key">🤏 Pinch In/Out</span> <span>Zoom</span></div>
+            <div class="key-row" style="color:#00ff88"><span class="key">↔️ Move Hand</span> <span>Rotate</span></div>
+        </div>
+        <div id="status">
+            <span class="status-dot" id="dot"></span> 
+            <span id="status-text">Loading System...</span>
+        </div>
+    </div>
+    <div id="credits">Made by <span>Krishna</span></div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

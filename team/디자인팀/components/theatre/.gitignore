@@ -1,0 +1,27 @@
+**/node_modules
+**/xeno
+/packages/*/dist
+/examples/*/dist
+*.log
+*.temp
+/.vscode
+/.history
+**/.DS_Store
+*.tsbuildinfo
+.eslintcache
+
+.yarn/*
+# !.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Required by the `parcel_v2`
+# compatibility tests
+.parcel-cache
+
+/compat-tests/*/.yarn
+/compat-tests/*/build
+/TODO.md
