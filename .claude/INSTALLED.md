@@ -175,12 +175,37 @@
 
 ---
 
+## API 키 현황 (`company/.env`)
+
+> 실제 값은 `.env` 파일에만. 여기는 키 목록만.
+
+| 키 | 서비스 | 상태 |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Claude | ✅ |
+| `OPENAI_API_KEY` | GPT-4o | ✅ |
+| `GOOGLE_API_KEY` / `GEMINI_API_KEY` | Gemini | ✅ |
+| `PERPLEXITY_API_KEY` | Perplexity | ✅ |
+| `DISCORD_WEBHOOK_URL` / `DISCORD_BOT_TOKEN` | Discord 알림 | ✅ |
+| `KLING_ACCESS_KEY` / `KLING_SECRET_KEY` | Kling MCP | ✅ |
+| `FAL_KEY` | fal.ai nano-banana | ✅ |
+| `STITCH_API_KEY` | Stitch UI MCP | ✅ |
+| `GITHUB_TOKEN` / `GITHUB_PERSONAL_ACCESS_TOKEN` | GitHub API | ✅ |
+| `VERCEL_TOKEN` | Vercel 배포 | ✅ |
+| `SUPABASE_URL` / `SUPABASE_ANON_KEY` 외 | Supabase DB | ✅ |
+| `NAVER_*` (ID/PW/API) | 네이버 광고/검색 | ✅ |
+| `META_*` / `INSTAGRAM_*` | Meta 광고/인스타 | ✅ |
+| `SENTRY_AUTH_TOKEN` | Sentry (미활성) | ⏸ |
+| `HF_API_KEY` / `HF_SECRET` | Higgsfield 영상 | ❌ 미발급 |
+| `CLOUDFLARE_*` | Cloudflare | ✅ |
+
+---
+
 ## 분류 요약
 
 | 분류 | 항목 수 |
 |---|---|
 | Skills | 21개 (자동 3개 + 수동 18개) |
-| MCP | - |
+| MCP | 3개 (kling 활성, notebooklm/higgsfield 키 대기) |
 | GitHub 레포 | 4개 (core, llm-guard-app, awesome-design-md, demo) |
 | 자동화 스크립트 | 4개 (전부 daily_auto.py 연결 완료) |
 | 코어 자동화 모듈 | 15개+ (pipeline 연결) |
