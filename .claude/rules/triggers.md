@@ -1,5 +1,20 @@
 # 리안 요청 → 시스템 실행 트리거
 
+## Git Push 트리거
+
+| 리안이 말하면 | 실행 |
+|---|---|
+| "올려" / "push" / "깃에 올려" | `bash push.sh` (origin + core-shell 둘 다) |
+| "개인깃 올려" | `bash push.sh origin` |
+| "팀깃 올려" / "팀에 올려" | `bash push.sh team` (team/ 포함) |
+
+**핵심 규칙:**
+- `origin` (lian1803/testcore) = 개인깃 → team/ 제외
+- `core-shell` (core-shell1/core-shell) = 팀깃 → team/ 포함
+- `.gitignore`는 origin 기준. core-shell은 push.sh가 임시 브랜치로 team/ 강제 포함 처리
+
+
+
 ## 프로젝트 시작 트리거
 리안이 아래 패턴으로 말하면 → 이사팀 소집:
 - "~할거야" / "~프로젝트" / "~하고 싶어" / "~사업 해볼까" + 새 아이디어
