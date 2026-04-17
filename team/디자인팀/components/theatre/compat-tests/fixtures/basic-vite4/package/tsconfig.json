@@ -1,9 +1,0 @@
-{
-  "include": ["./src/**/*.ts"],
-  "compilerOptions": {
-    "types": ["vite/client"],
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
-    "target": "ESNext"
-  }
-}

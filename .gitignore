@@ -5,6 +5,9 @@ company/**/__pycache__/
 *.pyc
 *.pyo
 
+# team/ 전체 — origin(개인깃) 제외, core-shell(팀깃)은 push.sh가 강제 포함
+team/
+
 # team 폴더 내 venv/빌드/dist
 team/**/.venv*/
 team/**/venv/

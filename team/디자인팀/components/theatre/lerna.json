@@ -1,6 +1,0 @@
-{
-  "packages": ["packages/*", "theatre/*"],
-  "version": "independent",
-  "npmClient": "yarn",
-  "useWorkspaces": true
-}

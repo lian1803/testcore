@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "LibAuthenticationFlow" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "lastCheckTime" SET DATA TYPE TIMESTAMPTZ;
