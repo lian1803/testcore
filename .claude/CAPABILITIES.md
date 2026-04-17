@@ -93,6 +93,8 @@
 |---|---|---|
 | "비용 얼마 나왔어?" / 주간 비용 | `tools/cost_tracker.py` | `python tools/cost_tracker.py 7` |
 | 에이전트 호출 기록 | `cost_tracker.log_call()` / `track()` context manager | import |
+| "팀 폴더 drift 확인" / team vs teams 분석 | `team_drift_analyzer.py` | `python team_drift_analyzer.py` |
+| CAPABILITIES 드리프트 | `capability_audit.py` | weekly_runner 자동 실행 |
 
 ### 리서치 심화 (NotebookLM)
 | 리안이 말하면 | 써야 할 것 | 비고 |
