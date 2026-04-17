@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>꽃잎이 내리는 첫 만남</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Karla:wght@400&display=swap" rel="stylesheet">
+  <!-- Lenis CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.45/bundled/lenis.min.js"></script>
+  <script>if(typeof Lenis==='undefined'){window.Lenis=function(){this.on=function(){return this};this.raf=function(){};this.scrollTo=function(){};};console.warn('Lenis CDN failed, using no-op fallback');}</script>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Karla:wght@300;400&display=swap');
+
+:root {
+  --bg: #FDF6F0;
+  --primary: #8B6F66;
+  --accent: #C9A9A6;
+  --secondary: #E8D5D0;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Karla', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { cursor: none; background: var(--bg); color: var(--primary); font-family: var(--font-body); overflow-x: hidden; }
+
+#shader-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+#cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+
+#cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width .3s, height .3s; }
+
+#main-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; padding: 1.4rem clamp(1.5rem, 6vw, 8rem); background: linear-gradient(to bottom, rgba(253,246,240,.85), transparent); backdrop-filter: blur(8px); }
+
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+.nav-logo { font-family: var(--font-heading); font-size: clamp(1.1rem, 2vw, 1.5rem); color: var(--primary); text-decoration: none; letter-spacing: .06em; font-weight: 400; }
+
+.nav-links { list-style: none; display: flex; align-items: center; gap: 2rem; }
+
+.nav-links a { font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(139,111,102,.7); text-decoration: none; transition: color .3s; }
+
+.nav-links a:hover { color: var(--primary); }
+
+.nav-cta { padding: .5em 1.5em; border: 1px solid var(--accent); color: var(--primary); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: background .3s, color .3s; }
+
+.nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+section { padding: clamp(5rem, 10vw, 12rem) clamp(1.5rem, 6vw, 8rem); }
+
+#hero-falling-petals { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+
+h1 { font-family: var(--font-heading); font-size: clamp(2.8rem, 7vw, 6.5rem); font-weight: 300; line-height: 1.1; }
+
+.petals-layer { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+@keyframes fall {
+  0% { transform: translateY(-60px) rotate(0deg) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: .8; }
+  100% { transform: translateY(110vh) rotate(360deg) translateX(40px); opacity: 0; }
+}
+
+.petal { position: absolute; display: block; border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; pointer-events: all; cursor: pointer; transition: transform .2s; }
+
+.petal:hover { transform: scale(1.4) rotate(20deg) !important; }
+
+.petal[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--primary); color: var(--bg); font-family: var(--font-body); font-size: .72rem; letter-spacing: .08em; white-space: nowrap; padding: .35em .8em; border-radius: 4px; pointer-events: none; z-index: 9999; }
+
+.petal--1  { width: 18px; height: 26px; background: #E8A0B0; left: 8%;  animation: fall 9s  2s  infinite ease-in-out; }
+.petal--2  { width: 14px; height: 20px; background: #C9A9A6; left: 18%; animation: fall 11s 0s  infinite ease-in-out; }
+.petal--3  { width: 22px; height: 30px; background: #F2B5C0; left: 28%; animation: fall 8s  4s  infinite ease-in-out; }
+.petal--4  { width: 12px; height: 18px; background: #D4A0C0; left: 38%; animation: fall 13s 1s  infinite ease-in-out; }
+.petal--5  { width: 20px; height: 28px; background: #E8D5D0; left: 48%; animation: fall 10s 3s  infinite ease-in-out; }
+.petal--6  { width: 16px; height: 22px; background: #F0B8C8; left: 57%; animation: fall 9s  5s  infinite ease-in-out; }
+.petal--7  { width: 24px; height: 32px; background: #C9A9A6; left: 65%; animation: fall 12s 0.5s infinite ease-in-out; }
+.petal--8  { width: 13px; height: 19px; background: #E8A0B0; left: 74%; animation: fall 7s  2.5s infinite ease-in-out; }
+.petal--9  { width: 19px; height: 27px; background: #F2B5C0; left: 82%; animation: fall 11s 4.5s infinite ease-in-out; }
+.petal--10 { width: 15px; height: 21px; background: #D4A0C0; left: 90%; animation: fall 8s  1.5s infinite ease-in-out; }
+.petal--11 { width: 21px; height: 29px; background: #E8D5D0; left: 23%; animation: fall 14s 6s  infinite ease-in-out; }
+.petal--12 { width: 17px; height: 23px; background: #F0B8C8; left: 70%; animation: fall 10s 7s  infinite ease-in-out; }
+
+.hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+.hero-eyebrow { font-size: clamp(.7rem, 1.2vw, .85rem); letter-spacing: .25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.4rem; }
+
+.hero-headline { margin-bottom: 1.8rem; }
+
+.headline-line { display: block; }
+
+.word { display: inline-block; opacity: 0; transform: translateY(25px); transition: opacity .8s, transform .8s; margin-right: .25em; }
+
+.word.visible { opacity: 1; transform: translateY(0); }
+
+.hero-sub { font-size: clamp(.95rem, 1.5vw, 1.15rem); color: rgba(139,111,102,.75); line-height: 1.8; max-width: 520px; margin-bottom: 2.4rem; font-weight: 300; }
+
+.hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+.btn { display: inline-block; font-family: var(--font-body); font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; padding: .85em 2.4em; transition: background .3s, color .3s, border-color .3s; }
+
+.btn--primary { background: var(--primary); color: var(--bg); border: 1px solid var(--primary); }
+
+.btn--primary:hover { background: var(--accent); border-color: var(--accent); }
+
+.btn--ghost { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+
+.btn--ghost:hover { background: var(--secondary); }
+
+.hero-bouquet-reveal { position: absolute; right: clamp(1.5rem, 8vw, 12rem); top: 50%; transform: translateY(-50%); z-index: 2; }
+
+.bouquet-frame { width: clamp(220px, 28vw, 420px); aspect-ratio: 3/4; overflow: hidden; border-radius: 50% 50% 48% 52% / 55% 55% 45% 45%; border: 1px solid var(--secondary); position: relative;
+  </style>
+</head>
+<body>
+<canvas id="shader-canvas"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Pétale Blanc</a>
+    <ul class="nav-links">
+      <li><a href="#hero-falling-petals">Home</a></li>
+      <li><a href="#portfolio-masonry">Portfolio</a></li>
+      <li><a href="#subscription-cards">Subscription</a></li>
+      <li><a href="#booking-form">Booking</a></li>
+    </ul>
+    <a href="#booking-form" class="nav-cta">Book Now</a>
+  </div>
+</nav>
+
+<section id="hero-falling-petals">
+  <div class="petals-layer" aria-hidden="true">
+    <span class="petal petal--1"></span>
+    <span class="petal petal--2"></span>
+    <span class="petal petal--3"></span>
+    <span class="petal petal--4"></span>
+    <span class="petal petal--5"></span>
+    <span class="petal petal--6"></span>
+    <span class="petal petal--7"></span>
+    <span class="petal petal--8"></span>
+    <span class="petal petal--9"></span>
+    <span class="petal petal--10"></span>
+    <span class="petal petal--11"></span>
+    <span class="petal petal--12"></span>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Seoul · Luxury Floral Atelier</p>
+    <h1 class="hero-headline">
+      <span class="headline-line">
+        <span class="word">Where</span>
+        <span class="word">Every</span>
+        <span class="word">Petal</span>
+      </span>
+      <span class="headline-line">
+        <span class="word">Tells</span>
+        <span class="word">Your</span>
+        <span class="word">Story</span>
+      </span>
+    </h1>
+    <p class="hero-sub">당신의 가장 아름다운 날을 위한 꽃.</p>
+    <div class="hero-actions">
+      <a href="#portfolio-masonry" class="btn btn--primary">Explore Designs</a>
+      <a href="#subscription-cards" class="btn btn--ghost">Monthly Blooms</a>
+    </div>
+    <div class="hero-bouquet-reveal">
+      <div class="bouquet-frame">
+        <img
+          src="https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?w=600&q=80"
+          alt="Signature bridal bouquet with blush roses and cascading greenery"
+          class="bouquet-img"
+          width="600"
+          height="800"
+        />
+        <div class="bouquet-overlay-text">
+          <span>Signature Bouquet</span>
+          <span>2025 Collection</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <strong class="stat-number">1,200+</strong>
+        <span class="stat-label">Weddings Styled</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <strong class="stat-number">8</strong>
+        <span class="stat-label">Years of Bloom</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <strong class="stat-number">98%</strong>
+        <span class="stat-label">Happy Couples</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-cue" aria-label="Scroll down">
+    <span class="scroll-line"></span>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<section id="portfolio-masonry">
+  <div class="section-header">
+    <p class="section-eyebrow">Our Portfolio</p>
+    <h2 class="section-title">
+      <span class="word">Blooms</span>
+      <span class="word">We've</span>
+      <span class="word">Crafted</span>
+    </h2>
+    <p class="section-desc">손으로 엮은 모든 꽃에는 이야기가 담겨 있습니다.</p>
+  </div>
+
+  <div class="filter-tabs" role="tablist" aria-label="Portfolio categories">
+    <button class="filter-tab filter-tab--active" role="tab" data-filter="all">All Works</button>
+    <button class="filter-tab" role="tab" data-filter="bouquet">Bouquets</button>
+    <button class="filter-tab" role="tab" data-filter="table">Table Flowers</button>
+    <button class="filter-tab" role="tab" data-filter="arch">Floral Arch</button>
+    <button class="filter-tab" role="tab" data-filter="ceremony">Ceremony</button>
+  </div>
+
+  <div class="masonry-grid">
+    <article class="masonry-item masonry-item--tall" data-category="bouquet">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80"
+          alt="Blush and ivory cascading bridal bouquet"
+          loading="lazy"
+          width="600"
+          height="900"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Bouquet</span>
+          <h3 class="masonry-title">Rose & Peony Cascade</h3>
+          <p class="masonry-client">— Ji-yeon & Daniel, May 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item masonry-item--wide" data-category="table">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80"
+          alt="Long wedding table with lush floral centerpieces"
+          loading="lazy"
+          width="800"
+          height="500"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Table Flowers</span>
+          <h3 class="masonry-title">Garden Banquet in White</h3>
+          <p class="masonry-client">— Soo-jin & Thomas, June 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item" data-category="arch">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80"
+          alt="Floral arch with blush roses and eucalyptus"
+          loading="lazy"
+          width="600"
+          height="700"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Floral Arch</span>
+          <h3 class="masonry-title">Enchanted Garden Arch</h3>
+          <p class="masonry-client">— Hye-rim & James, April 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item masonry-item--tall" data-category="bouquet">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=600&q=80"
+          alt="Minimalist white tulip bridal bouquet"
+          loading="lazy"
+          width="600"
+          height="900"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Bouquet</span>
+          <h3 class="masonry-title">Ivory Tulip Minimalist</h3>
+          <p class="masonry-client">— Na-yeon & Étienne, March 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item" data-category="ceremony">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+          alt="Ceremony aisle decorated with white floral arrangements"
+          loading="lazy"
+          width="600"
+          height="700"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Ceremony</span>
+          <h3 class="masonry-title">Petal Aisle — Grand Hall</h3>
+          <p class="masonry-client">— Yun-ha & Oliver, February 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item masonry-item--wide" data-category="table">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&q=80"
+          alt="Blush floral centerpiece with candles on wedding table"
+          loading="lazy"
+          width="800"
+          height="500"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Table Flowers</span>
+          <h3 class="masonry-title">Candlelit Blush Tablescape</h3>
+          <p class="masonry-client">— Min-jeong & Lucas, January 2024</p>
+          <a href="#booking-form" class="masonry-link">Inquire →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="masonry-item" data-category="arch">
+      <div class="masonry-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1525268323446-0505b6fe7778?w=600&q=80"
+          alt="Round floral hoop arch with dried flowers"
+          loading="lazy"
+          width="600"
+          height="700"
+        />
+        <div class="masonry-hover">
+          <span class="masonry-tag">Floral Arch</span>
+          <h3 class="masonry-title">Boho Hoop — Dried Blooms</h3>
+          <p class="masonry-client">— Da-eun & Finn, December 2023
+<script>
+window.addEventListener('DOMContentLoaded', init);
+
+function init() {
+  // ── Lenis smooth scroll ──────────────────────────────────────────
+  const lenis = new Lenis();
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // ── WebGL Silk shader ────────────────────────────────────────────
+  const canvas = document.querySelector('#shader-canvas');
+  if (canvas) {
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+      const resize = () => {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      const vsSource = `
+        attribute vec2 aPosition;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        void main() {
+          vUv      = aPosition * 0.5 + 0.5;
+          vPosition= vec3(aPosition, 0.0);
+          gl_Position = vec4(aPosition, 0.0, 1.0);
+        }
+      `;
+      const fsSource = `
+        precision highp float;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        uniform float uTime;
+        uniform vec3  uColor;
+        uniform float uSpeed;
+        uniform float uScale;
+        uniform float uRotation;
+        uniform float uNoiseIntensity;
+
+        const float e = 2.71828182845904523536;
+
+        float noise(vec2 texCoord) {
+          float G = e;
+          vec2  r = (G * sin(G * texCoord));
+          return fract(r.x * r.y * (1.0 + texCoord.x));
+        }
+
+        vec2 rotateUvs(vec2 uv, float angle) {
+          float c = cos(angle);
+          float s = sin(angle);
+          mat2  rot = mat2(c, -s, s, c);
+          return rot * uv;
+        }
+
+        void main() {
+          float rnd     = noise(gl_FragCoord.xy);
+          vec2  uv      = rotateUvs(vUv * uScale, uRotation);
+          vec2  tex     = uv * uScale;
+          float tOffset = uSpeed * uTime;
+
+          tex.y += 0.03 * sin(8.0 * tex.x - tOffset);
+
+          float pattern = 0.6 +
+                          0.4 * sin(5.0 * (tex.x + tex.y +
+                                           cos(3.0 * tex.x + 5.0 * tex.y) +
+                                           0.02 * tOffset) +
+                                   sin(20.0 * (tex.x + tex.y - 0.1 * tOffset)));
+
+          vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
+          col.a = 1.0;
+          gl_FragColor = col;
+        }
+      `;
+
+      function compileShader(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        return s;
+      }
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compileShader(gl.VERTEX_SHADER,   vsSource));
+      gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1,-1,  1,-1,  -1,1,
+         1,-1,  1, 1,  -1,1
+      ]), gl.STATIC_DRAW);
+
+      const aPos = gl.getAttribLocation(prog, 'aPosition');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const uTimeLoc     = gl.getUniformLocation(prog, 'uTime');
+      const uColorLoc    = gl.getUniformLocation(prog, 'uColor');
+      const uSpeedLoc    = gl.getUniformLocation(prog, 'uSpeed');
+      const uScaleLoc    = gl.getUniformLocation(prog, 'uScale');
+      const uRotLoc      = gl.getUniformLocation(prog, 'uRotation');
+      const uNoiseLoc    = gl.getUniformLocation(prog, 'uNoiseIntensity');
+
+      // accent: #C9A9A6 → rgb(201,169,166)/255
+      gl.uniform3f(uColorLoc, 201/255, 169/255, 166/255);
+      gl.uniform1f(uSpeedLoc, 0.4);
+      gl.uniform1f(uScaleLoc, 1.8);
+      gl.uniform1f(uRotLoc,   0.3);
+      gl.uniform1f(uNoiseLoc, 1.2);
+
+      let startTime = performance.now();
+      function renderGL() {
+        const t = (performance.now() - startTime) / 1000;
+        gl.uniform1f(uTimeLoc, t);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        requestAnimationFrame(renderGL);
+      }
+      renderGL();
+    }
+  }
+
+  // ── Blob Cursor ──────────────────────────────────────────────────
+  const dot  = document.querySelector('#cursor-dot');
+  const ring = document.querySelector('#cursor-ring');
+
+  // Blob state
+  const blobs = [];
+  const blobCount = 3;
+  const sizes      = [60, 125, 75];
+  const innerSizes = [20, 35,  25];
+  const opacities  = [0.55, 0.55, 0.55];
+  const fillColor  = '#C9A9A6';
+  const innerColor = 'rgba(255,255,255,0.75)';
+
+  // Build blob SVG elements injected into body (pure JS, no HTML)
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const blobEls = [];
+
+  for (let i = 0; i < blobCount; i++) {
+    const wrap = document.createElement('div');
+    Object.assign(wrap.style, {
+      position:      'fixed',
+      top:           '0',
+      left:          '0',
+      pointerEvents: 'none',
+      zIndex:        '99999',
+      transform:     'translate(-50%,-50%)',
+      willChange:    'transform',
+    });
+
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width',  sizes[i]);
+    svg.setAttribute('height', sizes[i]);
+    svg.setAttribute('viewBox', `0 0 ${sizes[i]} ${sizes[i]}`);
+    Object.assign(svg.style, { overflow: 'visible', opacity: opacities[i] });
+
+    const defs   = document.createElementNS(svgNS, 'defs');
+    const filter = document.createElementNS(svgNS, 'filter');
+    filter.setAttribute('id', `blob-filter-${i}`);
+    const feTurbulence = document.createElementNS(svgNS, 'feTurbulence');
+    feTurbulence.setAttribute('type',      'turbulence');
+    feTurbulence.setAttribute('baseFrequency', '0.015');
+    feTurbulence.setAttribute('numOctaves',    '3');
+    feTurbulence.setAttribute('seed',          String(i * 3));
+    feTurbulence.setAttribute('result',        'noise');
+    const feDisplace = document.createElementNS(svgNS, 'feDisplacementMap');
+    feDisplace.setAttribute('in',          'SourceGraphic');
+    feDisplace.setAttribute('in2',         'noise');
+    feDisplace.setAttribute('scale',       String(12 + i * 4));
+    feDisplace.setAttribute('xChannelSelector', 'R');
+    feDisplace.setAttribute('yChannelSelector', 'G');
+    filter.appendChild(feTurbulence);
+    filter.appendChild(feDisplace);
+    defs.appendChild(filter);
+    svg.appendChild(defs);
+
+    const outerCircle = document.createElementNS(svgNS, 'circle');
+    outerCircle.setAttribute('cx', sizes[i] / 2);
+    outerCircle.setAttribute('cy', sizes[i] / 2);
+    outerCircle.setAttribute('r',  sizes[i] / 2);
+    outerCircle.setAttribute('fill', fillColor);
+    outerCircle.setAttribute('filter', `url(#blob-filter-${i})`);
+
+    const innerCircle = document.createElementNS(svgNS, 'circle');
+    innerCircle.setAttribute('cx', sizes[i] / 2);
+    innerCircle.setAttribute('cy', sizes[i] / 2);
+    innerCircle.setAttribute('r',  innerSizes[i] / 2);
+    innerCircle.setAttribute('fill', innerColor);
+
+    svg.appendChild(outerCircle);
+    svg.appendChild(innerCircle);
+    wrap.appendChild(svg);
+    document.body.appendChild(wrap);
+
+    blobs.push({
+      el: wrap,
+      x: window.innerWidth  / 2,
+      y: window.innerHeight / 2,
+      tx: window.innerWidth  / 2,
+      ty: window.innerHeight / 2,
+      delay: i * 0.12,
+      feTurb: feTurbulence,
+    });
+    blobEls.push(wrap);
+  }
+
+  // Hide default cursor elements or style them
+  if (dot)  Object.assign(dot.style,  { opacity: '0' });
+  if (ring) Object.assign(ring.style, { opacity: '0' });
+
+  let mouseX = window.innerWidth  / 2;
+  let mouseY = window.innerHeight / 2;
+
+  window.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Blob animation times
+  const lags = [0.18, 0.08, 0.13];
+  let   lastTimestamp = null;
+  let   turbOffset = 0;
+
+  function animateBlobs(ts) {
+    const dt = lastTimestamp ? Math.min((ts - lastTimestamp) / 1000, 0.05) : 0.016;
+    lastTimestamp = ts;
+    turbOffset += dt;
+
+    blobs.forEach((b, i) => {
+      const ease = 1 - Math.pow(lags[i], dt * 60);
+      b.x += (mouseX - b.x) * ease;
+      b.y += (mouseY - b.y) * ease;
+      b.el.style.transform = `translate(${b.x - sizes[i]/2}px, ${b.y - sizes[i]/2}px)`;
+
+      // Animate turbulence baseFrequency for living blob feel
+      const freq = 0.012 + 0.004 * Math.sin(turbOffset * 0.7 + i * 1.2);
+      b.feTurb.setAttribute('baseFrequency', freq.toFixed(4));
+    });
+
+    requestAnimationFrame(animateBlobs);
+  }
+  requestAnimationFrame(animateBlobs);
+
+  // Blob scale on hover interactive elements
+  document.querySelectorAll('a, button, [data-hover]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      blobEls.forEach((b, i) => {
+        b.style.transition = 'transform 0.3s ease';
+        const svg = b.querySelector('svg');
+        if (svg) svg.style.transform = `scale(${1.4 - i * 0.1})`;
+      });
+    });
+    el.addEventListener('mouseleave', () => {
+      blobEls.forEach(b => {
+        const svg = b.querySelector('svg');
+        if (svg) svg.style.transform = 'scale(1)';
+      });
+    });
+  });
+
+  // ── Falling Petals ───────────────────────────────────────────────
+  const petalColors = ['#C9A9A6','#E8C5C2','#F2D7D5','#D4B5B0','#BFA09C'];
+  const petalCount  = 28;
+  const petalEls    = [];
+
+  function createPetal() {
+    const div = document.createElement('div');
+    const size = 10 + Math.random() * 14;
+    const color = petalColors[Math.floor(Math.random() * petalColors.length)];
+    Object.assign(div.style, {
+      position:      'fixed',
+      top:           `-${size * 2}px`,
+      left:          `${Math.random() * 100}vw`,
+      width:         `${size}px`,
+      height:        `${size * 0.6}px`,
+      background:    color,
+      borderRadius:  '50% 0 50% 0',
+      opacity:       String(0.55 + Math.random() * 0.35),
+      pointerEvents: 'none',
+      zIndex:        '9998',
+      willChange:    'transform',
+    });
+    document.body.appendChild(div);
+
+    const duration = 6000 + Math.random() * 7000;
+    const startX   = parseFloat(div.style.left);
+    const swing    = 60  + Math.random() * 80;
+    const rotSpeed = (Math.random() > 0.5 ? 1 : -1) * (0.4 + Math.random() * 0.8);
+    const delay    = Math.random() * 8000;
+    let   start    = null;
+    let   rot      = Math.random() * 360;
+
+    function drop(ts) {
+      if (!start) start = ts + delay;
+      if (ts < start) { requestAnimationFrame(drop); return; }
+
+      const elapsed = ts - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const vy = progress * window.innerHeight * 1.15;
+      const vx = Math.sin(progress * Math.PI * 2.5) * swing;
+      rot += rotSpeed;
+
+      div.style.transform = `translate(${vx}px, ${vy}px) rotate(${rot}deg)`;
+
+      if (progress < 1) {
+        requestAnimationFrame(drop);
+      } else {
+        // Reset
+        div.style.left = `${Math.random() * 100}vw`;
+        start = null;
+        requestAnimationFrame(drop);
+      }
+    }
+    requestAnimationFrame(drop);
+    petalEls.push(div);
+  }
+
+  for (let i = 0; i < petalCount; i++) createPetal();
+
+  // ── SplitText + IntersectionObserver ────────────────────────────
+  const targets = Array.from(document.querySelectorAll('h1, h2, h3, [data-split]'));
+
+  targets.forEach(el => {
+    const text  = el.innerText;
+    const words = text.split(/\s+/);
+    el.innerHTML = words.map(w =>
+      `<span class="word" style="
+        display:inline-block;
+        overflow:hidden;
+        opacity:0;
+        transform:translateY(24px);
+        transition:opacity 0.55s ease, transform 0.55s ease;
+        margin-right:0.25em;
+      ">${w}</span>`
+    ).join('');
+  });
+
+  function revealWords(el) {
+    el.querySelectorAll('.word').forEach((w, i) => {
+      setTimeout(() => {
+        w.style.opacity   = '1';
+        w.style.transform = 'translateY(0)';
+        w.classList.add('visible');
+      }, i * 70);
+    });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        revealWords(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  targets.forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.95) {
+      revealWords(el);
+    }
+    observer.observe(el);
+  });
+
+  // ── Cursor hide/show ─────────────────────────────────────────────
+  document.addEventListener('mouseleave', () => {
+    blobEls.forEach(b => b.style.opacity = '0');
+  });
+  document.addEventListener('mouseenter', () => {
+    blobEls.forEach((b, i) => { b.style.opacity = String(opacities[i]); });
+  });
+}
+
+// [PATCH] .word 초기 뷰포트 표시 — IntersectionObserver 타이밍 fallback
+(function() {
+  function revealInViewport() {
+    var words = document.querySelectorAll('.word');
+    words.forEach(function(w) {
+      var parent = w.closest('h1,h2,h3,section,nav,.hero-content,[data-split]') || w.parentElement;
+      if (!parent) return;
+      var r = parent.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight * 1.05) {
+        w.classList.add('visible');
+      }
+    });
+  }
+  // DOMContentLoaded + 300ms 후 한 번, load 후 한 번 더
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(revealInViewport, 300); });
+  } else {
+    setTimeout(revealInViewport, 100);
+  }
+  window.addEventListener('load', function() { setTimeout(revealInViewport, 200); });
+})();
+</script>
+</body>
+</html>

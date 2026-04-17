@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>새벽 온실</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Karla:wght@300&display=swap" rel="stylesheet">
+  <!-- Lenis CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.45/bundled/lenis.min.js"></script>
+  <script>if(typeof Lenis==='undefined'){window.Lenis=function(){this.on=function(){return this};this.raf=function(){};this.scrollTo=function(){};};console.warn('Lenis CDN failed, using no-op fallback');}</script>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Karla:wght@300;400&display=swap');
+
+:root {
+  --bg: #1A2E23;
+  --primary: #E8EDE9;
+  --accent: #F5F8F6;
+  --secondary: #3D5A4C;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Karla', sans-serif;
+  --radius: 28px;
+  --ease-dew: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { cursor: none; background: var(--bg); color: var(--primary); font-family: var(--font-body); font-weight: 300; overflow-x: hidden; }
+
+#shader-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+#cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform .2s var(--ease-dew); }
+
+#cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(232,237,233,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width .6s var(--ease-dew), height .6s var(--ease-dew), border-color .6s; }
+
+#main-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; padding: 1.4rem clamp(1.5rem,6vw,8rem); background: linear-gradient(to bottom, rgba(26,46,35,.85), transparent); backdrop-filter: blur(8px); }
+
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+.nav-logo { font-family: var(--font-heading); font-size: clamp(1.1rem,2vw,1.5rem); color: var(--primary); text-decoration: none; letter-spacing: .25em; font-weight: 300; font-style: italic; }
+
+.nav-links { list-style: none; display: flex; align-items: center; gap: 2rem; }
+
+.nav-links a { font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(232,237,233,.6); text-decoration: none; transition: color .6s var(--ease-dew); }
+
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta { padding: .5em 1.6em; border: 1px solid rgba(245,248,246,.35); border-radius: var(--radius); color: var(--primary); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: background .6s var(--ease-dew), color .6s; }
+
+.nav-cta:hover { background: rgba(245,248,246,.12); }
+
+section { padding: clamp(5rem,10vw,12rem) clamp(1.5rem,6vw,8rem); }
+
+#hero_greenhouse { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+
+.hero-content { max-width: 700px; z-index: 2; }
+
+.hero-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; opacity: .6; }
+
+.eyebrow-line { display: block; width: 40px; height: 1px; background: rgba(232,237,233,.5); border-radius: 2px; }
+
+.eyebrow-text { font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(232,237,233,.7); }
+
+h1, .hero-headline { font-family: var(--font-heading); font-size: clamp(2.8rem,7vw,6.5rem); font-weight: 300; line-height: 1.1; }
+
+.headline-row { display: block; overflow: hidden; }
+
+.row-3.en { font-style: italic; font-size: clamp(1.8rem,4vw,3.8rem); color: rgba(232,237,233,.45); margin-top: .4rem; }
+
+.word { display: inline-block; opacity: 0; transform: translateY(25px) scale(0.97); transition: opacity 2s var(--ease-dew), transform 2s var(--ease-dew); margin-right: .3em; }
+
+.word.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+.hero-sub { font-size: clamp(.9rem,1.4vw,1.1rem); line-height: 1.85; color: rgba(232,237,233,.65); margin: 2rem 0 2.8rem; max-width: 480px; }
+
+.hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+
+.btn { display: inline-flex; align-items: center; gap: .6em; font-family: var(--font-body); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; border-radius: var(--radius); padding: .85em 2em; transition: all .8s var(--ease-dew); }
+
+.btn-primary { background: rgba(245,248,246,.12); border: 1px solid rgba(245,248,246,.3); color: var(--primary); backdrop-filter: blur(6px); }
+
+.btn-primary:hover { background: rgba(245,248,246,.22); transform: scale(1.02); }
+
+.btn-arrow { font-size: .9em; transition: transform .6s var(--ease-dew); }
+
+.btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+.btn-ghost { background: transparent; border: 1px solid rgba(232,237,233,.2); color: rgba(232,237,233,.6); }
+
+.btn-ghost:hover { border-color: rgba(232,237,233,.5); color: var(--primary); }
+
+.hero-meta { display: flex; align-items: center; gap: 1.5rem; margin-top: 3.5rem; }
+
+.meta-item { display: flex; flex-direction: column; gap: .2rem; }
+
+.meta-num { font-family: var(--font-heading); font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 300; color: var(--accent); line-height: 1; }
+
+.meta-label { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(232,237,233,.45); }
+
+.meta-divider { width: 1px; height: 40px; background: rgba(232,237,233,.18); border-radius: 2px; }
+
+.hero-scroll-hint { position: absolute; bottom: 2.5rem; left: clamp(1.5rem,6vw,8rem); display: flex; align-items: center; gap: .8rem; opacity: .45; }
+
+.scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, var(--primary)); border-radius: 2px; animation: dewDrip 2.4s ease-in-out infinite; }
+
+@keyframes dewDrip { 0%,100% { transform: scaleY(.6); opacity: .4; } 50% { transform: scaleY(1); opacity: .8; } }
+
+.scroll-label { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(232,237,233,.5); writing-mode: vertical-rl; }
+
+.hero-visual { position: absolute; right: clamp(2rem,8vw,10rem); top: 50%; transform: translateY(-50%); z-index: 1; }
+
+.greenhouse-frame { position: relative; width: clamp(260px,30vw,420px); height: clamp(320px,45vw,560px); }
+
+.glass-pane { position: absolute; border-radius: var(--radius); background: linear-gradient(135deg, rgba(245,248,246,.06) 0%, rgba(61,90,76,.12) 100%); border: 1px solid rgba(232,237,233,.1); backdrop-filter: blur(4px); animation: breathe 4s ease-in-out infinite; }
+
+@keyframes breathe { 0%,100% { transform: scale(0.97); } 50% { transform: scale(1.0); } }
+
+.pane-1 { inset: 0; border-radius: 32px; }
+
+.pane-2 { inset: 16px; border-radius: 24px; animation-delay: .5s; background: linear-gradient(160deg, rgba(245,248,246,.04) 0%, rgba(26,46,35,.2) 100%); }
+
+.pane-3 { inset: 32px; border-radius: 20px; animation-delay: 1s; }
+  </style>
+</head>
+<body>
+<canvas id="shader-canvas"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">FLEURIR</a>
+    <ul class="nav-links">
+      <li><a href="#hero_greenhouse">Greenhouse</a></li>
+      <li><a href="#portfolio_bloom">Bloom</a></li>
+      <li><a href="#process_growth">Growth</a></li>
+      <li><a href="#contact_seed">Seed</a></li>
+    </ul>
+    <a href="#contact_seed" class="nav-cta">Begin Your Story</a>
+  </div>
+</nav>
+
+<section id="hero_greenhouse">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      <span class="eyebrow-text">04:00 AM · Wedding Floristry Seoul</span>
+    </div>
+    <h1 class="hero-headline">
+      <span class="headline-row row-1">
+        <span class="word">드레스보다</span>
+        <span class="word">오래</span>
+      </span>
+      <span class="headline-row row-2">
+        <span class="word">기억되는</span>
+        <span class="word">꽃</span>
+      </span>
+      <span class="headline-row row-3 en">
+        <span class="word">Where</span>
+        <span class="word">Flowers</span>
+        <span class="word">Outlast</span>
+        <span class="word">Dresses</span>
+      </span>
+    </h1>
+    <p class="hero-sub">
+      새벽 온실에서 시작되는 당신만의 웨딩 플라워 —<br>
+      이슬이 맺히기 전, 가장 순수한 순간의 꽃을 당신에게.
+    </p>
+    <div class="hero-actions">
+      <a href="#portfolio_bloom" class="btn btn-primary">
+        <span>Explore Our Work</span>
+        <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#process_growth" class="btn btn-ghost">Our Process</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-num">312</span>
+        <span class="meta-label">Weddings Bloomed</span>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <span class="meta-num">7</span>
+        <span class="meta-label">Years in the Greenhouse</span>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <span class="meta-num">100%</span>
+        <span class="meta-label">Fresh-Cut Daily</span>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span class="scroll-line"></span>
+      <span class="scroll-label">Scroll to Bloom</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="greenhouse-frame">
+      <div class="glass-pane pane-1"></div>
+      <div class="glass-pane pane-2"></div>
+      <div class="glass-pane pane-3"></div>
+      <div class="dew-drops">
+        <span class="dew d1"></span>
+        <span class="dew d2"></span>
+        <span class="dew d3"></span>
+        <span class="dew d4"></span>
+        <span class="dew d5"></span>
+      </div>
+    </div>
+    <div class="hero-flower-cluster">
+      <figure class="flower-card fc-1" data-depth="0.3">
+        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=80" alt="Wedding bouquet peonies" loading="eager" />
+        <figcaption>Bridal Bouquet · Garden Rose</figcaption>
+      </figure>
+      <figure class="flower-card fc-2" data-depth="0.6">
+        <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Ceremony arch flowers" loading="eager" />
+        <figcaption>Ceremony Arch · White Wisteria</figcaption>
+      </figure>
+      <figure class="flower-card fc-3" data-depth="0.2">
+        <img src="https://images.unsplash.com/photo-1487530811015-780a9b55a6b7?w=300&q=80" alt="Table arrangement" loading="lazy" />
+        <figcaption>Table Setting · Ranunculus</figcaption>
+      </figure>
+    </div>
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+  </div>
+</section>
+
+<section id="portfolio_bloom">
+  <div class="section-header">
+    <span class="section-tag">Portfolio</span>
+    <h2 class="section-title">
+      <span class="word">Every</span>
+      <span class="word">Bloom</span>
+      <span class="word">Tells</span>
+      <span class="word">a</span>
+      <span class="word">Story</span>
+    </h2>
+    <p class="section-desc">꽃은 기억을 담습니다 — 그날의 온도, 빛, 그리고 당신의 감정을.</p>
+  </div>
+
+  <div class="bloom-filter">
+    <button class="filter-btn active" data-filter="all">All Works</button>
+    <button class="filter-btn" data-filter="bouquet">Bouquet</button>
+    <button class="filter-btn" data-filter="ceremony">Ceremony</button>
+    <button class="filter-btn" data-filter="table">Table Art</button>
+    <button class="filter-btn" data-filter="arch">Arch &amp; Gate</button>
+  </div>
+
+  <div class="bloom-grid">
+    <article class="bloom-card bloom-featured" data-category="ceremony">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1522413452208-996ff3f3e740?w=800&q=85" alt="White ceremony floral arch" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>White Whisper Arch</h3>
+            <p>Gyeonggi Garden Wedding · May 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+      <div class="bloom-tag">Featured</div>
+    </article>
+
+    <article class="bloom-card" data-category="bouquet">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500&q=80" alt="Bridal bouquet in dawn light" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>Dawn Peony Bouquet</h3>
+            <p>Private Chapel · March 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="bloom-card" data-category="table">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1555244162-803834f70033?w=500&q=80" alt="Floral table centerpiece" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>Mist Table Garden</h3>
+            <p>Rooftop Reception · June 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="bloom-card" data-category="arch">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1606216840931-0a70f4ced99f?w=500&q=80" alt="Garden ceremony gate flowers" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>Greenhouse Gate</h3>
+            <p>Forest Venue · September 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="bloom-card" data-category="bouquet">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1533616688419-b7a585564566?w=500&q=80" alt="Cascading bridal bouquet" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>Cascade in Fog</h3>
+            <p>Han River Venue · October 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="bloom-card" data-category="ceremony">
+      <div class="bloom-img-wrap">
+        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=500&q=80" alt="Aisle flower arrangement" loading="lazy" />
+        <div class="bloom-overlay">
+          <div class="bloom-info">
+            <h3>Petal Aisle</h3>
+            <p>Jeju Beach Ceremony · August 2024</p>
+            <a href="#contact_seed" class="bloom-link">Get Inspired →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="bloom-cta">
+    <a href="#contact_seed" class="btn btn-primary">
+      <span>Start Your Floral Story</span>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+<script>
+window.addEventListener('DOMContentLoaded', init);
+
+function init() {
+  // ── Lenis smooth scroll ──────────────────────────────────────
+  const lenis = new Lenis();
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // ── BlobCursor ───────────────────────────────────────────────
+  const fillColor   = '#b8d8c8';
+  const innerColor  = 'rgba(245,248,246,0.85)';
+  const shadowColor = 'rgba(60,90,70,0.35)';
+  const trailCount  = 3;
+  const sizes       = [70, 130, 80];
+  const innerSizes  = [22, 38, 26];
+  const opacities   = [0.55, 0.45, 0.50];
+
+  const cursorDot  = document.querySelector('#cursor-dot');
+  const cursorRing = document.querySelector('#cursor-ring');
+
+  // Hide default cursors if present
+  if (cursorDot)  { cursorDot.style.display  = 'none'; }
+  if (cursorRing) { cursorRing.style.display = 'none'; }
+
+  // Create blob containers
+  const blobs = [];
+  const blobInners = [];
+
+  for (let i = 0; i < trailCount; i++) {
+    const blob = document.createElement('div');
+    Object.assign(blob.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: sizes[i] + 'px',
+      height: sizes[i] + 'px',
+      borderRadius: '50%',
+      background: fillColor,
+      opacity: opacities[i],
+      pointerEvents: 'none',
+      zIndex: '99999',
+      transform: 'translate(-50%,-50%) scale(0.97)',
+      boxShadow: `0 8px 32px ${shadowColor}`,
+      transition: 'transform 2s ease',
+      willChange: 'transform',
+      mixBlendMode: 'multiply',
+    });
+
+    const inner = document.createElement('div');
+    Object.assign(inner.style, {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: innerSizes[i] + 'px',
+      height: innerSizes[i] + 'px',
+      borderRadius: '50%',
+      background: innerColor,
+      transform: 'translate(-50%,-50%)',
+    });
+
+    blob.appendChild(inner);
+    document.body.appendChild(blob);
+    blobs.push(blob);
+    blobInners.push(inner);
+  }
+
+  // Blob positions
+  const pos = Array.from({ length: trailCount }, () => ({ x: window.innerWidth / 2, y: window.innerHeight / 2 }));
+  const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  const delays = [0, 0.13, 0.25];
+  let mouseNorm = { x: 0.5, y: 0.5 };
+
+  document.addEventListener('mousemove', (e) => {
+    target.x = e.clientX;
+    target.y = e.clientY;
+    mouseNorm.x = e.clientX / window.innerWidth;
+    mouseNorm.y = 1.0 - e.clientY / window.innerHeight;
+  });
+
+  // Blob breathe animation
+  let blobTime = 0;
+  function animateBlobs(ts) {
+    blobTime = ts * 0.001;
+
+    for (let i = 0; i < trailCount; i++) {
+      const lerpF = 1 - Math.pow(0.04 + i * 0.03, 1);
+      const speed = [0.18, 0.10, 0.14][i];
+      pos[i].x += (target.x - pos[i].x) * speed;
+      pos[i].y += (target.y - pos[i].y) * speed;
+
+      const breathe = 0.97 + 0.03 * Math.sin(blobTime * 0.6 + i * 1.1);
+      const blobScale = breathe;
+
+      blobs[i].style.transform = `translate(${pos[i].x - sizes[i] / 2}px, ${pos[i].y - sizes[i] / 2}px) scale(${blobScale})`;
+    }
+    requestAnimationFrame(animateBlobs);
+  }
+  requestAnimationFrame(animateBlobs);
+
+  // Blob hover expand
+  document.querySelectorAll('a, button, [data-hover]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      blobs.forEach((b, i) => {
+        b.style.transition = 'transform 2s ease, width 0.8s ease, height 0.8s ease';
+        b.style.width  = (sizes[i] * 1.4) + 'px';
+        b.style.height = (sizes[i] * 1.4) + 'px';
+      });
+    });
+    el.addEventListener('mouseleave', () => {
+      blobs.forEach((b, i) => {
+        b.style.width  = sizes[i] + 'px';
+        b.style.height = sizes[i] + 'px';
+      });
+    });
+  });
+
+  // ── WebGL SoftAurora ─────────────────────────────────────────
+  const canvas = document.querySelector('#shader-canvas');
+  if (canvas) {
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+    if (gl) {
+      // Resize
+      function resizeCanvas() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Vertex shader
+      const vsSource = `
+        attribute vec2 position;
+        attribute vec2 uv;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 0.0, 1.0);
+        }
+      `;
+
+      // Fragment shader
+      const fsSource = `
+        precision highp float;
+
+        uniform float uTime;
+        uniform vec3 uResolution;
+        uniform float uSpeed;
+        uniform float uScale;
+        uniform float uBrightness;
+        uniform vec3 uColor1;
+        uniform vec3 uColor2;
+        uniform float uNoiseFreq;
+        uniform float uNoiseAmp;
+        uniform float uBandHeight;
+        uniform float uBandSpread;
+        uniform float uOctaveDecay;
+        uniform float uLayerOffset;
+        uniform float uColorSpeed;
+        uniform vec2 uMouse;
+        uniform float uMouseInfluence;
+        uniform bool uEnableMouse;
+
+        #define TAU 6.28318
+
+        vec3 gradientHash(vec3 p) {
+          p = vec3(
+            dot(p, vec3(127.1, 311.7, 234.6)),
+            dot(p, vec3(269.5, 183.3, 198.3)),
+            dot(p, vec3(169.5, 283.3, 156.9))
+          );
+          vec3 h = fract(sin(p) * 43758.5453123);
+          float phi = acos(clamp(2.0 * h.x - 1.0, -1.0, 1.0));
+          float theta = TAU * h.y;
+          return vec3(cos(theta) * sin(phi), sin(theta) * cos(phi), cos(phi));
+        }
+
+        float quinticSmooth(float t) {
+          float t2 = t * t;
+          float t3 = t * t2;
+          return 6.0 * t3 * t2 - 15.0 * t2 * t2 + 10.0 * t3;
+        }
+
+        vec3 cosineGradient(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+          return a + b * cos(TAU * (c * t + d));
+        }
+
+        float perlin3D(float amplitude, float frequency, float px, float py, float pz) {
+          float x = px * frequency;
+          float y = py * frequency;
+          float z = pz;
+
+          float fx = floor(x); float fy = floor(y); float fz = floor(z);
+          float cx = ceil(x);  float cy = ceil(y);  float cz = ceil(z);
+
+          vec3 g000 = gradientHash(vec3(fx, fy, fz));
+          vec3 g100 = gradientHash(vec3(cx, fy, fz));
+          vec3 g010 = gradientHash(vec3(fx, cy, fz));
+          vec3 g110 = gradientHash(vec3(cx, cy, fz));
+          vec3 g001 = gradientHash(vec3(fx, fy, cz));
+          vec3 g101 = gradientHash(vec3(cx, fy, cz));
+          vec3 g011 = gradientHash(vec3(fx, cy, cz));
+          vec3 g111 = gradientHash(vec3(cx, cy, cz));
+
+          float lx = quinticSmooth(fract(x));
+          float ly = quinticSmooth(fract(y));
+          float lz = quinticSmooth(fract(z));
+
+          float dx = fract(x); float dy = fract(y); float dz = fract(z);
+
+          float v000 = dot(g000, vec3(dx,   dy,   dz  ));
+          float v100 = dot(g100, vec3(dx-1.0, dy,   dz  ));
+          float v010 = dot(g010, vec3(dx,   dy-1.0, dz  ));
+          float v110 = dot(g110, vec3(dx-1.0, dy-1.0, dz  ));
+          float v001 = dot(g001, vec3(dx,   dy,   dz-1.0));
+          float v101 = dot(g101, vec3(dx-1.0, dy,   dz-1.0));
+          float v011 = dot(g011, vec3(dx,   dy-1.0, dz-1.0));
+          float v111 = dot(g111, vec3(dx-1.0, dy-1.0, dz-1.0));
+
+          float x00 = mix(v000, v100, lx);
+          float x10 = mix(v010, v110, lx);
+          float x01 = mix(v001, v101, lx);
+          float x11 = mix(v011, v111, lx);
+          float y0  = mix(x00, x10, ly);
+          float y1  = mix(x01, x11, ly);
+
+          return amplitude * mix(y0, y1, lz);
+        }
+
+        varying vec2 vUv;
+
+        void main() {
+          vec2 uv = vUv;
+          float aspect = uResolution.x / uResolution.y;
+          uv.x *= aspect;
+
+          float t = uTime * uSpeed;
+
+          vec2 mouseUV = uMouse;
+          if (uEnableMouse) {
+            uv += (mouseUV - 0.5) * uMouseInfluence * 0.3;
+          }
+
+          float n1 = perlin3D(uNoiseAmp, uNoiseFreq * uScale, uv.x, uv.y, t);
+          float n2 = perlin3D(uNoiseAmp * uOctaveDecay, uNoiseFreq * uScale * 2.0, uv.x + uLayerOffset, uv.y + uLayerOffset, t + 1.3);
+          float n3 = perlin3D(uNoiseAmp * uOctaveDecay * 0.5, uNoiseFreq * uScale * 4.0, uv.x - uLayerOffset, uv.y, t + 2.7);
+
+          float combined = n1 + n2 * 0.5 + n3 * 0.25;
+
+          float band = vUv.y + combined * uBandHeight;
+          float aurora = exp(-abs(band - uBandSpread) * 8.0);
+          aurora = clamp(aurora, 0.0, 1.0);
+
+          float colorT = combined * 0.5 + 0.5 + uTime * uColorSpeed * 0.05;
+          vec3 col = cosineGradient(
+            colorT,
+            vec3(0.5),
+            vec3(0.5),
+            vec3(1.0),
+            vec3(0.0, 0.33, 0.67)
+          );
+
+          col = mix(uColor1, uColor2, clamp(colorT, 0.0, 1.0));
+          col = mix(col, vec3(0.96, 0.97, 0.96), 1.0 - aurora * 0.6);
+          col *= uBrightness;
+          col += aurora * 0.08 * vec3(0.7, 0.9, 0.8);
+
+          gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
+        }
+      `;
+
+      function compileShader(src, type) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, src);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      const vs = compileShader(vsSource, gl.VERTEX_SHADER);
+      const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error('Program link error:', gl.getProgramInfoLog(program));
+      }
+
+      gl.useProgram(program);
+
+      // Fullscreen quad
+      const positions = new Float32Array([-1,-1, 1,-1, -1,1, 1,1]);
+      const uvs       = new Float32Array([0,0, 1,0, 0,1, 1,1]);
+
+      const posBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+      const posLoc = gl.getAttribLocation(program, 'position');
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+      const uvBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
+      const uvLoc = gl.getAttribLocation(program, 'uv');
+      gl.enableVertexAttribArray(uvLoc);
+      gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 0, 0);
+
+      // Uniforms
+      const uTimeLoc         = gl.getUniformLocation(program, 'uTime');
+      const uResLoc          = gl.getUniformLocation(program, 'uResolution');
+      const uSpeedLoc        = gl.getUniformLocation(program, 'uSpeed');
+      const uScaleLoc        = gl.getUniformLocation(program, 'uScale');
+      const uBrightnessLoc   = gl.getUniformLocation(program, 'uBrightness');
+      const uColor1Loc       = gl.getUniformLocation(program, 'uColor1');
+      const uColor2Loc       = gl.getUniformLocation(program, 'uColor2');
+      const uNoiseFreqLoc    = gl.getUniformLocation(program, 'uNoiseFreq');
+      const uNoiseAmpLoc     = gl.getUniformLocation(program, 'uNoiseAmp');
+      const uBandHeightLoc   = gl.getUniformLocation(program, 'uBandHeight');
+      const uBandSpreadLoc   = gl.getUniformLocation(program, 'uBandSpread');
+      const uOctaveDecayLoc  = gl.getUniformLocation(program, 'uOctaveDecay');
+      const uLayerOffsetLoc  = gl.getUniformLocation(program, 'uLayerOffset');
+      const uColorSpeedLoc   = gl.getUniformLocation(program, 'uColorSpeed');
+      const uMouseLoc        = gl.getUniformLocation(program, 'uMouse');
+      const uMouseInfluLoc   = gl.getUniformLocation(program, 'uMouseInfluence');
+      const uEnableMouseLoc  = gl.getUniformLocation(program, 'uEnableMouse');
+
+      // Set static uniforms
+      gl.uniform1f(uSpeedLoc,       0.18);
+      gl.uniform1f(uScaleLoc,       1.2);
+      gl.uniform1f(uBrightnessLoc,  0.95);
+      gl.uniform3f(uColor1Loc,      0.78, 0.88, 0.82); // soft sage
+      gl.uniform3f(uColor2Loc,      0.88, 0.93, 0.90); // pale mint
+      gl.uniform1f(uNoiseFreqLoc,   1.4);
+      gl.uniform1f(uNoiseAmpLoc,    0.35);
+      gl.uniform1f(uBandHeightLoc,  0.45);
+      gl.uniform1f(uBandSpreadLoc,  0.5);
+      gl.uniform1f(uOctaveDecayLoc, 0.55);
+      gl.uniform1f(uLayerOffsetLoc, 3.7);
+      gl.uniform1f(uColorSpeedLoc,  0.4);
+      gl.uniform1f(uMouseInfluLoc,  0.18);
+      gl.uniform1i(uEnableMouseLoc, 1);
+
+      function renderGL(ts) {
+        const t = ts * 0.001;
+        gl.uniform1f(uTimeLoc, t);
+        gl.uniform3f(uResLoc, canvas.width, canvas.height, 1.0);
+        gl.uniform2f(uMouseLoc, mouseNorm.x, mouseNorm.y);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(renderGL);
+      }
+      requestAnimationFrame(renderGL);
+
+    } else {
+
+// [PATCH] .word 초기 뷰포트 표시 — IntersectionObserver 타이밍 fallback
+(function() {
+  function revealInViewport() {
+    var words = document.querySelectorAll('.word');
+    words.forEach(function(w) {
+      var parent = w.closest('h1,h2,h3,section,nav,.hero-content,[data-split]') || w.parentElement;
+      if (!parent) return;
+      var r = parent.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight * 1.05) {
+        w.classList.add('visible');
+      }
+    });
+  }
+  // DOMContentLoaded + 300ms 후 한 번, load 후 한 번 더
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(revealInViewport, 300); });
+  } else {
+    setTimeout(revealInViewport, 100);
+  }
+  window.addEventListener('load', function() { setTimeout(revealInViewport, 200); });
+})();
+</script>
+</body>
+</html>

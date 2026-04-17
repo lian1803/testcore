@@ -1,0 +1,135 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 213 52% 24%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 215 25% 27%;
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 213 52% 24%;
+    --radius: 0.75rem;
+
+    /* 브랜드 컬러 CSS 변수 */
+    --color-primary: #1E3A5F;
+    --color-primary-light: #2D5F8A;
+    --color-accent: #22C55E;
+    --color-accent-hover: #16A34A;
+    --color-background: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #1A202C;
+    --color-text-secondary: #718096;
+    --color-border: #E2E8F0;
+    --color-error: #EF4444;
+    --color-warning: #F59E0B;
+    --color-success: #22C55E;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    color: var(--color-text-primary);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* 스캔 라인 애니메이션 (OCR 로딩) */
+  .scan-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #1E3A5F, transparent);
+    animation: scan-line 1.5s ease-in-out infinite;
+  }
+
+  /* 사이드바 네비게이션 활성 상태 */
+  .nav-item-active {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 0.5rem;
+  }
+
+  /* 카테고리 뱃지 */
+  .badge-meal {
+    background-color: #FEF3C7;
+    color: #92400E;
+  }
+  .badge-transportation {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+  }
+  .badge-communication {
+    background-color: #F3E8FF;
+    color: #6B21A8;
+  }
+  .badge-office {
+    background-color: #DCFCE7;
+    color: #166534;
+  }
+  .badge-education {
+    background-color: #FFE4E6;
+    color: #9F1239;
+  }
+  .badge-other {
+    background-color: #F1F5F9;
+    color: #475569;
+  }
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E2E8F0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E0;
+}

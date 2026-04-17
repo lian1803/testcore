@@ -1,0 +1,84 @@
+[
+  {
+    "id": "B",
+    "name": "Morning Dew Garden",
+    "big_idea": "새벽 정원에 들어선 듯, 안개 속에서 조명이 하나씩 켜지며 꽃들이 모습을 드러낸다",
+    "background": {
+      "component": "SoftAurora",
+      "colors": [
+        "#F0F4F0",
+        "#D4E5D7",
+        "#A8C5B0",
+        "#7BA889"
+      ],
+      "note": "연한 세이지-민트 그린의 오로라가 안개처럼 천천히 흐르고, opacity 0.4로 은은하게"
+    },
+    "colors": {
+      "bg": "#F7FAF7",
+      "primary": "#4A6D5C",
+      "accent": "#A8C5B0",
+      "secondary": "#D4E5D7"
+    },
+    "typography": {
+      "heading_font": "Playfair Display",
+      "heading_weight": "400",
+      "body_font": "Karla",
+      "body_weight": "300"
+    },
+    "cursor": "GhostCursor",
+    "hero": {
+      "approach": "three.js",
+      "detail": "Three.js로 부드러운 fog 효과 + 화면 중앙에 3D 꽃 한 송이가 천천히 회전, 마우스 움직임에 따라 꽃이 살짝 기울어짐, 배경은 SoftAurora가 fog와 블렌딩",
+      "nano_banana_prompt": null
+    },
+    "text_animation": "BlurText",
+    "special": "히어로의 3D 꽃이 스크롤에 따라 점점 멀어지며 사라지고, 그 자리에 실제 포트폴리오 이미지가 블러에서 선명하게 등장",
+    "sections": [
+      "hero-3d-flower",
+      "services-horizontal-scroll",
+      "monthly-subscription",
+      "about-florist"
+    ]
+  },
+  {
+    "id": "C",
+    "name": "Prismatic Celebration",
+    "big_idea": "축하의 순간처럼, 빛이 프리즘을 통과하며 무지갯빛 광채가 터지고 그 속에서 브랜드가 등장한다",
+    "background": {
+      "component": "Prism",
+      "colors": [
+        "#FFF8F0",
+        "#FFD4E5",
+        "#D4E5FF",
+        "#E5FFD4"
+      ],
+      "note": "프리즘 굴절 효과로 파스텔 레인보우가 화면 모서리에서 중앙으로 흘러들어옴"
+    },
+    "colors": {
+      "bg": "#FFFBF7",
+      "primary": "#2D2D2D",
+      "accent": "#E091B0",
+      "secondary": "#91B0E0"
+    },
+    "typography": {
+      "heading_font": "Bodoni Moda",
+      "heading_weight": "500",
+      "body_font": "Inter",
+      "body_weight": "300"
+    },
+    "cursor": "SplashCursor",
+    "hero": {
+      "approach": "nano-banana",
+      "detail": "nano-banana로 생성한 추상적 플라워 아트 이미지를 배경에 배치, Prism 효과가 이미지 위를 오버레이하며 빛 굴절 연출, 히어로 텍스트는 GradientText로 무지갯빛 적용",
+      "nano_banana_prompt": "Abstract watercolor wedding flowers, soft pastel rainbow light rays passing through crystal prism, ethereal dreamy atmosphere, white background, elegant minimal composition"
+    },
+    "text_animation": "GradientText",
+    "special": "각 섹션 전환 시 PrismaticBurst가 0.3초간 터지며 다음 섹션으로 전환 — 축제의 순간들이 이어지는 느낌",
+    "sections": [
+      "hero-prismatic-burst",
+      "bouquet-collections",
+      "table-flower-showcase",
+      "contact-form"
+    ]
+  }
+]

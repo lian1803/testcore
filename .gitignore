@@ -34,16 +34,13 @@ zip/node_modules/
 .mcp.local.json
 ~/.claude/.mcp.json
 
-# Claude 개인 데이터
+# Claude 개인 데이터 (개인 컨텍스트 — 공유 금지)
 .claude/settings.local.json
 memory/
 STATUS.md
 PROJECTS.md
 
-# 개인 문서 (core-shell 업로드 금지)
-team/
-보고사항들.md
-회사 조직도.md
+# 개인 문서 (공유 금지)
 디자인참고 계정.txt
 
 # 로그

@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petal Atelier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Karla:wght@400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.45/bundled/lenis.min.js"></script>
+</head>
+<body>
+<script>
+(function () {
+  'use strict';
+
+  // ============================================================
+  // 1. CSS 주입
+  // ============================================================
+  const css = `
+    :root {
+      --bg: #0D0D0D;
+      --primary: #F5E6D3;
+      --accent: #C9A87C;
+      --secondary: #8B7355;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Karla', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      cursor: none;
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    #shader-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ── 커서 ── */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: background 0.3s, transform 0.1s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 44px; height: 44px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, border-color 0.3s;
+      opacity: 0.7;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 64px; height: 64px;
+      border-color: var(--primary);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem clamp(1.5rem, 8vw, 10rem);
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      letter-spacing: 0.25em;
+      color: var(--primary);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: clamp(6rem, 12vw, 14rem) clamp(1.5rem, 8vw, 10rem);
+      position: relative;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    #hero-canvas-wrapper {
+      position: relative;
+      width: min(520px, 90vw);
+      height: min(520px, 90vw);
+      margin: 0 auto 3rem;
+    }
+    #bloom-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.8s forwards;
+    }
+    .hero-title {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      opacity: 0.6;
+      max-width: 38ch;
+      margin: 0 auto 3rem;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 1rem 2.8rem;
+      border: 1px solid var(--accent);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      transition: background 0.4s, color 0.4s;
+      opacity: 0;
+      animation: fadeIn 1.2s 1.6s forwards;
+    }
+    .hero-cta:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .bloom-hint {
+      position: absolute;
+      bottom: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.5;
+      white-space: nowrap;
+    }
+
+    /* ── COLLECTION ── */
+    #collection {
+      background: transparent;
+    }
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      color: var(--primary);
+      margin-bottom: 3rem;
+    }
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+      gap: 1.5px;
+    }
+    .collection-card {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: #111;
+      cursor: none;
+    }
+    .collection-card-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .collection-card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem 1.5rem 1.5rem;
+      background: linear-gradient(transparent, rgba(13,13,13,0.9));
+    }
+    .card-name {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    .card-desc {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      opacity: 0.6;
+      margin-bottom: 0.7rem;
+    }
+    .card-price {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+    }
+    .collection-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid transparent;
+      transition: border-color 0.5s;
+      pointer-events: none;
+    }
+    .collection-card:hover::after {
+      border-color: rgba(201,168,124,0.35);
+    }
+
+    /* ── SUBSCRIPTION ── */
+    #subscription {
+      border-top: 1px solid rgba(245,230,211,0.08);
+    }
+    .subscription-intro {
+      max-width: 52ch;
+      margin-bottom: 5rem;
+    }
+    .subscription-intro p {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--primary);
+      opacity: 0.6;
+      margin-top: 1.5rem;
+    }
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+      gap: 1.5rem;
+    }
+    .tier-card {
+      border: 1px solid rgba(245,230,211,0.1);
+      padding: 2.8rem 2.2rem;
+      position: relative;
+      transition: border-color 0.4s, transform 0.4s;
+    }
+    .tier-card:hover {
+      border-color: rgba(201,168,124,0.4);
+      transform: translateY(-4px);
+    }
+    .tier-card.featured {
+      border-color: var(--accent);
+      background: rgba(201,168,124,0.04);
+    }
+    .tier-badge {
+      position: absolute;
+      top: -0.75rem; left: 2rem;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+    }
+    .tier-name {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    .tier-price {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1.8rem;
+    }
+    .tier-features {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+    .tier-features li {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--primary);
+      opacity: 0.7;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(245,230,211,0.06);
+      letter-spacing: 0.05em;
+    }
+    .tier-features li::before {
+      content: '— ';
+      color: var(--accent);
+      opacity: 1;
+    }
+    .tier-cta {
+      display: block;
+      text-align: center;
+      padding: 0.9rem;
+      border: 1px solid currentColor;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+      transition: background 0.4s, color 0.4s;
+      cursor: none;
+    }
+    .tier-cta:hover, .tier-card.featured .tier-cta {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    /* ── ATELIER STORY ── */
+    #atelier-story {
+      border-top: 1px solid rgba(245,230,211,0.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 8rem);
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      #atelier-story { grid-template-columns: 1fr; }
+    }
+    .story-visual {
+      aspect-ratio: 4/5;
+      position: relative;
+      overflow: hidden;
+    }
+    #story-canvas {
+      width: 100%; height: 100%;
+      display: block;
+    }
+    .story-content .section-label { margin-bottom: 0.8rem; }
+    .story-content .section-title { margin-bottom: 2rem; }
+    .story-body {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--primary);
+      opacity: 0.65;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+    .story-stat {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    .stat-item .stat-num {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: 2.8rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-item .stat-label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      opacity: 0.5;
+      margin-top: 0.4rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact-concierge {
+      border-top: 1px solid rgba(245,230,211,0.08);
+      text-align: center;
+    }
+    .contact-title {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(2.5rem, 6vw, 5.5rem);
+      line-height: 1.08;
+      color: var(--primary);
+      max-width: 16ch;
+      margin: 0 auto 2rem;
+      letter-spacing: 0.03em;
+    }
+    .contact-sub {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      opacity: 0.55;
+      margin-bottom: 3.5rem;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 480px;
+      margin: 0 auto 4rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(245,230,211,0.2);
+      padding: 1rem 0;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--primary);
+      letter-spacing: 0.08em;
+      outline: none;
+      transition: border-color 0.3s;
+      cursor: none;
+      resize: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: var(--primary);
+      opacity: 0.3;
+      letter-spacing: 0.15em;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--accent);
+    }
+    .contact-form button {
+      margin-top: 1rem;
+      padding: 1.1rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      cursor: none;
+      transition: background 0.4s, color 0.4s;
+    }
+    .contact-form button:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .contact-info-item {
+      text-align: center;
+    }
+    .contact-info-label {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .contact-info-value {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--primary);
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem clamp(1.5rem, 8vw, 10rem);
+      border-top: 1px solid rgba(245,230,211,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      color: var(--primary);
+      opacity: 0.4;
+      text-transform: uppercase;
+    }
+    .footer-copy {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      opacity: 0.3;
+    }
+
+    /* ── WORD REVEAL ── */
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .word.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── PARTICLES ── */
+    #particles-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 1.5s;
+    }
+    #particles-canvas.active { opacity: 1; }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-line {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      opacity: 0;
+      animation: fadeIn 1.2s 2.2s forwards;
+    }
+    .scroll-line span {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--primary);
+      opacity: 0.4;
+    }
+    .scroll-line-bar {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollBar 1.8s 2.5s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes scrollBar {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+  `;
+
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  // ============================================================
+  // 2. HTML 구조 빌드
+  // ============================================================
+  document.body.innerHTML = `
+    <canvas id="shader-canvas"></canvas>
+    <canvas id="particles-canvas"></canvas>
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <nav>
+      <a class="nav-logo" href="#">Petal Atelier</a>
+      <ul class="nav-links">
+        <li><a href="#collection">Collection</a></li>
+        <li><a href="#subscription">Subscription</a></li>
+        <li><a href="#atelier-story">Atelier</a></li>
+        <li><a href="#contact-concierge">Order</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- HERO -->
+      <section id="hero">
+        <p class="hero-eyebrow">Seoul · Paris · 2024</p>
+        <div id="hero-canvas-wrapper">
+          <canvas id="bloom-canvas"></canvas>
+          <span class="bloom-hint">마우스를 가까이 — 꽃이 피어납니다</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="word">Rare</span> <span class="word">Beauty,</span><br>
+          <span class="word">Blooming</span> <span class="word">for</span> <span class="word">You</span>
+        </h1>
+        <p class="hero-subtitle">
+          희귀한 꽃으로 빚은 단 하나의 감각.<br>
+          Petal Atelier는 당신의 감정을 꽃으로 번역합니다.
+        </p>
+        <a href="#collection" class="hero-cta">Explore Collection</a>
+        <div class="scroll-line">
+          <span>Scroll</span>
+          <div class="scroll-line-bar"></div>
+        </div>
+      </section>
+
+      <!-- COLLECTION -->
+      <section id="collection">
+        <p class="section-label">Signature Collection</p>
+        <h2 class="section-title">
+          <span class="word">손으로 엮은</span><br>
+          <span class="word">시간의 조각들</span>
+        </h2>
+        <div class="collection-grid">
+          <div class="collection-card">
+            <canvas class="collection-card-canvas" data-card="0"></canvas>
+            <div class="collection-card-info">
+              <div class="card-name">Noir Garden</div>
+              <div class="card-desc">블랙 바카라 장미 · 스모크 유칼립투스 · 벨벳 리본</div>
+              <div class="card-price">₩ 185,000</div>
+            </div>
+          </div>
+          <div class="collection-card">
+            <canvas class="collection-card-canvas" data-card="1"></canvas>
+            <div class="collection-card-info">
+              <div class="card-name">Ivory Reverie</div>
+              <div class="card-desc">아이보리 피어니 · 화이트 라넌큘러스 · 실버 레이스</div>
+              <div class="card-price">₩ 210,000</div>
+            </div>
+          </div>
+          <div class="collection-card">
+            <canvas class="collection-card-canvas" data-card="2"></canvas>
+            <div class="collection-card-info">
+              <div class="card-name">Blush Lumière</div>
+              <div class="card-desc">연핑크 오스틴 로즈 · 세레스토 튤립 · 골드 버들</div>
+              <div class="card-price">₩ 165,000</div>
+            </div>
+          </div>
+          <div class="collection-card">
+            <canvas class="collection-card-canvas" data-card="3"></canvas>
+            <div class="collection-card-info">
+              <div class="card-name">Bridal Couture</div>
+              <div class="card-desc">웨딩 전용 · 신부 부케 & 테이블 플라워 패키지</div>
+              <div class="card-price">₩ 650,000 ~</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSCRIPTION -->
+      <section id="subscription">
+        <div class="subscription-intro">
+          <p class="section-label">Bloom Subscription</p>
+          <h2 class="section-title">
+            <span class="word">매달 피어나는</span><br>
+            <span class="word">나만의 정원</span>
+          </h2>
+          <p>계절과 감정에 맞춰 큐레이션된 플라워 박스가<br>당신의 공간에 찾아옵니다. 럭셔리 언박싱의 감동을 매월.</p>
+        </div>
+        <div class="tiers-grid">
+          <div class="tier-card">
+            <div class="tier-name">Petal</div>
+            <div class="tier-price">₩ 89,000 / 월</div>
+            <ul class="tier-features">
+              <li>시즌 스몰 부케 (3~5종)</li>
+              <li>친환경 크래프트 박스</li>
+              <li>핸드라이팅 카드</li>
+              <li>플라워 케어 가이드</li>
+            </ul>
+            <a href="#contact-concierge" class="tier-cta">구독 시작하기</a>
+          </div>
+          <div class="tier-card featured">
+            <div class="tier-badge">Most Loved</div>
+            <div class="tier-name">Bloom</div>
+            <div class="tier-price">₩ 168,000 / 월</div>
+            <ul class="tier-features">
+              <li>프리미엄 미디엄 부케 (6~8종)</li>
+              <li>시그니처 블랙 박스 & 리본</li>
+              <li>퍼스널 메시지 각인 카드</li>
+              <li>드라이플라워 보너스</li>
+              <li>당일 배송 우선권</li>
+            </ul>
+            <a href="#contact-concierge" class="tier-cta">구독 시작하기</a>
+          </div>
+          <div class="tier-card">
+            <div class="tier-name">Atelier</div>
+            <div class="tier-price">₩ 320,000 / 월</div>
+            <ul class="tier-features">
+              <li>아틀리에 디렉터 큐레이션</li>
+              <li>래그 플라워 라지 어레인지먼트</li>
+              <li>골드 레터 프레스 카드</li>
+              <li>플라워 클래스 1회 (서울)</li>
+              <li>연간 멤버 전용 이벤트</li>
+              <li>전담 컨시어지 상담</li>
+            </ul>
+            <a href="#contact-concierge" class="tier-cta">구독 시작하기</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATELIER STORY -->
+      <section id="atelier-story">
+        <div class="story-visual">
+          <canvas id="story-canvas"></canvas>
+        </div>
+        <div class="story-content">
+          <p class="section-label">The Atelier</p>
+          <h2 class="section-title">
+            <span class="word">꽃은 언어다</span>
+          </h2>
+          <p class="story-body">
+            Petal Atelier는 2019년 서울 한남동의 작은 스튜디오에서 시작되었습니다.
+            플로리스트 이서연은 파리 École des Fleurs에서 수학한 뒤,
+            한국의 미감과 프랑스의 감성을 하나의 꽃 속에 담기 시작했습니다.
+          </p>
+          <p class="story-body">
+            모든 부케는 당일 아침 네덜란드·제주·고흥에서 공수된 신선한 꽃으로만 제작됩니다.
+            단 하나도
+</script>
+</body>
+</html>

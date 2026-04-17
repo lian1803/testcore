@@ -1,0 +1,186 @@
+{
+  "business_analysis": {
+    "type": "웨딩 플로리스트 / 플라워 스튜디오",
+    "positioning": "단순 꽃 장식이 아닌, 웨딩에서 가장 감각적으로 기억되는 순간을 만드는 아티스트",
+    "target_emotion": "숨이 멎을 듯한 아름다움 앞에서 느끼는 고요한 경외감"
+  },
+  "concepts": [
+    {
+      "id": "A",
+      "name": "새벽 온실",
+      "big_idea": "사이트를 열면 새벽 4시 온실에 들어선다. 아직 햇빛이 없는 유리 온실에서 이슬 맺힌 꽃들이 희미한 빛 속에 숨 쉬고 있다.",
+      "visual_dna": {
+        "story": "새벽 온실의 고요한 습기와 희미한 빛",
+        "color_rule": "새벽 온실의 색만. 짙은 숲색(#1A2E23)에서 시작해 희미한 유리 빛(#E8EDE9)으로 밝아짐. 이슬 하이라이트는 차가운 백색(#F5F8F6). 노란색/주황색 금지—해 뜨기 전이다.",
+        "motion_rule": "숨쉬듯 느리게. 모든 요소 scale 0.97→1.0, 2s ease. 빠른 등장, 튀는 모션 금지. 이슬이 맺히듯 천천히.",
+        "shape_rule": "유기적 곡선만. 꽃잎처럼 둥근 모서리(radius 24px+). 직선 격자, 각진 박스 금지. 온실 유리의 곡면처럼.",
+        "forbidden": [
+          "직선 격자",
+          "노란색/주황색 따뜻한 색",
+          "빠른 애니메이션",
+          "날카로운 모서리",
+          "기계적 패턴"
+        ]
+      },
+      "background": {
+        "component": "SoftAurora",
+        "why": "SoftAurora의 부드러운 빛 흐름이 새벽 온실의 희미한 유리 빛을 재현. 색상법칙(차가운 녹색~백색), 모션법칙(느린 흐름), 형태법칙(유기적 곡선) 모두 충족.",
+        "colors": [
+          "#1A2E23",
+          "#3D5A4C",
+          "#E8EDE9"
+        ]
+      },
+      "colors": {
+        "bg": "#1A2E23",
+        "primary": "#E8EDE9",
+        "accent": "#F5F8F6",
+        "secondary": "#3D5A4C"
+      },
+      "typography": {
+        "heading_font": "Cormorant Garamond",
+        "heading_weight": "300",
+        "body_font": "Karla",
+        "body_weight": "300"
+      },
+      "cursor": {
+        "component": "BlobCursor",
+        "why": "BlobCursor의 유기적 형태가 형태법칙(둥근 곡선)을 따르고, 느린 반응이 모션법칙(숨쉬듯 느리게)과 일치."
+      },
+      "hero": {
+        "approach": "shader-only",
+        "detail": "안개가 천천히 걷히듯 노이즈 셰이더로 화면이 서서히 선명해지며, 가운데 'FLEURIR' 타이포가 이슬 맺히듯 나타남. 마우스 위치에 따라 안개 밀도가 미세하게 변화.",
+        "nano_banana_prompt": null
+      },
+      "text_animation": {
+        "component": "BlurText",
+        "why": "BlurText의 흐림→선명 등장이 새벽 안개 속에서 형체가 드러나는 모션법칙과 정확히 일치."
+      },
+      "special": "스크롤하면 온실 유리에 이슬이 맺히듯 텍스트 위로 미세한 물방울 파티클이 생성되고, 커서가 지나가면 이슬이 흘러내림",
+      "sections": [
+        "hero_greenhouse",
+        "portfolio_bloom",
+        "process_growth",
+        "contact_seed"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "드라이드 메모리",
+      "big_idea": "사이트를 열면 수십 년 된 프레스드 플라워 앨범을 펼친다. 빛바랜 종이 위에 눌린 꽃잎들이 시간을 초월해 그 순간의 감정을 전한다.",
+      "visual_dna": {
+        "story": "빛바랜 종이 위 눌린 꽃잎의 고요한 영속",
+        "color_rule": "오래된 종이와 말린 꽃만. 누렇게 변한 크림(#F4EDE4)이 베이스, 바랜 자주(#8B6B61), 마른 녹색(#7A8B7A). 선명한 원색 금지—시간이 지나 퇴색된 색만.",
+        "motion_rule": "정적. 거의 움직이지 않음. 호버 시에만 미세한 그림자 변화(0.3s). 역동적 모션, 튀는 효과 금지. 박제된 시간처럼.",
+        "shape_rule": "납작하게 눌린 형태. 종이의 평면성. 얇은 선, 누른 듯한 섀도우. 두꺼운 입체, 3D 효과 금지.",
+        "forbidden": [
+          "선명한 원색",
+          "역동적 모션",
+          "3D 입체 효과",
+          "두꺼운 그림자",
+          "반짝이는 효과"
+        ]
+      },
+      "background": {
+        "component": "Grainient",
+        "why": "Grainient의 노이즈 텍스처가 오래된 종이의 질감을 재현. 색상법칙(바랜 크림톤), 형태법칙(평면적 텍스처), 모션법칙(정적)을 모두 충족.",
+        "colors": [
+          "#F4EDE4",
+          "#E8DFD4",
+          "#D9CFC3"
+        ]
+      },
+      "colors": {
+        "bg": "#F4EDE4",
+        "primary": "#3D3835",
+        "accent": "#8B6B61",
+        "secondary": "#7A8B7A"
+      },
+      "typography": {
+        "heading_font": "Playfair Display",
+        "heading_weight": "400",
+        "body_font": "Source Serif Pro",
+        "body_weight": "300"
+      },
+      "cursor": {
+        "component": "MouseFollower",
+        "why": "MouseFollower를 얇은 원형으로 설정하면 형태법칙(납작한 평면성)을 따르고, 느린 따라오기가 모션법칙(정적)과 일치."
+      },
+      "hero": {
+        "approach": "css-only",
+        "detail": "화면 전체가 오래된 앨범 페이지. 스크롤 없이 정적. 가운데 'FLEURIR' 타이포가 활자 찍힌 듯 미세한 잉크 번짐 효과로 존재. 호버 시 종이 그림자만 미세하게 변화.",
+        "nano_banana_prompt": null
+      },
+      "text_animation": {
+        "component": "SplitText",
+        "why": "SplitText를 매우 느린 타이밍(stagger 0.1s, duration 0.8s)으로 설정하면 한 글자씩 찍히는 활자 인쇄 느낌. 모션법칙(정적, 느림)과 일치."
+      },
+      "special": "포트폴리오 섹션에서 각 작품이 프레스드 플라워처럼 납작하게 눌린 상태로 존재하다가, 클릭하면 미세하게 그림자가 생기며 '떠오르는' 듯한 인터랙션",
+      "sections": [
+        "hero_album",
+        "portfolio_pressed",
+        "about_memory",
+        "contact_letter"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "미드나잇 블룸",
+      "big_idea": "사이트를 열면 자정의 정원에 서 있다. 달빛 아래서만 피는 희귀한 흰 꽃들이 어둠 속에서 스스로 빛을 발하며 천천히 열린다.",
+      "visual_dna": {
+        "story": "자정 정원에서 스스로 빛나는 흰 꽃의 개화",
+        "color_rule": "자정의 색만. 깊은 남색 밤하늘(#0D1117)이 베이스, 달빛 흰색(#F0F3F5)이 유일한 발광색. 중간톤은 달빛 받은 잎(#2D3748). 따뜻한 색/노란 조명 금지—오직 차가운 달빛.",
+        "motion_rule": "느리게 피어남. 모든 등장 scale 0.9→1.0, 1.5s ease-out. 개화하듯 중심에서 퍼져나감. 갑작스러운 등장, 수축 모션 금지.",
+        "shape_rule": "꽃잎의 부드러운 곡선. 큰 radius(32px+), 유기적 비대칭 가능. 기하학 도형, 직각 금지. 자연이 만든 형태만.",
+        "forbidden": [
+          "따뜻한 색/노란 조명",
+          "갑작스러운 등장",
+          "기하학 도형",
+          "직각",
+          "낮 시간대 밝기"
+        ]
+      },
+      "background": {
+        "component": "LiquidEther",
+        "why": "LiquidEther의 신비로운 유체 움직임이 달빛 아래 공기의 흐름을 재현. 색상법칙(어두운 베이스+발광), 모션법칙(느린 유동), 형태법칙(유기적 곡선) 모두 충족.",
+        "colors": [
+          "#0D1117",
+          "#1A2233",
+          "#2D3748"
+        ]
+      },
+      "colors": {
+        "bg": "#0D1117",
+        "primary": "#F0F3F5",
+        "accent": "#FFFFFF",
+        "secondary": "#2D3748"
+      },
+      "typography": {
+        "heading_font": "Italiana",
+        "heading_weight": "400",
+        "body_font": "Raleway",
+        "body_weight": "300"
+      },
+      "cursor": {
+        "component": "GhostCursor",
+        "why": "GhostCursor의 잔상이 달빛 아래 움직임의 궤적처럼 보임. 색상법칙(흰색 발광)과 형태법칙(유기적 곡선)을 따름."
+      },
+      "hero": {
+        "approach": "three.js",
+        "detail": "화면 중앙에 흰 꽃 한 송이가 3D로 존재. 처음엔 봉오리 상태로 미세하게 숨쉬듯 움직이다가, 스크롤 시작하면 꽃잎이 하나씩 천천히 열림. 꽃잎 끝에서 미세한 광채 입자가 떨어짐.",
+        "nano_banana_prompt": null
+      },
+      "text_animation": {
+        "component": "FuzzyText",
+        "why": "FuzzyText의 흐림→선명 효과가 어둠 속에서 형체가 드러나는 느낌. 모션법칙(느린 등장)과 일치."
+      },
+      "special": "스크롤할 때마다 화면 곳곳에서 새로운 꽃들이 천천히 피어남. 마우스가 꽃 위를 지나가면 꽃잎에서 미세한 빛 입자가 흩날림",
+      "sections": [
+        "hero_moonflower",
+        "portfolio_nocturnal",
+        "story_midnight",
+        "contact_whisper"
+      ]
+    }
+  ]
+}

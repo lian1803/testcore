@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLEURIR — Wedding Floral Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Karla:wght@400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.45/bundled/lenis.min.js"></script>
+  <style>
+    :root {
+      --bg: #FFFBF7;
+      --primary: #8B7355;
+      --accent: #C9A86C;
+      --secondary: #E8DDD4;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Karla', sans-serif;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      cursor: none;
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    #shader-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    #cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: background 0.3s;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s, border-color 0.3s;
+    }
+
+    #main-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      padding: 1.2rem clamp(1.5rem, 6vw, 8rem);
+      background: linear-gradient(to bottom, rgba(255, 251, 247, 0.92), transparent);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--primary);
+      opacity: 0.65;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-cta {
+      padding: 0.48em 1.5em;
+      border: 1px solid var(--accent);
+      color: var(--primary);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+      cursor: none;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .word.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes petalFloat {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .petal {
+      position: fixed;
+      border-radius: 50% 0 50% 0;
+      background: var(--accent);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+      animation: petalFloat linear infinite;
+    }
+
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: clamp(5rem, 10vw, 12rem) clamp(1.5rem, 6vw, 8rem);
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 680px;
+      z-index: 10;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.8rem;
+      opacity: 0.8;
+    }
+
+    .hero-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 7.5vw, 7rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.4vw, 1rem);
+      line-height: 1.8;
+      color: rgba(139, 115, 85, 0.75);
+      max-width: 46ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75em 2.2em;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .hero-petal-canvas {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    section {
+      padding: clamp(5rem, 10vw, 12rem) clamp(1.5rem, 6vw, 8rem);
+      position: relative;
+    }
+
+    .section-header {
+      margin-bottom: clamp(3rem, 6vw, 5rem);
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0.75;
+    }
+
+    h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--primary);
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      font-weight: 300;
+      margin-bottom: 0.8rem;
+      color: var(--primary);
+    }
+
+    p {
+      font-size: clamp(0.88rem, 1.4vw, 1rem);
+      line-height: 1.8;
+      color: rgba(139, 115, 85, 0.72);
+    }
+
+    #portfolio {
+      background: var(--bg);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--secondary);
+    }
+
+    .pi-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .pi-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      transition: transform 0.6s ease;
+    }
+
+    .pi-large .pi-img {
+      aspect-ratio: unset;
+      height: 100%;
+      min-height: 360px;
+    }
+
+    .portfolio-item:hover .pi-img {
+      transform: scale(1.04);
+    }
+
+    .pi-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(transparent, rgba(139, 115, 85, 0.45));
+      color: #fff;
+    }
+
+    .pi-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .pi-name {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-style: italic;
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+
+    #services {
+      background: var(--bg);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .service-card {
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(139, 115, 85, 0.15);
+      background: rgba(255, 251, 247, 0.6);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .sc-featured {
+      border-color: var(--accent);
+      background: rgba(201, 168, 108, 0.06);
+    }
+
+    .sc-icon {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      color: var(--accent);
+    }
+
+    .sc-price {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      margin-top: 1.2rem;
+    }
+
+    #subscription {
+      background: rgba(232, 221, 212, 0.2);
+    }
+
+    .sub-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .sub-text {
+      max-width: 500px;
+    }
+
+    .sub-plans {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin: 2rem 0;
+    }
+
+    .sub-plan {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.4rem;
+      border: 1px solid rgba(139, 115, 85, 0.15);
+      position: relative;
+      background: transparent;
+      transition: all 0.3s;
+    }
+
+    .sub-plan:hover {
+      border-color: var(--accent);
+    }
+
+    .sp-popular {
+      border-color: var(--accent);
+      background: rgba(201, 168, 108, 0.06);
+    }
+
+    .sp-badge {
+      position: absolute;
+      top: -0.75em;
+      left: 1rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.2em 0.8em;
+    }
+
+    .sp-name {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--primary);
+    }
+
+    .sp-price {
+      font-size: 0.88rem;
+      color: var(--accent);
+    }
+
+    .sub-visual {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sub-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 108, 0.3);
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+
+    .sub-ring-1 {
+      width: 100%;
+      height: 100%;
+      animation-delay: 0s;
+    }
+
+    .sub-ring-2 {
+      width: 72%;
+      height: 72%;
+      animation-delay: 0.8s;
+    }
+
+    .sub-ring-3 {
+      width: 46%;
+      height: 46%;
+      animation-delay: 1.6s;
+    }
+
+    .sub-center {
+      font-size: 3rem;
+      color: var(--accent);
+      z-index: 2;
+    }
+
+    @keyframes ringPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.7;
+      }
+    }
+
+    #contact {
+      background: var(--bg);
+    }
+
+    .contact-form {
+      max-width: 640px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.9em 1.2em;
+      background: transparent;
+      border: 1px solid rgba(139, 115, 85, 0.25);
+      color: var(--primary);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(139, 115, 85, 0.45);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-textarea {
+      resize: vertical;
+    }
+
+    .site-footer {
+      padding: 3rem clamp(1.5rem, 6vw, 8rem);
+      border-top: 1px solid rgba(139, 115, 85, 0.12);
+      background: var(--bg);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--primary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(139, 115, 85, 0.6);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .pi-large {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sub-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .sub-visual {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Flower Intro ───────────────────────────────────── */
+    #flower-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9900;
+      background: var(--bg);
+    }
+    #flower-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /* grain overlay on entire page */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 128px;
+    }
+    /* section divider */
+    .divider {
+      width: clamp(40px, 8vw, 80px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Flower Intro Overlay -->
+  <div id="flower-intro">
+    <canvas id="flower-canvas"></canvas>
+  </div>
+
+  <canvas id="shader-canvas"></canvas>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">FLEURIR</a>
+      <ul class="nav-links">
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#subscription">Subscribe</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Book Now</a>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">— Wedding Floral Studio —</p>
+      <h1 class="hero-heading">
+        <span class="word">Where</span> <span class="word">Every</span><br>
+        <span class="word">Petal</span> <span class="word">Tells</span><br>
+        <span class="word">Your</span> <span class="word">Story</span>
+      </h1>
+      <p class="hero-sub">Bespoke floral design for your most precious moments. From intimate ceremonies to grand celebrations.</p>
+      <div class="hero-ctas">
+        <a href="#portfolio" class="btn btn-primary">View Portfolio</a>
+        <a href="#services" class="btn btn-ghost">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-petal-canvas" id="petal-canvas-wrapper"></div>
+  </section>
+
+  <section id="portfolio">
+    <div class="section-header">
+      <p class="eyebrow">Our Work</p>
+      <h2><span class="word">Crafted</span> <span class="word">with</span> <span class="word">Love</span></h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item pi-large">
+        <div class="pi-img" style="background: linear-gradient(135deg, #E8DDD4, #D4C4B5)"></div>
+        <div class="pi-info"><span class="pi-tag">Bridal Bouquet</span><p class="pi-name">Garden Romance</p></div>
+      </div>
+      <div class="portfolio-item">
+        <div class="pi-img" style="background: linear-gradient(135deg, #D4C4B5, #C9A86C)"></div>
+        <div class="pi-info"><span class="pi-tag">Table Flowers</span><p class="pi-name">Ivory Dreams</p></div>
+      </div>
+      <div class="portfolio-item">
+        <div class="pi-img" style="background: linear-gradient(135deg, #C9A86C, #8B7355)"></div>
+        <div class="pi-info"><span class="pi-tag">Ceremony Arch</span><p class="pi-name">Golden Hour</p></div>
+      </div>
+      <div class="portfolio-item">
+        <div class="pi-img" style="background: linear-gradient(135deg, #8B7355, #E8DDD4)"></div>
+        <div class="pi-info"><span class="pi-tag">Centerpiece</span><p class="pi-name">Whispered Blush</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="section-header">
+      <p class="eyebrow">Services</p>
+      <h2><span class="word">Full</span> <span class="word">Floral</span> <span class="word">Design</span></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="sc-icon">❋</div>
+        <h3>Wedding Package</h3>
+        <p>Complete floral design from bouquet to reception — every detail curated for your day.</p>
+        <p class="sc-price">From ₩2,500,000</p>
+      </div>
+      <div class="service-card sc-featured">
+        <div class="sc-icon">❀</div>
+        <h3>Signature Bouquet</h3>
+        <p>Your one-of-a-kind bridal bouquet, designed to match your vision and personality.</p>
+        <p class="sc-price">From ₩350,000</p>
+      </div>
+      <div class="service-card">
+        <div class="sc-icon">✿</div>
+        <h3>Venue Styling</h3>
+        <p>Transform your ceremony and reception space into a breathtaking floral dreamscape.</p>
+        <p class="sc-price">From ₩800,000</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="subscription">
+    <div class="sub-inner">
+      <div class="sub-text">
+        <p class="eyebrow">Monthly Flowers</p>
+        <h2><span class="word">Bring</span> <span class="word">the</span> <span class="word">Studio</span><br><span class="word">Home</span></h2>
+        <p>A curated seasonal arrangement delivered to your door every month. Fresh, artisanal, and unique each time.</p>
+        <div class="sub-plans">
+          <div class="sub-plan">
+            <span class="sp-name">Essential</span>
+            <span class="sp-price">₩89,000 / mo</span>
+          </div>
+          <div class="sub-plan sp-popular">
+            <span class="sp-badge">Most Popular</span>
+            <span class="sp-name">Signature</span>
+            <span class="sp-price">₩159,000 / mo</span>
+          </div>
+          <div class="sub-plan">
+            <span class="sp-name">Luxe</span>
+            <span class="sp-price">₩259,000 / mo</span>
+          </div>
+        </div>
+        <a href="#contact" class="btn btn-primary">Start Subscription</a>
+      </div>
+      <div class="sub-visual">
+        <div class="sub-ring sub-ring-1"></div>
+        <div class="sub-ring sub-ring-2"></div>
+        <div class="sub-ring sub-ring-3"></div>
+        <div class="sub-center">❋</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-header">
+      <p class="eyebrow">Get in Touch</p>
+      <h2><span class="word">Let's</span> <span class="word">Create</span><br><span class="word">Together</span></h2>
+    </div>
+    <form class="contact-form">
+      <div class="form-row">
+        <input type="text" placeholder="Your Name" class="form-input">
+        <input type="email" placeholder="Email Address" class="form-input">
+      </div>
+      <input type="text" placeholder="Wedding Date" class="form-input">
+      <textarea placeholder="Tell us about your dream floral design..." class="form-textarea" rows="4"></textarea>
+      <button type="submit" class="btn btn-primary">Send Inquiry</button>
+    </form>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">FLEURIR</span>
+      <p>© 2026 Fleurir Wedding Studio. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Instagram</a>
+        <a href="#">KakaoTalk</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // ── Fullscreen Flower Intro ───────────────────────────
+      (function() {
+        const intro  = document.getElementById('flower-intro');
+        const canvas = document.getElementById('flower-canvas');
+        if (!intro || !canvas) return;
+
+        // 화면 꽉 채우기
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        const cx = canvas.width  / 2;
+        const cy = canvas.height / 2;
+        const diag = Math.sqrt(cx * cx + cy * cy);
+
+        // 꽃잎이 화면 모서리까지 뻗어나감
+        const OUTER_LEN = diag * 1.08;
+        const INNER_LEN = diag * 0.66;
+        const OUTER_W   = diag * 0.34;
+        const INNER_W   = diag * 0.21;
+
+        const BLOOM_MS = 2600;
+        const HOLD_MS  = 900;
+        const FADE_MS  = 1200;
+
+        function ease(t) { return 1 - Math.pow(1 - t, 3); }
+
+        function drawPetal(angle, len, wid, alpha) {
+          if (alpha <= 0 || len <= 0) return;
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(angle);
+          ctx.globalAlpha = Math.min(1, alpha);
+
+          // 페탈 그라데이션 — Silk 배경 색과 동일 톤 (아이보리→골드→투명)
+          // 페탈 끝이 투명해서 Silk 배경으로 자연스럽게 녹아듦
+          const g = ctx.createLinearGradient(0, 0, 0, -len);
+          g.addColorStop(0,    'rgba(255, 248, 235, 0.97)');
+          g.addColorStop(0.18, 'rgba(240, 220, 190, 0.92)');
+          g.addColorStop(0.45, 'rgba(218, 186, 128, 0.80)');
+          g.addColorStop(0.72, 'rgba(200, 168, 100, 0.52)');
+          g.addColorStop(0.88, 'rgba(255, 248, 235, 0.22)');
+          g.addColorStop(1,    'rgba(255, 251, 247, 0.04)');
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-wid * 0.82, -len * 0.18, -wid, -len * 0.48, -wid * 0.26, -len * 0.86);
+          ctx.bezierCurveTo(-wid * 0.07, -len * 0.97,  wid * 0.07, -len * 0.97, wid * 0.26, -len * 0.86);
+          ctx.bezierCurveTo(wid, -len * 0.48, wid * 0.82, -len * 0.18, 0, 0);
+          ctx.fillStyle = g;
+          ctx.fill();
+
+          // 실 질감 라인 (중심맥)
+          ctx.beginPath();
+          ctx.moveTo(0, -len * 0.05);
+          ctx.quadraticCurveTo(wid * 0.04, -len * 0.5, 0, -len * 0.84);
+          ctx.strokeStyle = `rgba(190, 155, 80, ${alpha * 0.13})`;
+          ctx.lineWidth = Math.max(0.5, wid * 0.018);
+          ctx.stroke();
+
+          ctx.restore();
+        }
+
+        // 텍스트를 캔버스에 직접 그림
+        function drawText(alpha) {
+          const fontSize = Math.max(24, Math.min(canvas.width * 0.028, 52));
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.font = `italic 300 ${fontSize}px 'Cormorant Garamond', serif`;
+          ctx.fillStyle = 'rgba(110, 85, 55, 0.88)';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // letterSpacing 수동 구현
+          const letters = 'FLEURIR'.split('');
+          const spacing = fontSize * 0.55;
+          const totalW = (letters.length - 1) * spacing;
+          letters.forEach((ch, i) => {
+            ctx.fillText(ch, cx - totalW / 2 + i * spacing, cy);
+          });
+
+          // 아래 부제
+          const subSize = fontSize * 0.32;
+          ctx.font = `300 ${subSize}px 'Karla', sans-serif`;
+          ctx.fillStyle = `rgba(139, 115, 85, ${alpha * 0.55})`;
+          ctx.globalAlpha = alpha * 0.7;
+          const sub = '— Wedding Floral Studio —';
+          ctx.fillText(sub, cx, cy + fontSize * 0.92);
+
+          ctx.restore();
+        }
+
+        let t0 = null;
+        function frame(ts) {
+          if (!t0) t0 = ts;
+          const el = ts - t0;
+          const bp = Math.min(1, el / BLOOM_MS);
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // 배경 아이보리 (Silk 색과 같아서 transition 시 seamless)
+          ctx.fillStyle = '#FFFBF7';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // 외꽃잎 12장
+          for (let i = 0; i < 12; i++) {
+            const a  = (i / 12) * Math.PI * 2 - Math.PI / 2;
+            const ps = (i / 12) * 0.48;
+            const pp = ease(Math.max(0, Math.min(1, (bp - ps) / 0.52)));
+            drawPetal(a, OUTER_LEN * pp, OUTER_W * pp, Math.min(1, pp * 1.8));
+          }
+
+          // 안꽃잎 8장 (나중에 피어남, 조금 더 작음)
+          for (let i = 0; i < 8; i++) {
+            const a  = (i / 8) * Math.PI * 2 + (Math.PI / 8) - Math.PI / 2;
+            const ps = 0.28 + (i / 8) * 0.26;
+            const pp = ease(Math.max(0, Math.min(1, (bp - ps) / 0.46)));
+            drawPetal(a, INNER_LEN * pp, INNER_W * pp, Math.min(1, pp * 1.6));
+          }
+
+          // 중심부
+          const cp = ease(Math.max(0, Math.min(1, (bp - 0.52) / 0.48)));
+          if (cp > 0) {
+            const r = Math.max(4, diag * 0.032 * cp);
+            // 하얀 원
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * 1.35, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFBF7';
+            ctx.fill();
+            // 골드
+            const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+            cg.addColorStop(0, '#E4C070');
+            cg.addColorStop(0.6, '#C9A040');
+            cg.addColorStop(1, '#A07828');
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fillStyle = cg;
+            ctx.fill();
+            // 수술 점
+            if (cp > 0.4) {
+              const sa = (cp - 0.4) / 0.6;
+              for (let i = 0; i < 8; i++) {
+                const ang = (i / 8) * Math.PI * 2;
+                const dr = r * 0.75;
+                ctx.beginPath();
+                ctx.arc(cx + Math.cos(ang)*dr, cy + Math.sin(ang)*dr, Math.max(1.5, r*0.1), 0, Math.PI*2);
+                ctx.fillStyle = `rgba(255, 238, 160, ${sa * 0.85})`;
+                ctx.fill();
+              }
+            }
+          }
+
+          // 브랜드 텍스트 (꽃 다 피면 등장)
+          if (bp > 0.72) {
+            const ta = ease(Math.min(1, (bp - 0.72) / 0.28));
+            drawText(ta);
+          }
+
+          // fade-out: 인트로 오버레이 사라지며 Silk 배경 드러남
+          if (el > BLOOM_MS + HOLD_MS) {
+            const fp = ease(Math.min(1, (el - BLOOM_MS - HOLD_MS) / FADE_MS));
+            intro.style.opacity = 1 - fp;
+            if (fp >= 1) { intro.style.display = 'none'; return; }
+          }
+
+          requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+      })();
+
+      // Lenis smooth scroll
+      const lenis = (typeof Lenis !== 'undefined') ? new Lenis() : null;
+      if (lenis) {
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+
+      // Custom cursor (BlobCursor style)
+      const dot = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX;
+        my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+      });
+
+      function updateRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(updateRing);
+      }
+      updateRing();
+
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          ring.style.width = '56px';
+          ring.style.height = '56px';
+          ring.style.borderColor = 'var(--accent)';
+        });
+        el.addEventListener('mouseleave', () => {
+          ring.style.width = '36px';
+          ring.style.height = '36px';
+          ring.style.borderColor = 'var(--accent)';
+        });
+      });
+
+      // SplitText + IntersectionObserver
+      function setupSplitText() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.querySelectorAll('.word').forEach((w, i) => {
+                setTimeout(() => w.classList.add('visible'), i * 80);
+              });
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('h1, h2').forEach(el => {
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.95) {
+            el.querySelectorAll('.word').forEach((w, i) => {
+              setTimeout(() => w.classList.add('visible'), i * 80);
+            });
+          }
+          observer.observe(el);
+        });
+      }
+      setupSplitText();
+
+      // Silk WebGL background
+      const canvas = document.getElementById('shader-canvas');
+      const gl = canvas.getContext('webgl');
+
+      if (!gl) {
+        canvas.style.background = 'linear-gradient(135deg, #FFFBF7, #E8DDD4)';
+      } else {
+        // Vertex shader
+        const vertexShaderSource = `
+          attribute vec2 aPosition;
+          varying vec2 vUv;
+          void main() {
+            vUv = aPosition * 0.5 + 0.5;
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+          }
+        `;
+
+        // Fragment shader
+        const fragmentShaderSource = `
+          precision highp float;
+          varying vec2 vUv;
+          uniform float uTime;
+          uniform vec3 uColor;
+          uniform float uSpeed;
+          uniform float uScale;
+          uniform float uRotation;
+          uniform float uNoiseIntensity;
+
+          const float e = 2.71828182845904523536;
+
+          float noise(vec2 texCoord) {
+            float G = e;
+            vec2 r = (G * sin(G * texCoord));
+            return fract(r.x * r.y * (1.0 + texCoord.x));
+          }
+
+          vec2 rotateUvs(vec2 uv, float angle) {
+            float c = cos(angle);
+            float s = sin(angle);
+            mat2 rot = mat2(c, -s, s, c);
+            return rot * uv;
+          }
+
+          void main() {
+            float rnd = noise(gl_FragCoord.xy);
+            vec2 uv = rotateUvs(vUv * uScale, uRotation);
+            vec2 tex = uv * uScale;
+            float tOffset = uSpeed * uTime;
+
+            tex.y += 0.03 * sin(8.0 * tex.x - tOffset);
+
+            float pattern = 0.82 +
+              0.18 * sin(5.0 * (tex.x + tex.y +
+                cos(3.0 * tex.x + 5.0 * tex.y) +
+                0.02 * tOffset) +
+                sin(20.0 * (tex.x + tex.y - 0.1 * tOffset)));
+
+            vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
+            col.a = 1.0;
+            gl_FragColor = col;
+          }
+        `;
+
+        function compileShader(source, type) {
+          const shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+            return null;
+          }
+          return shader;
+        }
+
+        const vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
+        const fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
+
+        if (vertexShader && fragmentShader) {
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Program link error:', gl.getProgramInfoLog(program));
+            canvas.style.background = 'linear-gradient(135deg, #FFFBF7, #E8DDD4)';
+          } else {
+            gl.useProgram(program);
+
+            const positions = new Float32Array([
+              -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1
+            ]);
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+            const positionAttributeLocation = gl.getAttribLocation(program, 'aPosition');
+            gl.enableVertexAttribArray(positionAttributeLocation);
+            gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const uTimeLoc = gl.getUniformLocation(program, 'uTime');
+            const uColorLoc = gl.getUniformLocation(program, 'uColor');
+            const uSpeedLoc = gl.getUniformLocation(program, 'uSpeed');
+            const uScaleLoc = gl.getUniformLocation(program, 'uScale');
+            const uRotationLoc = gl.getUniformLocation(program, 'uRotation');
+            const uNoiseIntensityLoc = gl.getUniformLocation(program, 'uNoiseIntensity');
+
+            gl.uniform3f(uColorLoc, 1.0, 0.973, 0.937);  // warm ivory #FFF8EF
+            gl.uniform1f(uSpeedLoc, 2.5);
+            gl.uniform1f(uScaleLoc, 1.4);
+            gl.uniform1f(uRotationLoc, 0.0);
+            gl.uniform1f(uNoiseIntensityLoc, 0.7);
+
+            function resizeCanvas() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+              gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            let startTime = Date.now();
+            function render() {
+              const elapsed = (Date.now() - startTime) / 1000;
+              gl.uniform1f(uTimeLoc, elapsed);
+              gl.drawArrays(gl.TRIANGLES, 0, 6);
+              requestAnimationFrame(render);
+            }
+            render();
+          }
+        } else {
+          canvas.style.background = 'linear-gradient(135deg, #FFFBF7, #E8DDD4)';
+        }
+      }
+
+      // Petal particles in hero
+      function createPetals() {
+        const wrapper = document.getElementById('petal-canvas-wrapper');
+        for (let i = 0; i < 20; i++) {
+          const petal = document.createElement('div');
+          petal.className = 'petal';
+          petal.style.left = Math.random() * 100 + '%';
+          petal.style.bottom = Math.random() * -100 - 10 + 'px';
+          petal.style.width = Math.random() * 20 + 10 + 'px';
+          petal.style.height = petal.style.width;
+          petal.style.animationDuration = Math.random() * 6 + 8 + 's';
+          petal.style.animationDelay = Math.random() * 2 + 's';
+          wrapper.appendChild(petal);
+        }
+      }
+      createPetals();
+
+      // Form submission handler
+      document.querySelector('.contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your inquiry! We will get back to you soon.');
+        this.reset();
+      });
+    });
+  </script>
+</body>
+</html>

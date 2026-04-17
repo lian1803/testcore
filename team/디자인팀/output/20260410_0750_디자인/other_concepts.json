@@ -1,0 +1,82 @@
+[
+  {
+    "id": "B",
+    "name": "수묵화 정원에서의 산책",
+    "big_idea": "마우스가 지나가는 곳마다 수묵화 잉크가 번지며 숨겨진 꽃들이 피어난다",
+    "background": {
+      "component": "Grainient",
+      "colors": [
+        "#F5F2EB",
+        "#E6E0D4",
+        "#2C2C2C"
+      ],
+      "note": "한지 질감의 미색 베이스에 미세한 노이즈, 먹색 악센트로 동양적 정제미"
+    },
+    "colors": {
+      "bg": "#F5F2EB",
+      "primary": "#2C2C2C",
+      "accent": "#8B7355",
+      "secondary": "#C4B8A5"
+    },
+    "typography": {
+      "heading_font": "Noto Serif KR",
+      "heading_weight": "200",
+      "body_font": "Pretendard",
+      "body_weight": "300"
+    },
+    "cursor": "SplashCursor",
+    "hero": {
+      "approach": "shader-only",
+      "detail": "커서 위치에 잉크가 번지는 커스텀 쉐이더. 잉크가 퍼진 영역에만 숨겨져 있던 꽃 일러스트가 드러남. 스크롤하면 전체 정원이 reveal",
+      "nano_banana_prompt": null
+    },
+    "text_animation": "BlurText",
+    "special": "스크롤할수록 사계절이 바뀜: 봄 벚꽃→여름 수국→가을 코스모스→겨울 동백",
+    "sections": [
+      "hero-ink-reveal",
+      "seasonal-gallery",
+      "ceremony-packages",
+      "monthly-subscription"
+    ]
+  },
+  {
+    "id": "C",
+    "name": "글래스 돔 속 영원한 순간",
+    "big_idea": "유리 돔 안에 보존된 한 송이 꽃을 360도로 바라보며 영원히 간직할 순간을 상상한다",
+    "background": {
+      "component": "LiquidChrome",
+      "colors": [
+        "#1A1A1A",
+        "#C0C0C0",
+        "#FFD4E5"
+      ],
+      "note": "다크 배경 위 크롬 광택이 흐르며 핑크 반사광이 은은하게 비침"
+    },
+    "colors": {
+      "bg": "#0D0D0D",
+      "primary": "#FFFFFF",
+      "accent": "#FFD4E5",
+      "secondary": "#666666"
+    },
+    "typography": {
+      "heading_font": "Playfair Display",
+      "heading_weight": "400",
+      "body_font": "Inter",
+      "body_weight": "300"
+    },
+    "cursor": "GhostCursor",
+    "hero": {
+      "approach": "three.js",
+      "detail": "투명한 글래스 돔 3D 오브젝트 중앙 배치. 돔 안에 실제 부케 또는 단일 꽃 모델. 마우스 드래그로 360도 회전 가능. 돔 표면에 빛 반사 굴절 쉐이더",
+      "nano_banana_prompt": null
+    },
+    "text_animation": "ShinyText",
+    "special": "스크롤 시 돔이 열리며 꽃이 피어오름. 구독 섹션에서는 12개 미니 돔이 월별 꽃을 보여줌",
+    "sections": [
+      "hero-glass-dome",
+      "bouquet-configurator",
+      "preservation-service",
+      "subscription-calendar"
+    ]
+  }
+]

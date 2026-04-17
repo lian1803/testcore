@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PÉTALE — Luxury Floral Atelier</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Montserrat:wght@400&display=swap" rel="stylesheet" />
+
+  <!-- Lenis CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.45/bundled/lenis.min.js"></script>
+
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0D0D0D;
+      --primary: #C4A77D;
+      --accent: #FFFFFF;
+      --secondary: #8B7355;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--accent);
+      font-family: var(--font-body);
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ─── Custom Cursor ─── */
+    #cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, background 0.2s ease;
+      will-change: transform;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(196, 167, 125, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+      will-change: transform;
+    }
+
+    body:has(a:hover) #cursor-ring,
+    body:has(button:hover) #cursor-ring {
+      width: 56px;
+      height: 56px;
+      border-color: var(--primary);
+    }
+
+    /* ─── WebGL Canvas ─── */
+    #shader-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      display: block;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: clamp(1.2rem, 3vw, 2rem) clamp(1.5rem, 6vw, 5rem);
+      mix-blend-mode: normal;
+    }
+
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,13,13,0.7) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      text-decoration: none;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      list-style: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-cta {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-cta a {
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1vw, 0.7rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--primary);
+      padding: 0.65rem 1.5rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .nav-cta a:hover {
+      background: var(--accent);
+    }
+
+    /* ─── Hero Section ─── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-text-wrap {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(0.8rem, 2vw, 1.5rem);
+    }
+
+    /* Chrome Mask Text — Brand Name */
+    .hero-brand {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(5rem, 18vw, 18rem);
+      letter-spacing: 0.05em;
+      line-height: 0.88;
+      text-transform: uppercase;
+
+      /* Chrome mask: canvas texture clips inside glyphs */
+      background: linear-gradient(
+        135deg,
+        #e8e0d0 0%,
+        #c4a77d 20%,
+        #f5f0e8 35%,
+        #8b7355 50%,
+        #f0ebe0 65%,
+        #c4a77d 80%,
+        #ffffff 100%
+      );
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+
+      /* Animation handled by JS, but base state */
+      will-change: background-position;
+      user-select: none;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1.5vw, 0.85rem);
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(196, 167, 125, 0.8);
+      margin-top: 0.5rem;
+    }
+
+    .hero-sub {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.55);
+      font-style: italic;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: clamp(2rem, 5vw, 3.5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 10;
+    }
+
+    .hero-scroll-hint span {
+      font-size: clamp(0.55rem, 1vw, 0.65rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(196, 167, 125, 0.6);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: clamp(40px, 8vh, 70px);
+      background: linear-gradient(to bottom, rgba(196, 167, 125, 0.8), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    /* Hero overlay — fades out as shader takes over */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(13, 13, 13, 0.55) 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* ─── Featured Collection ─── */
+    #featured-collection {
+      position: relative;
+      z-index: 10;
+      padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 8vw, 8rem);
+      background: var(--bg);
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: clamp(0.55rem, 1vw, 0.7rem);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: clamp(1.5rem, 4vw, 3rem);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      display: block;
+      width: clamp(30px, 6vw, 60px);
+      height: 1px;
+      background: var(--primary);
+      opacity: 0.5;
+    }
+
+    .section-heading {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(2.2rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin-bottom: clamp(3rem, 8vw, 6rem);
+      max-width: 18ch;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--primary);
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(0.8rem, 2vw, 1.5rem);
+    }
+
+    .collection-item {
+      position: relative;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+
+    .collection-item--large {
+      grid-column: span 7;
+      aspect-ratio: 3/4;
+    }
+
+    .collection-item--tall {
+      grid-column: span 5;
+      aspect-ratio: 2/3;
+    }
+
+    .collection-item--wide {
+      grid-column: span 5;
+      aspect-ratio: 4/3;
+    }
+
+    .collection-item--square {
+      grid-column: span 7;
+      aspect-ratio: 16/9;
+    }
+
+    .collection-img-placeholder {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .collection-item:hover .collection-img-placeholder {
+      transform: scale(1.06);
+    }
+
+    /* Placeholder gradient stand-ins */
+    .placeholder-a {
+      background: linear-gradient(160deg, #2a1f14 0%, #1a1209 40%, #3d2b1a 100%);
+      width: 100%;
+      height: 100%;
+    }
+    .placeholder-b {
+      background: linear-gradient(200deg, #1e1812 0%, #2c2318 60%, #151008 100%);
+      width: 100%;
+      height: 100%;
+    }
+    .placeholder-c {
+      background: linear-gradient(140deg, #251c10 0%, #0e0b06 50%, #2e2416 100%);
+      width: 100%;
+      height: 100%;
+    }
+    .placeholder-d {
+      background: linear-gradient(170deg, #1a150d 0%, #32261a 55%, #100d06 100%);
+      width: 100%;
+      height: 100%;
+    }
+
+    .collection-item-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: clamp(1rem, 3vw, 2rem);
+      background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 100%);
+      transform: translateY(30%);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .collection-item:hover .collection-item-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .collection-item-name {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+
+    .collection-item-price {
+      font-size: clamp(0.6rem, 1vw, 0.72rem);
+      letter-spacing: 0.2em;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    /* ─── Services Grid ─── */
+    #services-grid {
+      position: relative;
+      z-index: 10;
+      padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 8vw, 8rem);
+      background: #0a0a0a;
+    }
+
+    .services-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 8vw, 8rem);
+      align-items: start;
+    }
+
+    .services-left {
+      position: sticky;
+      top: clamp(6rem, 15vh, 10rem);
+    }
+
+    .services-right {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    .service-card {
+      border-top: 1px solid rgba(196, 167, 125, 0.2);
+      padding-top: clamp(1.5rem, 4vw, 3rem);
+      padding-bottom: clamp(1.5rem, 4vw, 3rem);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      cursor: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .service-card:hover {
+      border-color: var(--primary);
+    }
+
+    .service-num {
+      font-family: var(--font-body);
+      font-size: clamp(0.55rem, 0.9vw, 0.65rem);
+      letter-spacing: 0.3em;
+      color: var(--secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-name {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+    }
+
+    .service-desc {
+      font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 38ch;
+    }
+
+    .service-arrow {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--primary);
+      opacity: 0;
+      transform: translate(-10px, 10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      align-self: end;
+    }
+
+    .service-card:hover .service-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* ─── Subscription CTA ─── */
+    #subscription-cta {
+      position: relative;
+      z-index: 10;
+      padding: clamp(6rem, 15vw, 14rem) clamp(1.5rem, 8vw, 8rem);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .cta-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(6rem, 20vw, 22rem);
+      letter-spacing: -0.02em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(196, 167, 125, 0.07);
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    .cta-heading {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(2.5rem, 7vw, 6.5rem);
+      letter-spacing: 0.02em;
+      line-height: 1.0;
+      max-width: 20ch;
+    }
+
+    .cta-heading em {
+      font-style: italic;
+      color: var(--primary);
+    }
+
+    .cta-body {
+      font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+      line-height: 2;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 45ch;
+    }
+
+    .cta-plans {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1rem, 2.5vw, 2rem);
+      width: 100%;
+      max-width: 900px;
+      margin-top: clamp(1rem, 3vw, 2rem);
+    }
+
+    .plan-card {
+      border: 1px solid rgba(196, 167, 125, 0.2);
+      padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.2rem, 3vw, 2rem);
+      text-align: left;
+      position: relative;
+      transition: border-color 0.4s ease, background 0.4s ease;
+      cursor: none;
+    }
+
+    .plan-card:hover {
+      border-color: var(--primary);
+      background: rgba(196, 167, 125, 0.04);
+    }
+
+    .plan-card--featured {
+      border-color: var(--primary);
+      background: rgba(196, 167, 125, 0.06);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: var(--bg);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+    }
+
+    .plan-freq {
+      font-size: clamp(0.55rem, 0.9vw, 0.65rem);
+      letter-spacing: 0.3em;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .plan-name {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-price {
+      font-family: var(--font-heading);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      color: var(--primary);
+      margin-bottom: clamp(0.8rem, 2vw, 1.5rem);
+    }
+
+    .plan-price span {
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1vw, 0.72rem);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .plan-features li {
+      font-size: clamp(0.62rem, 1vw, 0.75rem);
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+<script>
+```html
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     0. UTILITY
+  ============================================================ */
+  const qs  = (sel, ctx = document) => ctx.querySelector(sel);
+  const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+
+  /* ============================================================
+     1. LENIS SMOOTH SCROLL
+  ============================================================ */
+  function initLenis() {
+    if (typeof Lenis === 'undefined') {
+      console.warn('Lenis not found – skipping smooth scroll');
+      return null;
+    }
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    return lenis;
+  }
+
+  /* ============================================================
+     2. WEBGL – LIQUID CHROME
+  ============================================================ */
+  function initWebGL() {
+    /* ── canvas setup ── */
+    let canvas = qs('#shader-canvas');
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.id = 'shader-canvas';
+      Object.assign(canvas.style, {
+        position : 'fixed',
+        top      : '0',
+        left     : '0',
+        width    : '100%',
+        height   : '100%',
+        zIndex   : '-1',
+        pointerEvents: 'none',
+      });
+      document.body.prepend(canvas);
+    }
+
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) { console.error('WebGL not supported'); return; }
+
+    /* ── shaders ── */
+    const VS = `
+      attribute vec2 position;
+      attribute vec2 uv;
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    `;
+
+    const FS = `
+      precision highp float;
+      uniform float uTime;
+      uniform vec3  uResolution;
+      uniform vec3  uBaseColor;
+      uniform float uAmplitude;
+      uniform float uFrequencyX;
+      uniform float uFrequencyY;
+      uniform vec2  uMouse;
+      varying vec2  vUv;
+
+      vec4 renderImage(vec2 uvCoord) {
+        vec2 fragCoord = uvCoord * uResolution.xy;
+        vec2 uv = (2.0 * fragCoord - uResolution.xy) / min(uResolution.x, uResolution.y);
+
+        for (float i = 1.0; i < 10.0; i++) {
+          uv.x += uAmplitude / i * cos(i * uFrequencyX * uv.y + uTime + uMouse.x * 3.14159);
+          uv.y += uAmplitude / i * cos(i * uFrequencyY * uv.x + uTime + uMouse.y * 3.14159);
+        }
+
+        vec2  diff   = uvCoord - uMouse;
+        float dist   = length(diff);
+        float falloff= exp(-dist * 20.0);
+        float ripple = sin(10.0 * dist - uTime * 2.0) * 0.03;
+        uv += (diff / (dist + 0.0001)) * ripple * falloff;
+
+        vec3 color = uBaseColor / abs(sin(uTime - uv.y - uv.x));
+        return vec4(color, 1.0);
+      }
+
+      void main() {
+        vec4 col    = vec4(0.0);
+        int  samples = 0;
+        for (int i = -1; i <= 1; i++) {
+          for (int j = -1; j <= 1; j++) {
+            vec2 offset = vec2(float(i), float(j)) * (1.0 / min(uResolution.x, uResolution.y));
+            col += renderImage(vUv + offset);
+            samples++;
+          }
+        }
+        gl_FragColor = col / float(samples);
+      }
+    `;
+
+    /* ── compile helpers ── */
+    function compileShader(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error('Shader compile error:', gl.getShaderInfoLog(s));
+        gl.deleteShader(s);
+        return null;
+      }
+      return s;
+    }
+
+    const vs  = compileShader(gl.VERTEX_SHADER,   VS);
+    const fs  = compileShader(gl.FRAGMENT_SHADER, FS);
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error('Program link error:', gl.getProgramInfoLog(prog));
+      return;
+    }
+    gl.useProgram(prog);
+
+    /* ── full-screen quad ── */
+    const positions = new Float32Array([-1,-1, 1,-1, -1,1, 1,1]);
+    const uvs       = new Float32Array([ 0, 0, 1, 0,  0,1, 1,1]);
+
+    function makeBuffer(data, attr) {
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, attr);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    }
+    makeBuffer(positions, 'position');
+    makeBuffer(uvs,       'uv');
+
+    /* ── uniforms ── */
+    const U = {
+      uTime      : gl.getUniformLocation(prog, 'uTime'),
+      uResolution: gl.getUniformLocation(prog, 'uResolution'),
+      uBaseColor : gl.getUniformLocation(prog, 'uBaseColor'),
+      uAmplitude : gl.getUniformLocation(prog, 'uAmplitude'),
+      uFrequencyX: gl.getUniformLocation(prog, 'uFrequencyX'),
+      uFrequencyY: gl.getUniformLocation(prog, 'uFrequencyY'),
+      uMouse     : gl.getUniformLocation(prog, 'uMouse'),
+    };
+
+    /* Liquid Petal palette  bg=#0D0D0D, primary=#C4A77D */
+    gl.uniform3f(U.uBaseColor,  0.082, 0.075, 0.055); // warm dark gold tint
+    gl.uniform1f(U.uAmplitude,  0.35);
+    gl.uniform1f(U.uFrequencyX, 1.8);
+    gl.uniform1f(U.uFrequencyY, 1.8);
+
+    /* ── mouse state ── */
+    const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+    window.addEventListener('mousemove', e => {
+      mouse.tx = e.clientX / window.innerWidth;
+      mouse.ty = 1.0 - e.clientY / window.innerHeight;
+    });
+
+    /* ── resize ── */
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width  = window.innerWidth  * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    /* ── render loop ── */
+    const startTime = performance.now();
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    function render() {
+      mouse.x = lerp(mouse.x, mouse.tx, 0.06);
+      mouse.y = lerp(mouse.y, mouse.ty, 0.06);
+
+      const t = (performance.now() - startTime) * 0.001;
+      gl.uniform1f(U.uTime,       t);
+      gl.uniform3f(U.uResolution, canvas.width, canvas.height, 1.0);
+      gl.uniform2f(U.uMouse,      mouse.x, mouse.y);
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+  }
+
+  /* ============================================================
+     3. CUSTOM CURSOR  (BlobCursor — dot + ring)
+  ============================================================ */
+  function initCursor() {
+    /* inject styles */
+    const style = document.createElement('style');
+    style.textContent = `
+      *,*::before,*::after { cursor: none !important; }
+
+      #cursor-dot,
+      #cursor-ring {
+        position: fixed;
+        top: 0; left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        will-change: transform;
+        z-index: 99999;
+        mix-blend-mode: difference;
+      }
+
+      #cursor-dot {
+        width: 8px; height: 8px;
+        background: #C4A77D;
+        transition: transform .15s ease, opacity .15s ease;
+      }
+
+      #cursor-ring {
+        width: 44px; height: 44px;
+        border: 1.5px solid rgba(196,167,125,.65);
+        background: transparent;
+        transition: transform .42s cubic-bezier(.16,1,.3,1),
+                    width .3s ease, height .3s ease,
+                    border-color .3s ease, opacity .3s ease;
+      }
+
+      body.cursor-hovering #cursor-dot  { transform: translate(-50%,-50%) scale(2.4); opacity:.5; }
+      body.cursor-hovering #cursor-ring { width:70px; height:70px; border-color:#C4A77D; }
+      body.cursor-hidden   #cursor-dot,
+      body.cursor-hidden   #cursor-ring { opacity:0; }
+    `;
+    document.head.appendChild(style);
+
+    const dot  = document.createElement('div'); dot.id  = 'cursor-dot';
+    const ring = document.createElement('div'); ring.id = 'cursor-ring';
+    document.body.append(dot, ring);
+
+    let mx = -200, my = -200;
+    let rx = -200, ry = -200;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    document.addEventListener('mouseleave',() => document.body.classList.add('cursor-hidden'));
+    document.addEventListener('mouseenter', () => document.body.classList.remove('cursor-hidden'));
+
+    /* hover detection */
+    const hoverSels = 'a,button,[data-cursor-hover],input,textarea,select,label';
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(hoverSels)) document.body.classList.add('cursor-hovering');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(hoverSels)) document.body.classList.remove('cursor-hovering');
+    });
+
+    const lerpVal = (a, b, t) => a + (b - a) * t;
+
+    (function animateCursor() {
+      dot.style.transform  = `translate(calc(${mx}px - 50%), calc(${my}px - 50%))`;
+
+      rx = lerpVal(rx, mx, 0.12);
+      ry = lerpVal(ry, my, 0.12);
+      ring.style.transform = `translate(calc(${rx}px - 50%), calc(${ry}px - 50%))`;
+
+      requestAnimationFrame(animateCursor);
+    })();
+  }
+
+  /* ============================================================
+     4. SPLIT TEXT – CHROME MASK EFFECT
+     Each heading gets a canvas-texture mask so liquid chrome
+     shows through the letterforms only.
+  ============================================================ */
+  function initSplitText() {
+    const style = document.createElement('style');
+    style.textContent = `
+      /* ── word / char split helpers ── */
+      .split-word {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+      }
+      .split-char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(48px) rotate(4deg);
+        transition: opacity .75s cubic-bezier(.16,1,.3,1),
+                    transform .75s cubic-bezier(.16,1,.3,1);
+        will-change: transform, opacity;
+      }
+      .split-char.visible {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+
+      /* ── chrome mask headings ── */
+      .chrome-mask-text {
+        position: relative;
+        display: inline-block;
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        background-attachment: fixed;
+        /* background-image set dynamically after canvas renders one frame */
+        background-image: linear-gradient(135deg, #C4A77D 0%, #fff 40%, #C4A77D 70%, #a08060 100%);
+      }
+
+      /* animated shimmer fallback */
+      @keyframes shimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position:  200% center; }
+      }
+      .chrome-mask-text {
+        background-size: 200% auto;
+        animation: shimmer 4s linear infinite;
+      }
+    `;
+    document.head.appendChild(style);
+
+    /* ── split every [data-split] element into chars ── */
+    const targets = qsa('[data-split], h1, h2, h3, .hero-title, .section-title');
+
+    targets.forEach(el => {
+      /* already processed */
+      if (el.dataset.splitDone) return;
+      el.dataset.splitDone = '1';
+
+      /* add chrome-mask class if it's a heading */
+      if (/^H[1-3]$/.test(el.tagName) || el.classList.contains('hero-title')) {
+        el.classList.add('chrome-mask-text');
+      }
+
+      const rawText = el.innerText;
+      el.innerHTML = '';
+
+      rawText.split(' ').forEach((word, wi) => {
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'split-word';
+
+        word.split('').forEach((ch, ci) => {
+          const charSpan = document.createElement('span');
+          charSpan.className = 'split-char';
+          charSpan.textContent = ch === '' ? '\u00A0' : ch;
+          /* staggered delay */
+          charSpan.style.transitionDelay = `${(wi * 6 + ci) * 38}ms`;
+          wordSpan.appendChild(charSpan);
+        });
+
+        el.appendChild(wordSpan);
+        /* space between words */
+        if (wi < rawText.split(' ').length - 1) {
+          el.appendChild(document.createTextNode('\u00A0'));
+        }
+      });
+    });
+
+    /* ── IntersectionObserver to trigger animations ── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const chars = qsa('.split-char', entry.target);
+        chars.forEach(c => c.classList.add('visible'));
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.15, rootMargin: '-60px 0px' });
+
+    targets.forEach(el => io.observe(el));
+  }
+
+  /* ============================================================
+     5. SCROLL FADE-UP  (generic .fade-up elements)
+  ============================================================ */
+  function initFadeUp() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .fade-up {
+        opacity: 0;
+        transform: translateY(56px);
+        transition: opacity .9s cubic-bezier(.16,1,.3,1),
+                    transform .9s cubic-bezier(.16,1,.3,1);
+        will-change: transform, opacity;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    `;
+    document.head.appendChild(style);
+
+    /* Auto-tag common content blocks if not already tagged */
+    qsa('p, .card, .feature, figure, img, .cta-btn').forEach((el, i) => {
+      if (!el.classList.contains('fade-up') && !el.closest('[data-split]')) {
+        el.classList.add('fade-up');
+        el.style.transitionDelay = `${(i % 4) * 80}ms`;
+      }
+    });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '-40px 0px' });
+
+    qsa('.fade-up').forEach(el => io.observe(el));
+  }
+
+  /* ============================================================
+     6. PETAL PARTICLE LAYER  (canvas overlay – CSS z-index: 0)
+        Adds organic petal-shaped particles drifting upward
+        to reinforce the "Liquid Petal" concept.
+  ============================================================ */
+  function initPetalParticles() {
+    const canvas = document.createElement('canvas');
+    Object.assign(canvas.style, {
+      position     : 'fixed',
+      top          : '0',
+      left         : '0',
+      width        : '100%',
+      height       : '100%',
+      zIndex       : '0',
+      pointerEvents: 'none',
+      opacity      : '0.18',
+    });
+    document.body.insertBefore(canvas, document.body.children[1]);
+
+    const ctx = canvas.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resize() {
+      canvas.width  = window.innerWidth  * DPR;
+      canvas.height = window.innerHeight * DPR;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    /* petal drawing helper */
+    function drawPetal(cx, cy, size, angle, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(cx * DPR, cy * DPR);
+      ctx.rotate(angle);
+      ctx.scale(size * DPR, size * DPR);
+      ctx.beginPath();
+      /* Bézier petal shape */
+      ctx.moveTo(0, -1);
+      ctx.bezierCurveTo( 0.6, -0.6,  0.6,  0.6, 0, 1);
+      ctx.bezierCurveTo(-0.6,  0.6, -0.6, -0.6, 0,-1);
+      ctx.closePath();
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      grad.addColorStop(0,   'rgba(255,255,255,0.9)');
+      grad.addColorStop(0.4, 'rgba(196,167,125,0.7)');
+      grad.addColorStop(1,   'rgba(196,167,125,0)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    /* particle pool */
+    const COUNT = 28;
+    const petals = Array.from({ length: COUNT }, (_, i) => ({
+      x     : Math.random() * window.innerWidth,
+      y     : Math.random() * window.innerHeight + window.innerHeight,
+      size  : 8 + Math.random() * 22,
+      speed : 0.25 + Math.random() * 0.55,
+      drift : (Math.random() - 0.5) * 0.35,
+      angle : Math.random() * Math.PI * 2,
+      spin  : (Math.random() - 0.5) * 0.012,
+      alpha : 0.25 + Math.random() * 0.55,
+    }));
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const W = window.innerWidth, H = window.innerHeight;
+
+      petals.forEach(p => {
+        drawPetal(p.x, p.y, p.size, p.angle, p.alpha);
+        p.y     -= p.speed;
+        p.x     += p.drift;
+        p.angle += p.spin;
+        if (p.y < -80) {
+          p.y = H + 80;
+          p.x = Math.random() * W;
+        }
+      });
+      requestAnimationFrame(animatePetals);
+    }
+    requestAnimationFrame(animatePetals);
+  }
+
+  /* ============================================================
+     7. GLOBAL PAGE STYLES  (minimal baseline so the effect works
+        even on a plain HTML file)
+  ============================================================ */
+  function injectBaseStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      :root {
+        --bg      : #0D0D0D;
+        --primary : #C4A77D;
+        --accent  : #FFFFFF;
+      }
+      html, body {
+        margin: 0; padding: 0;
+        background: var(--bg);
+        color: var(--accent);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* scrollbar */
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: #0D0D0D; }
+      ::-webkit-scrollbar-thumb { background: #C4A77D; border-radius: 2px; }
+
+      /* selection */
+      ::selection {
+        background: rgba(196,167,125,.35);
+        color: #fff;
+      }
+
+      /* hero baseline – override in your own CSS */
+      .hero {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+</script>
+</html>

@@ -1,0 +1,265 @@
+// ──────────────────────────────────────────────────────────────────────────────
+// AI 세금신고 도우미 — Prisma Schema
+// 기준: wave_cto.md v1.0 (7개 도메인 모델 + NextAuth 필수 모델)
+// 금액 필드 전부 Int (원 단위) — 부동소수점 절대 금지
+// ──────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────
+// User: 회원 기본 정보 + 플랜 상태
+// ──────────────────────────────────────────────
+model User {
+  id             String     @id @default(cuid())
+  email          String     @unique
+  name           String?
+  emailVerified  DateTime?
+  image          String?
+  passwordHash   String?                    // 소셜 로그인은 null
+  planStatus     PlanStatus @default(FREE)  // FREE | PREMIUM | EXPIRED
+  trialStartedAt DateTime?                  // 무료 체험 시작일
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  accounts        Account[]
+  sessions        Session[]
+  businessProfile BusinessProfile?
+  receipts        Receipt[]
+  expenseItems    ExpenseItem[]
+  taxReturns      TaxReturn[]
+  subscription    Subscription?
+  usageLogs       UsageLog[]
+}
+
+enum PlanStatus {
+  FREE
+  PREMIUM
+  EXPIRED
+}
+
+// ──────────────────────────────────────────────
+// BusinessProfile: 사업자 프로필
+// 업종/과세유형에 따라 공제 항목 계산이 달라지므로 필수
+// ──────────────────────────────────────────────
+model BusinessProfile {
+  id                 String       @id @default(cuid())
+  userId             String       @unique
+  businessType       String       // 국세청 업종코드 (예: "940909" 프리랜서)
+  businessTypeLabel  String       // 사람이 읽을 수 있는 업종명 (예: "프리랜서/IT")
+  taxationType       TaxationType // 과세유형
+  registrationNumber String?      // 사업자등록번호 (선택, 미입력 시 null)
+  taxYear            Int          // 신고 대상 연도 (기본값: 전년도)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TaxationType {
+  GENERAL      // 일반과세자
+  SIMPLIFIED   // 간이과세자
+  TAX_FREE     // 면세사업자
+  INCOME_ONLY  // 소득세만 해당 (프리랜서)
+}
+
+// ──────────────────────────────────────────────
+// Receipt: 영수증 원본 메타데이터
+// 이미지는 S3에 저장, imageUrl은 S3 Object Key
+// ──────────────────────────────────────────────
+model Receipt {
+  id            String        @id @default(cuid())
+  userId        String
+  imageUrl      String        // S3 Object Key
+  imageDeleted  Boolean       @default(false) // 원본 이미지 삭제 여부 (개인정보 보호)
+  ocrRawText    String?       // OCR 원본 텍스트 (AES-256 암호화 권장)
+  ocrConfidence Float?        // OCR 신뢰도 점수 (0~1)
+  ocrEngine     OcrEngine     @default(GOOGLE_VISION)
+  status        ReceiptStatus @default(PENDING)
+  uploadedAt    DateTime      @default(now())
+  processedAt   DateTime?     // OCR 완료 시각
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expenseItems ExpenseItem[]
+}
+
+enum OcrEngine {
+  GOOGLE_VISION
+  GPT4O_VISION // 폴백 엔진 (저신뢰도/실패 시)
+}
+
+enum ReceiptStatus {
+  PENDING    // 업로드됨, OCR 미처리
+  PROCESSING // OCR 진행중
+  COMPLETED  // OCR + AI 분류 완료
+  FAILED     // OCR 실패
+  MANUAL     // 수동 입력
+}
+
+// ──────────────────────────────────────────────
+// ExpenseItem: AI 분류된 경비 항목
+// userVerified: 법적 책임 분산 핵심 필드
+// ──────────────────────────────────────────────
+model ExpenseItem {
+  id                String          @id @default(cuid())
+  receiptId         String?         // 수동 입력 시 null 가능
+  userId            String
+  date              DateTime        // 영수증 날짜
+  amount            Int             // 원 단위 (소수점 제거, Math.round() 처리)
+  merchantName      String          // 상호명
+  category          ExpenseCategory
+  isBusinessExpense Boolean         @default(true)  // 업무 관련 경비 여부
+  userVerified      Boolean         @default(false) // 사용자가 최종 확인했는지
+  memo              String?         // 사용자 메모
+  taxYear           Int             // 귀속 연도
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  receipt Receipt? @relation(fields: [receiptId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ExpenseCategory {
+  OFFICE_SUPPLIES  // 사무용품
+  COMMUNICATION    // 통신비
+  TRANSPORTATION   // 교통비
+  MEAL             // 식비/접대비
+  EDUCATION        // 교육/도서비
+  EQUIPMENT        // 장비/소프트웨어
+  RENT             // 임차료
+  INSURANCE        // 보험료
+  ADVERTISING      // 광고/마케팅
+  PROFESSIONAL_FEE // 전문가 수수료 (세무사, 변호사 등)
+  OTHER            // 기타
+}
+
+// ──────────────────────────────────────────────
+// TaxReturn: 종합소득세 신고서 초안
+// status: DRAFT → READY → DOWNLOADED
+// @@unique([userId, taxYear]) — 연도별 1개 제한
+// ──────────────────────────────────────────────
+model TaxReturn {
+  id                String          @id @default(cuid())
+  userId            String
+  taxYear           Int
+  totalIncome       Int             // 연간 총 수입 (원)
+  totalExpense      Int             // 인정된 총 경비 (원)
+  estimatedTax      Int             // 예상 납부세액 (원)
+  standardDeduction Int             // 기본 공제 합계 (원)
+  taxBase           Int             // 과세표준 = totalIncome - totalExpense - standardDeduction
+  status            TaxReturnStatus @default(DRAFT)
+  generatedAt       DateTime        @default(now())
+  downloadedAt      DateTime?
+  pdfUrl            String?         // 생성된 PDF S3 키 (임시 저장)
+  excelUrl          String?         // 생성된 Excel S3 키 (임시 저장)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, taxYear]) // 연도별 1개 제한
+}
+
+enum TaxReturnStatus {
+  DRAFT      // 생성 중
+  READY      // 완료, 다운로드 가능
+  DOWNLOADED // 사용자가 다운로드함
+}
+
+// ──────────────────────────────────────────────
+// Subscription: Stripe 구독 정보
+// ──────────────────────────────────────────────
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  plan                 SubscriptionPlan
+  stripeCustomerId     String             @unique
+  stripeSubscriptionId String?            @unique
+  stripePriceId        String?
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum SubscriptionPlan {
+  MONTHLY // 월 9,900원
+  ANNUAL  // 연 79,200원
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE  // 결제 실패
+  CANCELED
+  TRIALING
+}
+
+// ──────────────────────────────────────────────
+// UsageLog: 무료 플랜 한도 추적 + 감사 로그
+// @@index([userId, action, createdAt]) — 한도 집계 쿼리 최적화
+// ──────────────────────────────────────────────
+model UsageLog {
+  id        String      @id @default(cuid())
+  userId    String
+  action    UsageAction
+  metadata  Json?       // 추가 컨텍스트 (receiptId, taxYear 등)
+  createdAt DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, action, createdAt]) // 한도 집계 쿼리 최적화
+}
+
+enum UsageAction {
+  RECEIPT_UPLOAD       // 영수증 업로드 (무료: 20건/월 제한)
+  TAX_RETURN_GENERATE  // 신고서 생성 (무료: 1회/년 제한)
+  PDF_DOWNLOAD
+  EXCEL_DOWNLOAD
+}
+
+// ──────────────────────────────────────────────
+// NextAuth.js v5 필수 모델 (변경 금지)
+// ──────────────────────────────────────────────
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

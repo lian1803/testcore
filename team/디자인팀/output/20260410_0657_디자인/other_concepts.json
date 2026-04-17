@@ -1,0 +1,84 @@
+[
+  {
+    "id": "B",
+    "name": "Glass Garden",
+    "big_idea": "이 사이트를 열면 유리 온실 안에 들어온 것처럼 빛이 프리즘처럼 굴절되며 꽃들이 홀로그램처럼 떠있다",
+    "background": {
+      "component": "Iridescence",
+      "colors": [
+        "#E8F4EC",
+        "#F0E6F6",
+        "#FFF8E7"
+      ],
+      "note": "파스텔 민트-라벤더-피치가 무지갯빛으로 천천히 시프트"
+    },
+    "colors": {
+      "bg": "#FEFEFE",
+      "primary": "#2D3436",
+      "accent": "#A29BFE",
+      "secondary": "#81ECEC"
+    },
+    "typography": {
+      "heading_font": "Italiana",
+      "heading_weight": "400",
+      "body_font": "Nunito Sans",
+      "body_weight": "300"
+    },
+    "cursor": "BlobCursor",
+    "hero": {
+      "approach": "css-only",
+      "detail": "glassmorphism 카드들이 z축으로 레이어되어 있고, 각 카드 안에 부케 이미지. 마우스 움직임에 따라 perspective가 미세하게 기울어지며 빛 굴절 효과. 배경 Iridescence와 조화",
+      "nano_banana_prompt": null
+    },
+    "text_animation": "BlurText",
+    "special": "스크롤하면 유리 카드들이 캐러셀처럼 회전하며 다음 컬렉션 reveal - 윈도우 쇼핑 경험",
+    "sections": [
+      "hero-glass-display",
+      "seasonal-carousel",
+      "wedding-portfolio",
+      "gift-finder-quiz",
+      "boutique-locations"
+    ]
+  },
+  {
+    "id": "C",
+    "name": "Botanical Manifesto",
+    "big_idea": "이 사이트를 열면 꽃이 아닌 '선언문'이 먼저 보인다 - 타이포그래피가 주인공이고 꽃은 배우다",
+    "background": {
+      "component": "Grainient",
+      "colors": [
+        "#1B4D3E",
+        "#2E5A4C",
+        "#D4A574"
+      ],
+      "note": "딥 포레스트 그린에 골드 노이즈 텍스처가 인쇄물 같은 촉감 부여"
+    },
+    "colors": {
+      "bg": "#1B4D3E",
+      "primary": "#F4EDE4",
+      "accent": "#D4A574",
+      "secondary": "#8FBC8F"
+    },
+    "typography": {
+      "heading_font": "Playfair Display",
+      "heading_weight": "900",
+      "body_font": "Source Serif Pro",
+      "body_weight": "400"
+    },
+    "cursor": "TargetCursor",
+    "hero": {
+      "approach": "nano-banana",
+      "detail": "배경에 빈티지 보태니컬 일러스트 스타일의 AI 생성 이미지. 그 위에 거대한 타이포그래피가 마스크처럼 겹쳐져 이미지를 드러낸다",
+      "nano_banana_prompt": "vintage botanical illustration, single rose stem with leaves, sepia tone, scientific drawing style, aged paper texture, no text, centered composition"
+    },
+    "text_animation": "ScrollReveal",
+    "special": "스크롤할 때마다 새로운 보태니컬 일러스트가 텍스트 마스크 뒤에서 드러남 - 식물도감을 넘기는 경험",
+    "sections": [
+      "hero-manifesto",
+      "philosophy-scroll",
+      "artisan-process",
+      "membership-club",
+      "journal-editorial"
+    ]
+  }
+]

@@ -1,0 +1,135 @@
+{
+  "business_analysis": {
+    "type": "프리미엄 플로리스트 / 럭셔리 기프트",
+    "positioning": "꽃집이 아닌 패션 메종처럼 느껴지는 플로럴 부티크",
+    "target_emotion": "내가 특별한 취향을 가진 사람이 된 것 같은 우월감과 설렘"
+  },
+  "concepts": [
+    {
+      "id": "A",
+      "name": "Liquid Petal",
+      "big_idea": "이 사이트를 열면 크롬 금속이 녹아내리며 그 안에서 꽃잎 형태가 피어오른다",
+      "background": {
+        "component": "LiquidChrome",
+        "colors": [
+          "#1A1A1A",
+          "#C4A77D",
+          "#E8E4DF"
+        ],
+        "note": "크롬이 골드 톤으로 흐르며 다크 배경 위에서 금속 광택 연출"
+      },
+      "colors": {
+        "bg": "#0D0D0D",
+        "primary": "#C4A77D",
+        "accent": "#FFFFFF",
+        "secondary": "#8B7355"
+      },
+      "typography": {
+        "heading_font": "Cormorant Garamond",
+        "heading_weight": "300",
+        "body_font": "Montserrat",
+        "body_weight": "400"
+      },
+      "cursor": "BlobCursor",
+      "hero": {
+        "approach": "shader-only",
+        "detail": "LiquidChrome 셰이더 위에 Cormorant Garamond 300 light로 브랜드명이 마스크 클리핑되어 크롬 텍스처가 글자 안에서만 보임. 스크롤 시 크롬이 아래로 흘러내리며 첫 번째 부케 이미지가 드러남",
+        "nano_banana_prompt": null
+      },
+      "text_animation": "SplitText",
+      "special": "텍스트가 크롬 마스크 역할을 해서 글자 안에서만 액체 금속이 움직이는 하이엔드 패션 감성",
+      "sections": [
+        "hero",
+        "featured-collection",
+        "services-grid",
+        "subscription-cta",
+        "instagram-feed",
+        "footer"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Ethereal Garden",
+      "big_idea": "이 사이트를 열면 안개 속 정원에 들어선 것처럼 모든 것이 몽환적으로 피어난다",
+      "background": {
+        "component": "SoftAurora",
+        "colors": [
+          "#E8D5E0",
+          "#D4C5B9",
+          "#F5EEE6"
+        ],
+        "note": "먼지 핑크와 베이지 오로라가 천천히 흐르며 꿈속 분위기 연출"
+      },
+      "colors": {
+        "bg": "#FAF7F4",
+        "primary": "#9B7E6B",
+        "accent": "#D4A5A5",
+        "secondary": "#C9B8A8"
+      },
+      "typography": {
+        "heading_font": "Playfair Display",
+        "heading_weight": "400",
+        "body_font": "Lato",
+        "body_weight": "300"
+      },
+      "cursor": "GhostCursor",
+      "hero": {
+        "approach": "nano-banana",
+        "detail": "AI로 생성한 안개 속 하얀 장미 클로즈업 이미지가 배경. SoftAurora가 그 위에 살짝 오버레이되어 움직임 부여. 헤드라인이 BlurText로 안개에서 선명해지듯 등장",
+        "nano_banana_prompt": "ethereal close-up of white garden roses in morning fog, soft diffused light, dreamy atmosphere, shallow depth of field, dewdrops on petals, romantic and luxurious mood, muted pastel tones"
+      },
+      "text_animation": "BlurText",
+      "special": "GhostCursor가 커서 지나간 자리에 잔상을 남겨 안개 속을 걷는 느낌 강화",
+      "sections": [
+        "hero",
+        "brand-story",
+        "bouquet-gallery",
+        "wedding-services",
+        "subscription-plans",
+        "contact"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Editorial Bloom",
+      "big_idea": "이 사이트를 열면 VOGUE 화보집의 한 페이지처럼 타이포가 화면을 장악하고 꽃은 오브제처럼 등장한다",
+      "background": {
+        "component": "Grainient",
+        "colors": [
+          "#F5F5F0",
+          "#EEEEE8",
+          "#E5E5DD"
+        ],
+        "note": "오프화이트 그라디언트에 필름 그레인 텍스처로 프린트 매거진 종이 질감"
+      },
+      "colors": {
+        "bg": "#F5F5F0",
+        "primary": "#1A1A1A",
+        "accent": "#8B0000",
+        "secondary": "#666666"
+      },
+      "typography": {
+        "heading_font": "Bodoni Moda",
+        "heading_weight": "700",
+        "body_font": "Inter",
+        "body_weight": "400"
+      },
+      "cursor": "MouseFollower",
+      "hero": {
+        "approach": "css-only",
+        "detail": "화면 전체를 Bodoni Moda 700 bold로 브랜드명이 가로 120vw로 채움. 스크롤하면 글자 사이로 붉은 장미 한 송이가 패럴랙스로 떠오름. 글자는 검정, 장미만 딥레드로 강렬한 대비",
+        "nano_banana_prompt": null
+      },
+      "text_animation": "ScrollReveal",
+      "special": "MouseFollower 커서가 'VIEW'라는 텍스트를 달고 다니며 에디토리얼 매거진의 인터랙티브 버전 경험 제공",
+      "sections": [
+        "hero",
+        "editorial-lookbook",
+        "services-accordion",
+        "press-mentions",
+        "atelier-location",
+        "newsletter-signup"
+      ]
+    }
+  ]
+}

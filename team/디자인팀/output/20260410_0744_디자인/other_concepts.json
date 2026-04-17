@@ -1,0 +1,85 @@
+[
+  {
+    "id": "B",
+    "name": "Editorial Bloom",
+    "big_idea": "보그 웨딩 화보집을 넘기듯, 매 스크롤이 한 장의 에디토리얼 스프레드다",
+    "background": {
+      "component": "Grainient",
+      "colors": [
+        "#1A1A1A",
+        "#2D2D2D",
+        "#0A0A0A"
+      ],
+      "note": "매트 블랙 위 미세한 노이즈로 인쇄물 질감"
+    },
+    "colors": {
+      "bg": "#0F0F0F",
+      "primary": "#FFFFFF",
+      "accent": "#D4AF37",
+      "secondary": "#3D3D3D"
+    },
+    "typography": {
+      "heading_font": "Playfair Display",
+      "heading_weight": "700",
+      "body_font": "Inter",
+      "body_weight": "300"
+    },
+    "cursor": "MouseFollower",
+    "hero": {
+      "approach": "css-only",
+      "detail": "전체화면 흑백 웨딩 플라워 이미지가 좌우 분할로 배치. 마우스 호버 시 해당 영역만 컬러로 전환. 중앙에 세리프 타이틀이 마스크 클리핑으로 이미지와 겹침",
+      "nano_banana_prompt": null
+    },
+    "text_animation": "ScrollReveal",
+    "special": "각 섹션 전환 시 페이지 넘김 효과, 골드 포일 텍스처가 악센트 텍스트에 적용",
+    "sections": [
+      "hero",
+      "editorial-spread-1",
+      "editorial-spread-2",
+      "pricing-table",
+      "inquiry-form"
+    ]
+  },
+  {
+    "id": "C",
+    "name": "Living Garden",
+    "big_idea": "스크롤할수록 정원이 자라나고, 내가 지나간 자리에 꽃이 피어난다",
+    "background": {
+      "component": "Aurora",
+      "colors": [
+        "#E8F5E9",
+        "#C8E6C9",
+        "#FFF8E1"
+      ],
+      "note": "연두-크림 오로라가 햇살 받은 정원처럼 일렁임"
+    },
+    "colors": {
+      "bg": "#FAFDF7",
+      "primary": "#2E5339",
+      "accent": "#E57373",
+      "secondary": "#8BC34A"
+    },
+    "typography": {
+      "heading_font": "DM Serif Display",
+      "heading_weight": "400",
+      "body_font": "Nunito Sans",
+      "body_weight": "400"
+    },
+    "cursor": "ImageTrail",
+    "hero": {
+      "approach": "nano-banana",
+      "detail": "AI 생성 이미지들이 커서 trail로 남으며 정원을 그려나감. 히어로 중앙에는 심플한 텍스트만, 유저 인터랙션이 비주얼을 완성",
+      "nano_banana_prompt": "delicate wedding flowers, soft pink roses and white peonies, watercolor style, transparent background, dreamy and romantic, no text"
+    },
+    "text_animation": "FuzzyText",
+    "special": "스크롤 진행도에 따라 화면 하단에서 일러스트 꽃줄기가 자라남 (SVG path animation)",
+    "sections": [
+      "hero",
+      "our-story",
+      "flower-types",
+      "subscription-tiers",
+      "testimonials",
+      "footer-garden"
+    ]
+  }
+]
