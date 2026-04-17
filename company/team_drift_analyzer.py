@@ -160,14 +160,9 @@ def analyze():
 
     lines.append("\n**다음 단계**: ❌/⚠️ 표시된 팀들 → 리안 확인 후 `archive/` 이동 또는 유지 결정\n")
 
-    report = "\n".join(lines)
-    with open(REPORT, "a", encoding="utf-8") as f:
-        f.write(report)
-
-    print("[완료] 보고사항들.md에 분석 리포트 추가")
-    print(f"  중복: {len(common_keys)}개")
-    print(f"  team/ 전용: {len(only_in_team)}개")
-    print(f"  company/teams/ 전용: {len(only_in_teams)}개")
+    # 콘솔 출력만 (보고사항들.md 오염 제거)
+    print("\n".join(lines))
+    print(f"\n[요약] 중복 {len(common_keys)}개 | team/ 전용 {len(only_in_team)}개 | company/teams/ 전용 {len(only_in_teams)}개")
 
 
 if __name__ == "__main__":
