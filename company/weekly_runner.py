@@ -132,23 +132,30 @@ def main():
         results.append(f"지호 참모 보고: 실패 ({e})")
         log(f"지호 참모 보고 실패: {e}")
 
-    # ── CAPABILITIES 드리프트 감사 ─────────────────
-    log("CAPABILITIES.md 드리프트 감사")
-    try:
-        audit_result = subprocess.run(
-            [sys.executable, "capability_audit.py"],
-            cwd=os.path.dirname(__file__),
-            capture_output=True, text=True, encoding="utf-8", errors="replace",
-            timeout=30
-        )
-        if audit_result.returncode == 0:
-            results.append(f"CAPABILITIES 감사: {audit_result.stdout.strip().splitlines()[0] if audit_result.stdout.strip() else '완료'}")
-            log("CAPABILITIES 감사 완료")
-        else:
-            results.append(f"CAPABILITIES 감사 실패: {audit_result.stderr[:80]}")
-    except Exception as e:
-        results.append(f"CAPABILITIES 감사 실패: {e}")
-        log(f"CAPABILITIES 감사 실패: {e}")
+    # ── 주간 감사 묶음 (CAPABILITIES + 팀 drift + 프롬프트 길이 + 죽은 팀) ─
+    for script_name, label in [
+        ("capability_audit.py", "CAPABILITIES 감사"),
+        ("team_drift_analyzer.py", "team 폴더 drift"),
+        ("audit_prompt_length.py", "프롬프트 150줄 감사"),
+        ("audit_dead_teams.py", "죽은 팀 감사"),
+    ]:
+        log(label)
+        try:
+            r = subprocess.run(
+                [sys.executable, script_name],
+                cwd=os.path.dirname(__file__),
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+                timeout=60
+            )
+            if r.returncode == 0:
+                first_line = r.stdout.strip().splitlines()[0] if r.stdout.strip() else "완료"
+                results.append(f"{label}: {first_line}")
+                log(f"{label} 완료")
+            else:
+                results.append(f"{label} 실패: {r.stderr[:80]}")
+        except Exception as e:
+            results.append(f"{label} 실패: {e}")
+            log(f"{label} 실패: {e}")
 
     # ── 시스템 건강 진단 (Phase 6: 자동 진단) ─────────
     log("시스템 건강 진단 시작")
