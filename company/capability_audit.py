@@ -96,19 +96,11 @@ def audit():
         print(f"[{now}] CAPABILITIES.md 최신 상태 — 드리프트 없음")
         return
 
-    # 보고
-    lines = [f"\n---\n## 🔔 CAPABILITIES 드리프트 감지 — {now}\n"]
-    lines.append("`.claude/CAPABILITIES.md`에 등록 안 된 새 능력 발견:\n")
+    # 콘솔 출력만 (보고사항들.md 오염 제거 — audit_hub이 JSON 로그로 관리)
+    print(f"[{now}] 드리프트 발견:")
     for key, items in missing_from_caps.items():
-        lines.append(f"**{key}**: {', '.join(sorted(items))}")
-    lines.append("\n→ `CAPABILITIES.md`에 추가하고 트리거 매핑 정의 필요.\n")
-
-    with open(REPORT, "a", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-
-    print(f"[{now}] 드리프트 발견 — 보고사항들.md에 기록")
-    for key, items in missing_from_caps.items():
-        print(f"  {key}: {items}")
+        print(f"  {key}: {sorted(items)}")
+    print("→ CAPABILITIES.md에 추가 필요.")
 
 
 if __name__ == "__main__":
